@@ -5,8 +5,13 @@ export class OrientationHandler {
 
     private supported: boolean = false;
     private active: boolean = false;
-    private currentOrientation: number = 0;
     private autoRotate: boolean = false;
+    private currentOrientation: number = 0;
+
+    public get isSupported () : boolean { return this.supported }
+    public get isActive () : boolean { return this.active }
+    public get isAutoRotateEnabled () : boolean { return this.autoRotate }
+    public get currentHeading () : number { return this.currentOrientation }
 
     constructor ( private map: APMap ) {
 
@@ -94,6 +99,25 @@ export class OrientationHandler {
         else this.enableAutoRotate();
 
         return this.autoRotate;
+
+    }
+
+    public destroy () : void {
+
+        if ( this.supported ) {
+
+            window.removeEventListener( 'deviceorientation',
+                this.handleOrientationChange.bind( this )
+            );
+
+            screen.orientation?.removeEventListener( 'change',
+                this.handleScreenOrientationChange.bind( this )
+            );
+
+            this.resetRotation();
+            this.active = false;
+
+        }
 
     }
 
