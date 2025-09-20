@@ -1,4 +1,6 @@
+import type { APMapEventType } from '@airportmap/types';
 import { type APMap } from '@map/core/APMap';
+import L from 'leaflet';
 
 export class LocationTracker {
 
@@ -10,11 +12,39 @@ export class LocationTracker {
     private highAccuracy: boolean = true;
     private watchId?: number;
 
+    private currentPosition?: L.LatLng;
+
     public get isTracking () : boolean { return this.trackingActive }
     public get isFollowing () : boolean { return this.followUser }
-    public get currentPos () : LatLng { return this.currentPosition }
+    public get currentPos () : L.LatLng { return this.currentPosition }
 
     constructor ( private map: APMap ) {}
+
+    private handlePositionUpdate ( position: GeolocationPosition ) : void {
+
+        const { latitude, longitude, accuracy } = position.coords;
+
+        const latLng = new L.LatLng( latitude, longitude );
+
+        this.currentPosition = latLng;
+
+        this.updateMarkers( latLng, accuracy );
+
+        if ( this.followUser ) this.map.setCenter( latitude, longitude );
+
+        this.map.dispatchEvent( 'user-position-changed' as APMapEventType, {
+            lat: latitude, lng: longitude, accuracy
+        } );
+
+    }
+
+    private handlePositionError ( err: GeolocationPositionError ) : void {
+
+        console.error( `Error getting user position:`, err.message );
+
+        this.stopTracking();
+
+    }
 
     public startTracking ( options: { 
         follow?: boolean, 
@@ -44,5 +74,23 @@ export class LocationTracker {
         this.trackingActive = true;
 
     }
+
+    public stopTracking () : void {
+
+        if ( this.watchId !== null ) {
+
+            navigator.geolocation.clearWatch( this.watchId );
+            this.watchId = null;
+
+        }
+
+        this.trackingActive = false;
+        this.followUser = false;
+
+        this.removeMarkers();
+
+    }
+
+    public destroy () : void { this.stopTracking() }
 
 }
