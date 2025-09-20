@@ -19,13 +19,11 @@ export class OrientationHandler {
 
     private init () : void {
 
-        window.addEventListener(
-            'deviceorientation',
+        window.addEventListener( 'deviceorientation',
             this.handleOrientationChange.bind( this )
         );
 
-        screen.orientation?.addEventListener(
-            'change',
+        screen.orientation?.addEventListener( 'change',
             this.handleScreenOrientationChange.bind( this )
         );
 
@@ -48,9 +46,54 @@ export class OrientationHandler {
 
     private handleScreenOrientationChange () : void {
 
-        const orientation = screen.orientation?.type || '';
-
         if ( this.autoRotate ) this.rotateMap( this.currentOrientation );
+
+    }
+
+    public rotateMap ( heading: number ) : void {
+
+        const container = this.map.map.getContainer();
+
+        container.style.transform = `rotate(${-heading}deg)`;
+
+        this.map.map.invalidateSize();
+
+    }
+
+    public resetRotation(): void {
+
+        const container = this.map.map.getContainer();
+
+        container.style.transform = '';
+
+        this.map.map.invalidateSize();
+
+    }
+
+    public enableAutoRotate () : void {
+
+        if ( ! this.supported ) return;
+
+        this.autoRotate = true;
+
+        if ( this.currentOrientation !== 0 )
+            this.rotateMap( this.currentOrientation );
+
+    }
+
+    public disableAutoRotate () : void {
+
+        this.autoRotate = false;
+        this.resetRotation();
+
+    }
+
+    public toggleAutoRotate () : boolean {
+
+        if ( this.autoRotate ) this.disableAutoRotate();
+        else this.enableAutoRotate();
+
+        return this.autoRotate;
 
     }
 
