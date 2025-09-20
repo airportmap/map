@@ -48,12 +48,6 @@ class APMap {
 
     }
 
-    public draw () {
-
-        //
-
-    }
-
 }
 
 export { APMap };
