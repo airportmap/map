@@ -1,5 +1,6 @@
 import { APMapOptions, APMapEventType } from '@airportmap/types';
 import { LocationTracker } from '@map/utils/LocationTracker';
+import { OrientationHandler } from '@map/utils/OrientationHandler';
 import { URLHandler } from '@map/utils/URLHandler';
 import deepmerge from 'deepmerge';
 import { Map as LeafletMap, LatLngBounds } from 'leaflet';
@@ -12,8 +13,9 @@ export class APMap {
     private eventListeners: Map< string, Function[] > = new Map();
 
     private utils: {
-        urlHandler?: URLHandler,
-        locationTracker?: LocationTracker
+        locationTracker?: LocationTracker,
+        orientationHandler?: OrientationHandler,
+        urlHandler?: URLHandler
     } = {};
 
     public get map () : LeafletMap { return this.leafletMap }
@@ -28,8 +30,9 @@ export class APMap {
 
     }
 
-    public get urlHandler () : URLHandler | undefined { return this.utils.urlHandler }
     public get locationTracker () : LocationTracker | undefined { return this.utils.locationTracker }
+    public get orientationHandler () : OrientationHandler | undefined { return this.utils.orientationHandler }
+    public get urlHandler () : URLHandler | undefined { return this.utils.urlHandler }
 
     constructor (
         element: HTMLElement,
@@ -74,11 +77,11 @@ export class APMap {
 
     private initUtils() : void {
 
-        if ( this.options.urlManipulation )
-            this.utils.urlHandler = new URLHandler( this );
-
         if ( this.options.trackUserPosition )
             this.utils.locationTracker = new LocationTracker( this );
+
+        if ( this.options.urlManipulation )
+            this.utils.urlHandler = new URLHandler( this );
 
     }
 
@@ -134,8 +137,8 @@ export class APMap {
         this.leafletMap.remove();
         this.eventListeners.clear();
 
-        this.utils.urlHandler?.destroy();
         this.utils.locationTracker?.destroy();
+        this.utils.urlHandler?.destroy();
 
     }
 
