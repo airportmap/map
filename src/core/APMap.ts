@@ -1,14 +1,14 @@
-import type { APMapOptions, APMapEventType } from '@airportmap/types';
+import { APMapOptions, APMapEventType } from '@airportmap/types';
 import { LocationTracker } from '@map/utils/LocationTracker';
 import { URLHandler } from '@map/utils/URLHandler';
 import deepmerge from 'deepmerge';
-import L from 'leaflet';
+import { Map as LeafletMap, LatLngBounds } from 'leaflet';
 
 export class APMap {
 
     private element: HTMLElement;
     private options: Required< APMapOptions >;
-    private map: L.Map;
+    private map: LeafletMap;
     private eventListeners: Map< string, Function[] > = new Map();
 
     private urlHandler?: URLHandler;
@@ -23,7 +23,7 @@ export class APMap {
     }
 
     public get zoom () : number { return this.map.getZoom() };
-    public get bounds () : L.LatLngBounds { return this.map.getBounds() }
+    public get bounds () : LatLngBounds { return this.map.getBounds() }
 
     constructor (
         element: HTMLElement,
@@ -60,9 +60,9 @@ export class APMap {
 
     }
 
-    private createMap () : L.Map {
+    private createMap () : LeafletMap {
 
-        return new L.Map ( this.element, this.options.mapOptions );
+        return new LeafletMap ( this.element, this.options.mapOptions );
 
     }
 
@@ -129,6 +129,7 @@ export class APMap {
 
         this.eventListeners.clear();
         this.urlHandler?.destroy();
+        this.locationTracker?.destroy();
 
     }
 

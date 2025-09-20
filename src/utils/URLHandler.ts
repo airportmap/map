@@ -1,5 +1,5 @@
-import type { APMapEventType } from '@airportmap/types';
-import { type APMap } from '@map/core/APMap';
+import { APMapEventType } from '@airportmap/types';
+import { APMap } from '@map/core/APMap';
 
 export class URLHandler {
 

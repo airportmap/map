@@ -1,6 +1,6 @@
-import type { APMapEventType } from '@airportmap/types';
-import { type APMap } from '@map/core/APMap';
-import L from 'leaflet';
+import { APMapEventType } from '@airportmap/types';
+import { APMap } from '@map/core/APMap';
+import { LatLng, Marker, CircleMarker, Circle } from 'leaflet';
 
 export class LocationTracker {
 
@@ -12,11 +12,11 @@ export class LocationTracker {
     private highAccuracy: boolean = true;
     private watchId?: number;
 
-    private currentPosition?: L.LatLng;
+    private currentPosition?: LatLng;
 
     public get isTracking () : boolean { return this.trackingActive }
     public get isFollowing () : boolean { return this.followUser }
-    public get currentPos () : L.LatLng { return this.currentPosition }
+    public get currentPos () : LatLng { return this.currentPosition }
 
     constructor ( private map: APMap ) {}
 
@@ -24,7 +24,7 @@ export class LocationTracker {
 
         const { latitude, longitude, accuracy } = position.coords;
 
-        const latLng = new L.LatLng( latitude, longitude );
+        const latLng = new LatLng( latitude, longitude );
 
         this.currentPosition = latLng;
 
