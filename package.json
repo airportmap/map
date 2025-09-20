@@ -8,6 +8,10 @@
     "url": "https://komed3.de"
   },
   "dependencies": {
-    "leaflet": "^1.9.4"
+    "leaflet": "^2.0.0-alpha.1"
+  },
+  "devDependencies": {
+    "@airportmap/types": "github:airportmap/types",
+    "@types/leaflet": "^1.9.20"
   }
 }
