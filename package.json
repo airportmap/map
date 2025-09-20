@@ -1,0 +1,13 @@
+{
+  "name": "@airportmap/map",
+  "private": true,
+  "license": "MIT",
+  "author": {
+    "name": "komed3 (Paul Köhler)",
+    "email": "webmaster@komed3.de",
+    "url": "https://komed3.de"
+  },
+  "dependencies": {
+    "leaflet": "^1.9.4"
+  }
+}
