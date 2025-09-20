@@ -122,6 +122,9 @@ export class APMap {
 
         this.map.remove();
 
+        this.eventListeners.clear();
+        this.urlHandler?.destroy();
+
     }
 
 }
