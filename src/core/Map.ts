@@ -1,11 +1,12 @@
 import type { APMapOptions } from '@airportmap/types';
-import { Map, type MapOptions } from 'leaflet';
+import deepmerge from 'deepmerge';
+import { LatLng, LatLngBounds, Map } from 'leaflet';
 
 class APMap {
 
     private element: HTMLElement
     private options: Required< APMapOptions >;
-    private map: Map;
+    private map?: Map;
 
     constructor (
         element: HTMLElement,
@@ -17,20 +18,35 @@ class APMap {
         );
 
         this.element = element;
-
-        this.options = {
+        this.options = deepmerge< Required< APMapOptions > >( {
             mode: 'normal',
-            fullscreenAllowed: true,
-            zoomMin: 4,
-            zoomMax: 16,
-            ...options
-        };
+            allowFullscreen: true,
+            mapOptions: {
+                minZoom: 4,
+                maxZoom: 16,
+                zoom: 6,
+                maxBounds: new LatLngBounds(
+                    new LatLng( -90, -180 ),
+                    new LatLng(  90,  180 )
+                ),
+                maxBoundsViscosity: 1,
+                scrollWheelZoom: true,
+                zoomControl: false
+            }
+        }, options );
 
         this.create();
 
     }
 
-    private create () { this.map = new Map ( this.element, {} ) }
+    private create () {
+
+        if ( ! this.map ) this.map = new Map (
+            this.element,
+            this.options.mapOptions
+        );
+
+    }
 
     public draw () {
 
