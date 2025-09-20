@@ -1,6 +1,6 @@
 import { APMapEventType } from '@airportmap/types';
 import { APMap } from '@map/core/APMap';
-import { LatLng, Marker, CircleMarker, Circle } from 'leaflet';
+import { LatLng, CircleMarker, Circle } from 'leaflet';
 
 export class LocationTracker {
 
@@ -161,6 +161,44 @@ export class LocationTracker {
         if ( follow && this.currentPosition ) this.map.setCenter(
             this.currentPosition.lat, this.currentPosition.lng
         );
+
+    }
+
+    public centerOnUserPosition ( zoom?: number ) : boolean {
+
+        if ( ! this.currentPosition ) {
+
+            if ( ! this.trackingActive ) {
+
+                navigator.geolocation.getCurrentPosition(
+                    ( position ) => {
+
+                        const { latitude, longitude } = position.coords;
+
+                        if ( zoom !== undefined ) this.map.setView( latitude, longitude, zoom );
+                        else this.map.setCenter( latitude, longitude );
+
+                    },
+                    ( err ) => console.error( `Error getting user position:`, err.message ),
+                    {
+                        enableHighAccuracy: this.highAccuracy,
+                        maximumAge: this.MAXAGE,
+                        timeout: this.TIMEOUT
+                    }
+                );
+
+            }
+
+            return false;
+
+        }
+
+        const { lat, lng } = this.currentPosition;
+
+        if ( zoom !== undefined ) this.map.setView( lat, lng, zoom );
+        else this.map.setCenter( lat, lng );
+
+        return true;
 
     }
 
