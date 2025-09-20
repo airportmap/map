@@ -8,7 +8,7 @@ export class APMap {
 
     private element: HTMLElement;
     private options: Required< APMapOptions >;
-    private map: LeafletMap;
+    private leafletMap: LeafletMap;
     private eventListeners: Map< string, Function[] > = new Map();
 
     private urlHandler?: URLHandler;
@@ -16,14 +16,15 @@ export class APMap {
 
     public get center () : { lat: number, lng: number } {
 
-        const center = this.map.getCenter();
+        const center = this.leafletMap.getCenter();
 
         return { lat: center.lat, lng: center.lng };
 
     }
 
-    public get zoom () : number { return this.map.getZoom() };
-    public get bounds () : LatLngBounds { return this.map.getBounds() }
+    public get zoom () : number { return this.leafletMap.getZoom() };
+    public get bounds () : LatLngBounds { return this.leafletMap.getBounds() }
+    public get map () : LeafletMap { return this.leafletMap }
 
     constructor (
         element: HTMLElement,
@@ -37,7 +38,7 @@ export class APMap {
         this.element = element;
         this.options = this.mergeDefaultOptions( options ?? {} );
 
-        this.map = this.createMap();
+        this.leafletMap = this.createMap();
 
         this.initUtils();
 
@@ -107,25 +108,25 @@ export class APMap {
 
     public setCenter ( lat: number, lng: number ) : void {
 
-        this.map.setView( [ lat, lng ], this.map.getZoom() );
+        this.leafletMap.setView( [ lat, lng ], this.leafletMap.getZoom() );
 
     }
 
     public setZoom ( zoom: number ) : void {
 
-        this.map.setZoom( zoom );
+        this.leafletMap.setZoom( zoom );
 
     }
 
     public setView ( lat: number, lng: number, zoom: number ) : void {
 
-        this.map.setView( [ lat, lng ], zoom );
+        this.leafletMap.setView( [ lat, lng ], zoom );
 
     }
 
     public destroy () : void {
 
-        this.map.remove();
+        this.leafletMap.remove();
 
         this.eventListeners.clear();
         this.urlHandler?.destroy();

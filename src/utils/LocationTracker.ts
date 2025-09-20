@@ -13,6 +13,8 @@ export class LocationTracker {
     private watchId?: number;
 
     private currentPosition?: LatLng;
+    private positionMarker?: CircleMarker;
+    private accuracyCircle?: Circle;
 
     public get isTracking () : boolean { return this.trackingActive }
     public get isFollowing () : boolean { return this.followUser }
@@ -43,6 +45,67 @@ export class LocationTracker {
         console.error( `Error getting user position:`, err.message );
 
         this.stopTracking();
+
+    }
+
+    private updateMarkers ( position: LatLng, accuracy: number ) : void {
+
+        const leafletMap = this.map.map;
+
+        if ( ! this.positionMarker ) {
+
+            this.positionMarker = new CircleMarker( position, {
+                radius: 10,
+                weight: 2,
+                color: '#ffffff',
+                fillColor: '#2196f3',
+                fillOpacity: 1,
+                opacity: 1
+            } ).addTo( leafletMap );
+
+        } else {
+
+            this.positionMarker.setLatLng( position );
+
+        }
+
+        if ( ! this.accuracyCircle ) {
+
+            this.accuracyCircle = new Circle( position, {
+                radius: accuracy,
+                weight: 1,
+                color: '#2196f3',
+                fillColor: '#2196f3',
+                fillOpacity: 0.15,
+                opacity: 0.3
+            } ).addTo( leafletMap );
+
+        } else {
+
+            this.accuracyCircle.setLatLng( position );
+            this.accuracyCircle.setRadius( accuracy );
+
+        }
+
+    }
+
+    private removeMarkers () : void {
+
+        const leafletMap = this.map.map;
+
+        if ( this.positionMarker ) {
+
+            leafletMap.removeLayer( this.positionMarker );
+            this.positionMarker = null;
+
+        }
+
+        if ( this.accuracyCircle ) {
+
+            leafletMap.removeLayer( this.accuracyCircle );
+            this.accuracyCircle = null;
+
+        }
 
     }
 
@@ -88,6 +151,16 @@ export class LocationTracker {
         this.followUser = false;
 
         this.removeMarkers();
+
+    }
+
+    public setFollowUser ( follow: boolean ) : void {
+
+        this.followUser = follow;
+
+        if ( follow && this.currentPosition ) this.map.setCenter(
+            this.currentPosition.lat, this.currentPosition.lng
+        );
 
     }
 
