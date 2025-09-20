@@ -9,7 +9,7 @@
     "forceConsistentCasingInFileNames": true,
     "resolveJsonModule": true,
     "rootDir": "./src",
-    "outFile": "./dist/build.js",
+    "outDir": "./dist",
     "declaration": true,
     "declarationMap": false,
     "sourceMap": true
