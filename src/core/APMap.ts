@@ -80,6 +80,9 @@ export class APMap {
         if ( this.options.trackUserPosition )
             this.utils.locationTracker = new LocationTracker( this );
 
+        if ( this.options.enableDeviceOrientation )
+            this.utils.orientationHandler = new OrientationHandler( this );
+
         if ( this.options.urlManipulation )
             this.utils.urlHandler = new URLHandler( this );
 
@@ -138,6 +141,7 @@ export class APMap {
         this.eventListeners.clear();
 
         this.utils.locationTracker?.destroy();
+        this.utils.orientationHandler?.destroy();
         this.utils.urlHandler?.destroy();
 
     }
