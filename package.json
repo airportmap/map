@@ -7,6 +7,14 @@
     "email": "webmaster@komed3.de",
     "url": "https://komed3.de"
   },
+  "scripts": {
+    "alias": "tsc-alias -p tsconfig.build.json",
+    "build": "npm update && tsc -b tsconfig.build.json --verbose && npm run alias",
+    "build:ci": "tsc -b tsconfig.build.json && npm run alias",
+    "build:safe": "npm run lint && npm run build:ci",
+    "lint": "tsc --p tsconfig.lint.json",
+    "prepare": "npm run build:safe"
+  },
   "dependencies": {
     "leaflet": "^2.0.0-alpha.1"
   },
