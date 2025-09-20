@@ -1,12 +1,23 @@
 import type { APMapOptions } from '@airportmap/types';
 import deepmerge from 'deepmerge';
-import { LatLng, LatLngBounds, Map } from 'leaflet';
+import L from 'leaflet';
 
-class APMap {
+export class Map {
 
     private element: HTMLElement
     private options: Required< APMapOptions >;
-    private map?: Map;
+    private map: L.Map;
+
+    public get center () : { lat: number, lng: number } {
+
+        const center = this.map.getCenter();
+
+        return { lat: center.lat, lng: center.lng };
+
+    }
+
+    public get zoom () : number { return this.map.getZoom() };
+    public get bounds () : L.LatLngBounds { return this.map.getBounds() }
 
     constructor (
         element: HTMLElement,
@@ -18,36 +29,48 @@ class APMap {
         );
 
         this.element = element;
-        this.options = deepmerge< Required< APMapOptions > >( {
-            mode: 'normal',
-            allowFullscreen: true,
-            mapOptions: {
-                minZoom: 4,
-                maxZoom: 16,
-                zoom: 6,
-                maxBounds: new LatLngBounds(
-                    new LatLng( -90, -180 ),
-                    new LatLng(  90,  180 )
-                ),
-                maxBoundsViscosity: 1,
-                scrollWheelZoom: true,
-                zoomControl: false
-            }
-        }, options ?? {} );
+        this.options = this.mergeDefaultOptions( options ?? {} );
 
-        this.create();
+        this.map = this.createMap();
 
     }
 
-    private create () {
+    private mergeDefaultOptions ( options: APMapOptions ) : Required< APMapOptions > {
 
-        if ( ! this.map ) this.map = new Map (
-            this.element,
-            this.options.mapOptions
-        );
+        return deepmerge( {
+            mapOptions: {}
+        }, options );
+
+    }
+
+    private createMap () : L.Map {
+
+        return new L.Map ( this.element, this.options.mapOptions );
+
+    }
+
+    public setCenter ( lat: number, lng: number ) : void {
+
+        this.map.setView( [ lat, lng ], this.map.getZoom() );
+
+    }
+
+    public setZoom ( zoom: number ) : void {
+
+        this.map.setZoom( zoom );
+
+    }
+
+    public setView ( lat: number, lng: number, zoom: number ) : void {
+
+        this.map.setView( [ lat, lng ], zoom );
+
+    }
+
+    public destroy () : void {
+
+        this.map.remove();
 
     }
 
 }
-
-export { APMap };
