@@ -33,7 +33,7 @@ class APMap {
                 scrollWheelZoom: true,
                 zoomControl: false
             }
-        }, options );
+        }, options ?? {} );
 
         this.create();
 
