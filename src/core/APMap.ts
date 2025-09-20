@@ -1,4 +1,5 @@
 import type { APMapOptions, APMapEventType } from '@airportmap/types';
+import { LocationTracker } from '@map/utils/LocationTracker';
 import { URLHandler } from '@map/utils/URLHandler';
 import deepmerge from 'deepmerge';
 import L from 'leaflet';
@@ -11,6 +12,7 @@ export class APMap {
     private eventListeners: Map< string, Function[] > = new Map();
 
     private urlHandler?: URLHandler;
+    private locationTracker?: LocationTracker;
 
     public get center () : { lat: number, lng: number } {
 
@@ -68,6 +70,9 @@ export class APMap {
 
         if ( this.options.urlManipulation )
             this.urlHandler = new URLHandler( this );
+
+        if ( this.options.trackUserPosition )
+            this.locationTracker = new LocationTracker( this );
 
     }
 
