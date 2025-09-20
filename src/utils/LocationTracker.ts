@@ -18,7 +18,7 @@ export class LocationTracker {
 
     public get isTracking () : boolean { return this.trackingActive }
     public get isFollowing () : boolean { return this.followUser }
-    public get currentPos () : LatLng { return this.currentPosition }
+    public get currentPos () : LatLng | undefined { return this.currentPosition }
 
     constructor ( private map: APMap ) {}
 
@@ -96,14 +96,14 @@ export class LocationTracker {
         if ( this.positionMarker ) {
 
             leafletMap.removeLayer( this.positionMarker );
-            this.positionMarker = null;
+            this.positionMarker = undefined;
 
         }
 
         if ( this.accuracyCircle ) {
 
             leafletMap.removeLayer( this.accuracyCircle );
-            this.accuracyCircle = null;
+            this.accuracyCircle = undefined;
 
         }
 
@@ -140,10 +140,10 @@ export class LocationTracker {
 
     public stopTracking () : void {
 
-        if ( this.watchId !== null ) {
+        if ( this.watchId ) {
 
             navigator.geolocation.clearWatch( this.watchId );
-            this.watchId = null;
+            this.watchId = undefined;
 
         }
 

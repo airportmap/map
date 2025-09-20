@@ -28,8 +28,8 @@ export class APMap {
 
     }
 
-    public get urlHandler () : URLHandler | null { return this.utils.urlHandler }
-    public get locationTracker () : LocationTracker | null { return this.utils.locationTracker }
+    public get urlHandler () : URLHandler | undefined { return this.utils.urlHandler }
+    public get locationTracker () : LocationTracker | undefined { return this.utils.locationTracker }
 
     constructor (
         element: HTMLElement,
