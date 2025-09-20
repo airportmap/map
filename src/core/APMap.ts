@@ -11,8 +11,14 @@ export class APMap {
     private leafletMap: LeafletMap;
     private eventListeners: Map< string, Function[] > = new Map();
 
-    private urlHandler?: URLHandler;
-    private locationTracker?: LocationTracker;
+    private utils: {
+        urlHandler?: URLHandler,
+        locationTracker?: LocationTracker
+    } = {};
+
+    public get map () : LeafletMap { return this.leafletMap }
+    public get bounds () : LatLngBounds { return this.leafletMap.getBounds() }
+    public get zoom () : number { return this.leafletMap.getZoom() }
 
     public get center () : { lat: number, lng: number } {
 
@@ -22,9 +28,8 @@ export class APMap {
 
     }
 
-    public get zoom () : number { return this.leafletMap.getZoom() };
-    public get bounds () : LatLngBounds { return this.leafletMap.getBounds() }
-    public get map () : LeafletMap { return this.leafletMap }
+    public get urlHandler () : URLHandler | null { return this.utils.urlHandler }
+    public get locationTracker () : LocationTracker | null { return this.utils.locationTracker }
 
     constructor (
         element: HTMLElement,
@@ -70,10 +75,10 @@ export class APMap {
     private initUtils() : void {
 
         if ( this.options.urlManipulation )
-            this.urlHandler = new URLHandler( this );
+            this.utils.urlHandler = new URLHandler( this );
 
         if ( this.options.trackUserPosition )
-            this.locationTracker = new LocationTracker( this );
+            this.utils.locationTracker = new LocationTracker( this );
 
     }
 
@@ -127,10 +132,10 @@ export class APMap {
     public destroy () : void {
 
         this.leafletMap.remove();
-
         this.eventListeners.clear();
-        this.urlHandler?.destroy();
-        this.locationTracker?.destroy();
+
+        this.utils.urlHandler?.destroy();
+        this.utils.locationTracker?.destroy();
 
     }
 
