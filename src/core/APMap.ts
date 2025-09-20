@@ -1,4 +1,5 @@
 import type { APMapOptions, APMapEventType } from '@airportmap/types';
+import { URLHandler } from '@map/utils/URLHandler';
 import deepmerge from 'deepmerge';
 import L from 'leaflet';
 
@@ -8,6 +9,8 @@ export class APMap {
     private options: Required< APMapOptions >;
     private map: L.Map;
     private eventListeners: Map< string, Function[] > = new Map();
+
+    private urlHandler?: URLHandler;
 
     public get center () : { lat: number, lng: number } {
 
@@ -34,12 +37,23 @@ export class APMap {
 
         this.map = this.createMap();
 
+        this.initUtils();
+
     }
 
     private mergeDefaultOptions ( options: APMapOptions ) : Required< APMapOptions > {
 
         return deepmerge< Required< APMapOptions > >( {
-            mapOptions: {}
+            mapOptions: {
+                minZoom: 4,
+                maxZoom: 16
+            },
+            mode: 'normal',
+            allowFullscreen: true,
+            urlManipulation: false,
+            trackUserPosition: false,
+            enableDeviceOrientation: false,
+            showDayNightBoundary: false
         }, options );
 
     }
@@ -47,6 +61,13 @@ export class APMap {
     private createMap () : L.Map {
 
         return new L.Map ( this.element, this.options.mapOptions );
+
+    }
+
+    private initUtils() : void {
+
+        if ( this.options.urlManipulation )
+            this.urlHandler = new URLHandler( this );
 
     }
 

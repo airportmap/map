@@ -3,7 +3,8 @@
     "baseUrl": ".",
     "lib": [ "esnext", "dom" ],
     "paths": {
-      "@map/core/*": [ "src/core/*" ]
+      "@map/core/*": [ "src/core/*" ],
+      "@map/utils/*": [ "src/utils/*" ]
     }
   }
 }
