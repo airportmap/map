@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
     "baseUrl": ".",
+    "lib": [ "esnext", "dom" ],
     "paths": {
       "@map/core/*": [ "src/core/*" ]
     }

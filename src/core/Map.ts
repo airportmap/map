@@ -1,12 +1,13 @@
-import type { APMapOptions } from '@airportmap/types';
+import type { APMapOptions, APMapEventType } from '@airportmap/types';
 import deepmerge from 'deepmerge';
 import L from 'leaflet';
 
-export class Map {
+export class APMap {
 
-    private element: HTMLElement
+    private element: HTMLElement;
     private options: Required< APMapOptions >;
     private map: L.Map;
+    private eventListeners: Map< string, Function[] > = new Map();
 
     public get center () : { lat: number, lng: number } {
 
@@ -46,6 +47,35 @@ export class Map {
     private createMap () : L.Map {
 
         return new L.Map ( this.element, this.options.mapOptions );
+
+    }
+
+    public addEventListener ( event: APMapEventType, callback: Function ) : void {
+
+        if ( ! this.eventListeners.has( event ) )
+            this.eventListeners.set( event, [] );
+
+        this.eventListeners.get( event )!.push( callback );
+
+    }
+
+    public removeEventListener ( event: APMapEventType, callback: Function ) : void {
+
+        if ( ! this.eventListeners.has( event ) ) return;
+
+        const listeners = this.eventListeners.get( event ) || [];
+        const index = listeners.indexOf( callback );
+
+        if ( index !== -1 ) listeners.splice( index, 1 );
+
+    }
+
+    public dispatchEvent ( event: APMapEventType, data: any ) : void {
+
+        if ( ! this.eventListeners.has( event ) ) return;
+
+        const listeners = this.eventListeners.get( event ) || [];
+        listeners.forEach( callback => callback( data ) );
 
     }
 
