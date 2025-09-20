@@ -37,7 +37,7 @@ export class Map {
 
     private mergeDefaultOptions ( options: APMapOptions ) : Required< APMapOptions > {
 
-        return deepmerge( {
+        return deepmerge< Required< APMapOptions > >( {
             mapOptions: {}
         }, options );
 
