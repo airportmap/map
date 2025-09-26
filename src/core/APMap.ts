@@ -1,4 +1,5 @@
 import { APMapOptions, APMapEventType } from '@airportmap/types';
+import { LayerManager } from '@map/core/LayerManager';
 import { LocationTracker } from '@map/utils/LocationTracker';
 import { OrientationHandler } from '@map/utils/OrientationHandler';
 import { StateStorage } from '@map/utils/StateStorage';
@@ -11,6 +12,7 @@ export class APMap {
     private element: HTMLElement;
     private options: Required< APMapOptions >;
     private leafletMap: LeafletMap;
+    private layerManager: LayerManager;
     private eventListeners: Map< string, Function[] > = new Map();
 
     private utils: {
@@ -22,16 +24,10 @@ export class APMap {
 
     public get opt () : Required< APMapOptions > { return this.options }
     public get map () : LeafletMap { return this.leafletMap }
+    public get layer () : LayerManager | undefined { return this.layerManager }
     public get bounds () : LatLngBounds { return this.leafletMap.getBounds() }
     public get zoom () : number { return this.leafletMap.getZoom() }
-
-    public get center () : { lat: number, lng: number } {
-
-        const center = this.leafletMap.getCenter();
-
-        return { lat: center.lat, lng: center.lng };
-
-    }
+    public get center () : { lat: number, lng: number } { return { ...this.leafletMap.getCenter() } }
 
     public get locationTracker () : LocationTracker | undefined { return this.utils.locationTracker }
     public get orientationHandler () : OrientationHandler | undefined { return this.utils.orientationHandler }
@@ -51,6 +47,8 @@ export class APMap {
         this.options = this.mergeDefaultOptions( options ?? {} );
 
         this.leafletMap = this.createMap();
+
+        this.layerManager = new LayerManager( this );
 
         this.initUtils();
 
