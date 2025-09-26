@@ -77,11 +77,11 @@ export class APMap {
 
         const map = new LeafletMap ( this.element, this.options.mapOptions );
 
-        map.addEventListener( 'zoomlevelschange', ( e ) => {
+        map.on( 'zoomend', ( e ) => {
             this.dispatchEvent( 'zoom-changed' as APMapEventType, { e } );
         } );
 
-        map.addEventListener( 'moveend', ( e ) => {
+        map.on( 'moveend', ( e ) => {
             this.dispatchEvent( 'position-changed' as APMapEventType, { e } );
         } );
 
