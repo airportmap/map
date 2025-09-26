@@ -19,7 +19,7 @@ export class TileLayer extends BaseLayer {
 
         return deepmerge< APMapTileLayerOptions >( {
             url: '',
-            subdomains: '',
+            subdomains: 'abc',
             tileSize: 256,
             detectRetina: true,
             crossOrigin: false
