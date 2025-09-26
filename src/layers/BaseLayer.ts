@@ -8,7 +8,7 @@ export abstract class BaseLayer {
     protected visibility: boolean;
     protected leafletLayer: LeafletLayer;
 
-    public get id () : string { return this.options.id }
+    public get id () : string { return this.options._id }
     public get name () : string { return this.options.name }
     public get description () : string | undefined { return this.options.description }
     public get group () : string | undefined { return this.options.group }
@@ -38,7 +38,7 @@ export abstract class BaseLayer {
     private mergeDefaultOptions ( options: APMapLayerOptions ) : Required< APMapLayerOptions > {
 
         return deepmerge< Required< APMapLayerOptions > >( {
-            id: '',
+            _id: '',
             name: '',
             description: undefined,
             group: undefined,
