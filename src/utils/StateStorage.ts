@@ -12,7 +12,7 @@ export class StateStorage {
 
     constructor ( private map: APMap ) {
 
-        const { enabled = false, restoreOnLoad = true, mapId = null } = this.map.opt.stateStorage;
+        const { enabled = false, restoreOnLoad = true, mapId = undefined } = this.map.opt.stateStorage;
 
         this.enabled = enabled;
         this.restoreOnLoad = restoreOnLoad;
@@ -33,7 +33,7 @@ export class StateStorage {
 
     public getState () : APMapState {
 
-        return JSON.parse( localStorage.getItem( this.storageKey ) ) as APMapState;
+        return JSON.parse( localStorage.getItem( this.storageKey ) ?? '' ) as APMapState;
 
     }
 

@@ -69,7 +69,7 @@ export class APMap {
             stateStorage: {
                 enabled: false,
                 restoreOnLoad: true,
-                mapId: null
+                mapId: undefined
             },
             trackUserPosition: false,
             enableDeviceOrientation: false,
@@ -152,6 +152,7 @@ export class APMap {
         this.leafletMap.remove();
         this.eventListeners.clear();
 
+        this.utils.stateStorage?.destroy();
         this.utils.locationTracker?.destroy();
         this.utils.orientationHandler?.destroy();
         this.utils.urlHandler?.destroy();
