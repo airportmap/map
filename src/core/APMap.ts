@@ -1,6 +1,7 @@
 import { APMapOptions, APMapEventType } from '@airportmap/types';
 import { LocationTracker } from '@map/utils/LocationTracker';
 import { OrientationHandler } from '@map/utils/OrientationHandler';
+import { StateStorage } from '@map/utils/StateStorage';
 import { URLHandler } from '@map/utils/URLHandler';
 import deepmerge from 'deepmerge';
 import { Map as LeafletMap, LatLngBounds } from 'leaflet';
@@ -15,6 +16,7 @@ export class APMap {
     private utils: {
         locationTracker?: LocationTracker,
         orientationHandler?: OrientationHandler,
+        stateStorage?: StateStorage,
         urlHandler?: URLHandler
     } = {};
 
@@ -32,6 +34,7 @@ export class APMap {
 
     public get locationTracker () : LocationTracker | undefined { return this.utils.locationTracker }
     public get orientationHandler () : OrientationHandler | undefined { return this.utils.orientationHandler }
+    public get stateStorage () : StateStorage | undefined { return this.utils.stateStorage }
     public get urlHandler () : URLHandler | undefined { return this.utils.urlHandler }
 
     constructor (
