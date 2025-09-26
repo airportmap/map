@@ -25,7 +25,7 @@ export class LayerManager {
 
         }
 
-        return this.layerGroups.get( groupName );
+        return this.layerGroups.get( groupName )!;
 
     }
 
@@ -33,7 +33,7 @@ export class LayerManager {
 
         if ( ! this.layerGroups.has( groupName ) ) return false;
 
-        this.layerGroups.get( groupName ).removeFrom( this.map.map );
+        this.layerGroups.get( groupName )!.removeFrom( this.map.map );
         this.layerGroups.delete( groupName );
 
         return true;
