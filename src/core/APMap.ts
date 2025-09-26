@@ -9,6 +9,9 @@ import { Map as LeafletMap, LatLngBounds } from 'leaflet';
 
 export class APMap {
 
+    private readonly LATLNG_PRECISION: number = 7;
+    private readonly ZOOM_PRECISION: number = 0;
+
     private element: HTMLElement;
     private options: Required< APMapOptions >;
     private leafletMap: LeafletMap;
@@ -26,8 +29,23 @@ export class APMap {
     public get map () : LeafletMap { return this.leafletMap }
     public get layer () : LayerManager | undefined { return this.layerManager }
     public get bounds () : LatLngBounds { return this.leafletMap.getBounds() }
-    public get zoom () : number { return this.leafletMap.getZoom() }
-    public get center () : { lat: number, lng: number } { return { ...this.leafletMap.getCenter() } }
+
+    public get center () : { lat: number, lng: number } {
+
+        const { lat, lng } = this.leafletMap.getCenter();
+
+        return {
+            lat: Number ( lat.toFixed( this.LATLNG_PRECISION ) ),
+            lng: Number ( lng.toFixed( this.LATLNG_PRECISION ) )
+        };
+
+    }
+
+    public get zoom () : number {
+
+        return Number ( this.leafletMap.getZoom().toFixed( this.ZOOM_PRECISION ) );
+
+    }
 
     public get locationTracker () : LocationTracker | undefined { return this.utils.locationTracker }
     public get orientationHandler () : OrientationHandler | undefined { return this.utils.orientationHandler }

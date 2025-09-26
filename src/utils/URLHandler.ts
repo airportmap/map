@@ -3,7 +3,7 @@ import { APMap } from '@map/core/APMap';
 
 export class URLHandler {
 
-    private readonly TIMEOUT: number = 500;
+    private readonly TIMEOUT: number = 250;
 
     private updateTimer: number | null = null;
     private enabled: boolean = true;
@@ -30,7 +30,7 @@ export class URLHandler {
 
     private updateURLImmediate () : void {
 
-        const { lat, lng } = this.map.center ?? {};
+        const { lat, lng } = this.map.center;
         const zoom = this.map.zoom;
 
         if ( zoom && lat && lng ) window.location.hash = `#${zoom}/${lat}/${lng}`;
@@ -43,7 +43,10 @@ export class URLHandler {
 
         this.destroy();
 
-        this.updateTimer = window.setTimeout( this.updateURLImmediate, this.TIMEOUT );
+        this.updateTimer = window.setTimeout(
+            this.updateURLImmediate.bind( this ),
+            this.TIMEOUT
+        );
 
     }
 
