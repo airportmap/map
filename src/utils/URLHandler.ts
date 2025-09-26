@@ -24,8 +24,7 @@ export class URLHandler {
         const hash = new URL( window.location.href ).hash;
         const [ zoom, lat, lng ] = hash.slice( 1 ).split( '/' ).map( Number );
 
-        if ( zoom && lat && lng )
-            this.map.setView( lat, lng, zoom );
+        if ( zoom && lat && lng ) this.map.setView( lat, lng, zoom );
 
     }
 
@@ -54,8 +53,7 @@ export class URLHandler {
 
     public destroy () : void {
 
-        if ( this.updateTimer !== null )
-            window.clearTimeout( this.updateTimer );
+        if ( this.updateTimer !== null ) window.clearTimeout( this.updateTimer );
 
     }
 

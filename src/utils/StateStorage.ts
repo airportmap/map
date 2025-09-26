@@ -117,6 +117,4 @@ export class StateStorage {
 
     }
 
-    public destroy () : void { this.mapState = {} }
-
 }

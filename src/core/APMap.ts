@@ -100,8 +100,7 @@ export class APMap {
 
     public addEventListener ( event: APMapEventType, callback: Function ) : void {
 
-        if ( ! this.eventListeners.has( event ) )
-            this.eventListeners.set( event, [] );
+        if ( ! this.eventListeners.has( event ) ) this.eventListeners.set( event, [] );
 
         this.eventListeners.get( event )!.push( callback );
 
@@ -150,7 +149,6 @@ export class APMap {
         this.leafletMap.remove();
         this.eventListeners.clear();
 
-        this.utils.stateStorage?.destroy();
         this.utils.locationTracker?.destroy();
         this.utils.orientationHandler?.destroy();
         this.utils.urlHandler?.destroy();

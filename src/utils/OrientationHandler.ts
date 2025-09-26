@@ -81,8 +81,7 @@ export class OrientationHandler {
 
         this.autoRotate = true;
 
-        if ( this.currentOrientation !== 0 )
-            this.rotateMap( this.currentOrientation );
+        if ( this.currentOrientation !== 0 ) this.rotateMap( this.currentOrientation );
 
     }
 
@@ -115,7 +114,6 @@ export class OrientationHandler {
             );
 
             this.resetRotation();
-            this.active = false;
 
         }
 
