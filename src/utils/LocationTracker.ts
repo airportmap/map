@@ -58,7 +58,7 @@ export class LocationTracker {
                 radius: 10,
                 weight: 2,
                 color: '#ffffff',
-                fillColor: '#2196f3',
+                fillColor: '#176db3',
                 fillOpacity: 1,
                 opacity: 1
             } ).addTo( leafletMap );
@@ -74,8 +74,8 @@ export class LocationTracker {
             this.accuracyCircle = new Circle( position, {
                 radius: accuracy,
                 weight: 1,
-                color: '#2196f3',
-                fillColor: '#2196f3',
+                color: '#176db3',
+                fillColor: '#176db3',
                 fillOpacity: 0.15,
                 opacity: 0.3
             } ).addTo( leafletMap );
