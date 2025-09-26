@@ -1,5 +1,6 @@
 import { APMapEventType, APMapState } from '@airportmap/types';
 import { APMap } from '@map/core/APMap';
+import deepmerge from 'deepmerge';
 
 export class StateStorage {
 
@@ -20,8 +21,13 @@ export class StateStorage {
         if ( this.enabled ) this.mapState = this.getState();
         if ( this.enabled && this.restoreOnLoad ) this.restoreState();
 
-        /*this.map.addEventListener( 'position-changed' as APMapEventType, this.savePos.bind( this ) );
-        this.map.addEventListener( 'zoom-changed' as APMapEventType, this.saveZoom.bind( this ) );*/
+        this.map.addEventListener( 'position-changed' as APMapEventType, () => {
+            this.merge( this.map.center );
+        } );
+
+        this.map.addEventListener( 'zoom-changed' as APMapEventType, () => {
+            this.set( 'zoom', this.map.zoom );
+        } );
 
     }
 
@@ -66,6 +72,26 @@ export class StateStorage {
     public enable () : void { this.enabled = true }
 
     public disable () : void { this.enabled = false }
+
+    public get< T > ( key: keyof APMapState ) : T { return this.mapState[ key ] as T }
+
+    public set ( key: keyof APMapState, value: any ) : APMapState {
+
+        this.mapState[ key ] = value;
+        this.saveState();
+
+        return this.mapState;
+
+    }
+
+    public merge ( state: Partial< APMapState > ) : APMapState {
+
+        this.mapState = deepmerge( this.mapState, state );
+        this.saveState();
+
+        return this.mapState;
+
+    }
 
     public export () : string { return JSON.stringify( this.mapState ) }
 
