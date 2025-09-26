@@ -7,6 +7,9 @@ export class StateStorage {
     private enabled: boolean;
     private restoreOnLoad: boolean;
 
+    public set enable ( is: boolean ) { this.enabled = is }
+    public set restore ( is: boolean ) { this.restoreOnLoad = is }
+
     constructor ( private map: APMap ) {
 
         const { enabled = false, restoreOnLoad = true, mapId = null } = this.map.opt.stateStorage;
@@ -35,5 +38,19 @@ export class StateStorage {
     public clear () : void { localStorage.removeItem( this.storageKey ) }
 
     public export () : string | null { return localStorage.getItem( this.storageKey ) }
+
+    public import ( stateString: string ) : boolean {
+
+        try {
+
+            localStorage.setItem( this.storageKey, JSON.stringify(
+                JSON.parse( stateString ) as APMapState
+            ) );
+
+            return true;
+
+        } catch { return false }
+
+    }
 
 }
