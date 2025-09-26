@@ -7,7 +7,7 @@ export class StateStorage {
     private enabled: boolean;
     private restoreOnLoad: boolean;
 
-    public set enable ( is: boolean ) { this.enabled = is }
+    private mapState: APMapState = {};
 
     constructor ( private map: APMap ) {
 
@@ -17,67 +17,45 @@ export class StateStorage {
         this.restoreOnLoad = restoreOnLoad;
         this.storageKey = `__apmap_state_${ mapId ?? 'default' }`;
 
-        if ( this.enabled && this.restoreOnLoad ) this.restore();
+        if ( this.enabled ) this.mapState = this.getState();
+        if ( this.enabled && this.restoreOnLoad ) this.restoreState();
 
-        this.map.addEventListener( 'position-changed' as APMapEventType, this.save.bind( this ) );
-        this.map.addEventListener( 'zoom-changed' as APMapEventType, this.save.bind( this ) );
-
-    }
-
-    public save () : APMapState | undefined {
-
-        if ( ! this.enabled ) return;
-
-        const state: APMapState = {
-            ...this.map.center,
-            zoom: this.map.zoom
-        };
-
-        localStorage.setItem( this.storageKey, JSON.stringify( state ) );
-
-        return state;
+        /*this.map.addEventListener( 'position-changed' as APMapEventType, this.savePos.bind( this ) );
+        this.map.addEventListener( 'zoom-changed' as APMapEventType, this.saveZoom.bind( this ) );*/
 
     }
 
-    public restore () : boolean {
+    public getState () : APMapState {
+
+        return JSON.parse( localStorage.getItem( this.storageKey ) ) as APMapState;
+
+    }
+
+    public saveState () : boolean {
 
         if ( ! this.enabled ) return false;
 
-        const raw = localStorage.getItem( this.storageKey );
+        localStorage.setItem( this.storageKey, JSON.stringify( this.mapState ) );
 
-        if ( ! raw ) return false;
-
-        try {
-
-            const state: APMapState = JSON.parse( raw );
-
-            if (
-                typeof state.lat === 'number' &&
-                typeof state.lng === 'number' &&
-                typeof state.zoom === 'number'
-            ) {
-
-                this.map.setView( state.lat, state.lng, state.zoom );
-
-            }
-
-            return true;
-
-        } catch { return false }
+        return true;
 
     }
 
-    public clear () : void { localStorage.removeItem( this.storageKey ) }
+    public restoreState () : boolean {
 
-    public export () : string | null { return localStorage.getItem( this.storageKey ) }
-
-    public import ( stateString: string ) : boolean {
+        if ( ! this.enabled ) return false;
 
         try {
 
-            localStorage.setItem( this.storageKey, JSON.stringify(
-                JSON.parse( stateString ) as APMapState
-            ) );
+            if (
+                typeof this.mapState.lat === 'number' &&
+                typeof this.mapState.lng === 'number' &&
+                typeof this.mapState.zoom === 'number'
+            ) {
+
+                this.map.setView( this.mapState.lat, this.mapState.lng, this.mapState.zoom );
+
+            }
 
             return true;
 
