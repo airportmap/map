@@ -15,4 +15,24 @@ export class LayerManager {
 
     }
 
+    public getLayerById ( layerId: string ) : BaseLayer | undefined {}
+
+    public addLayer ( layer: BaseLayer ) : BaseLayer {}
+
+    public removeLayer ( layerId: string ) : boolean {}
+
+    public getLayers () : BaseLayer[] { return Array.from( this.layers.values() ) }
+
+    public getLayersByGroup ( groupName: string ) : BaseLayer[] {}
+
+    public getVisibleLayers () : BaseLayer[] {}
+
+    public setLayerVisibility ( layerId: string, visible: boolean ) : boolean {}
+
+    public toggleLayerVisibility ( layerId: string ) : boolean | undefined {}
+
+    public setGroupVisibility ( groupName: string, visible: boolean ) : boolean {}
+
+    public toggleGroupVisibility ( groupName: string ) : boolean {}
+
 }
