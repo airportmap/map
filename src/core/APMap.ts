@@ -75,7 +75,17 @@ export class APMap {
 
     private createMap () : LeafletMap {
 
-        return new LeafletMap ( this.element, this.options.mapOptions );
+        const map = new LeafletMap ( this.element, this.options.mapOptions );
+
+        map.addEventListener( 'zoomlevelschange', ( e ) => {
+            this.dispatchEvent( 'zoom-changed' as APMapEventType, { e } );
+        } );
+
+        map.addEventListener( 'moveend', ( e ) => {
+            this.dispatchEvent( 'position-changed' as APMapEventType, { e } );
+        } );
+
+        return map;
 
     }
 
