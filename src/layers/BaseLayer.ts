@@ -5,7 +5,6 @@ import { Layer as LeafletLayer } from 'leaflet';
 export abstract class BaseLayer< T extends APMapLayerOptions > {
 
     protected options: Required< T >;
-    protected visibility: boolean = false;
     protected leafletLayer: LeafletLayer;
 
     public get id () : string { return this.options._id! }
@@ -19,8 +18,8 @@ export abstract class BaseLayer< T extends APMapLayerOptions > {
     public get opacity () : number { return this.options.opacity! }
     public get attribution () : string | undefined { return this.options.attribution }
 
-    public set visible ( is: boolean ) { this.visibility = is }
-    public get visible () : boolean { return this.visibility }
+    public set visible ( is: boolean ) { this.options.visible = is }
+    public get visible () : boolean { return this.options.visible }
 
     public get layer () : LeafletLayer { return this.leafletLayer }
 

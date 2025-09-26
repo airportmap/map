@@ -2,7 +2,7 @@ import { TileLayer } from '@map/layers/TileLayer';
 
 export class OSMTileLayer extends TileLayer {
 
-    constructor ( visible: boolean ) {
+    constructor () {
 
         super( {
             _id: '__tile_layer__osm__',
@@ -12,8 +12,7 @@ export class OSMTileLayer extends TileLayer {
             attribution: '&copy; <a href="https://openstreetmap.org/copyright">OSM</a> contributors',
             performanceImpact: 'low',
             minZoom: 0,
-            maxZoom: 19,
-            visible
+            maxZoom: 19
         } );
 
     }
