@@ -14,8 +14,8 @@ export class URLHandler {
 
         this.initFromURL();
 
-        this.map.addEventListener( 'position-changed' as APMapEventType, this.updateURL );
-        this.map.addEventListener( 'zoom-changed' as APMapEventType, this.updateURL );
+        this.map.addEventListener( 'position-changed' as APMapEventType, this.updateURL.bind( this ) );
+        this.map.addEventListener( 'zoom-changed' as APMapEventType, this.updateURL.bind( this ) );
 
     }
 
@@ -30,10 +30,10 @@ export class URLHandler {
 
     private updateURLImmediate () : void {
 
-        const { lat, lng } = this.map.center;
+        const { lat, lng } = this.map.center ?? {};
         const zoom = this.map.zoom;
 
-        window.location.hash = `#${zoom}/${lat}/${lng}`;
+        if ( zoom && lat && lng ) window.location.hash = `#${zoom}/${lat}/${lng}`;
 
     }
 
