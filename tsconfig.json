@@ -4,6 +4,7 @@
     "lib": [ "esnext", "dom" ],
     "paths": {
       "@map/core/*": [ "src/core/*" ],
+      "@map/layers/*": [ "src/layers/*" ],
       "@map/utils/*": [ "src/utils/*" ]
     }
   }
