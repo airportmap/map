@@ -33,7 +33,7 @@ export class StateStorage {
 
     public getState () : APMapState {
 
-        return JSON.parse( localStorage.getItem( this.storageKey ) ?? '' ) as APMapState;
+        return JSON.parse( localStorage.getItem( this.storageKey ) ?? '{}' ) as APMapState;
 
     }
 
