@@ -22,6 +22,7 @@ export abstract class BaseLayer {
 
     public set visible ( is: boolean ) { this.visibility = is }
     public get visible () : boolean { return this.visibility }
+
     public get layer () : LeafletLayer { return this.leafletLayer }
 
     constructor ( options: APMapLayerOptions ) {
