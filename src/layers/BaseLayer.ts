@@ -5,14 +5,13 @@ import { Layer as LeafletLayer } from 'leaflet';
 export abstract class BaseLayer {
 
     protected options: Required< APMapLayerOptions >;
-    protected visible: boolean;
+    protected visibility: boolean;
     protected leafletLayer: LeafletLayer;
 
     public get id () : string { return this.options.id }
     public get name () : string { return this.options.name }
     public get description () : string | undefined { return this.options.description }
     public get group () : string | undefined { return this.options.group }
-    public get isVisible () : boolean { return this.visible }
     public get minZoom () : number { return this.options.minZoom }
     public get maxZoom () : number { return this.options.maxZoom }
     public get performanceImpact () : 'low' | 'medium' | 'high' { return this.options.performanceImpact }
@@ -21,10 +20,14 @@ export abstract class BaseLayer {
     public get attribution () : string | undefined { return this.options.attribution }
     public get pane () : string | undefined { return this.options.pane }
 
+    public set visible ( is: boolean ) { this.visibility = is }
+    public get visible () : boolean { return this.visibility }
+    public get layer () : LeafletLayer { return this.leafletLayer }
+
     constructor ( options: APMapLayerOptions ) {
 
         this.options = this.mergeDefaultOptions( options );
-        this.visible  = this.options.visible || false;
+        this.visibility  = this.options.visible || false;
 
         this.leafletLayer = this.createLeafletLayer();
         this.initEventHandlers();
