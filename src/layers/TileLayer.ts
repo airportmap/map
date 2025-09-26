@@ -12,6 +12,7 @@ export class TileLayer extends BaseLayer {
         super( options );
 
         this.tileOptions = this.mergeTileOptions( options );
+        this.init();
 
     }
 
@@ -35,6 +36,6 @@ export class TileLayer extends BaseLayer {
 
     protected initEventHandlers () : void {}
 
-    public update () : void {}
+    public update () : this { return this }
 
 }

@@ -30,9 +30,6 @@ export abstract class BaseLayer {
         this.options = this.mergeDefaultOptions( options );
         this.visibility  = this.options.visible || false;
 
-        this.leafletLayer = this.createLeafletLayer();
-        this.initEventHandlers();
-
     }
 
     private mergeDefaultOptions ( options: APMapLayerOptions ) : Required< APMapLayerOptions > {
@@ -58,6 +55,15 @@ export abstract class BaseLayer {
 
     protected abstract initEventHandlers() : void;
 
-    public abstract update () : void;
+    public init () : this {
+
+        this.leafletLayer = this.createLeafletLayer();
+        this.initEventHandlers();
+
+        return this;
+
+    }
+
+    public abstract update () : this;
 
 }
