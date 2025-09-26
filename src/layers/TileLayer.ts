@@ -3,34 +3,23 @@ import { BaseLayer } from '@map/layers/BaseLayer';
 import deepmerge from 'deepmerge';
 import { TileLayer as LeafletTileLayer } from 'leaflet';
 
-export class TileLayer extends BaseLayer {
-
-    private tileOptions: APMapTileLayerOptions;
+export class TileLayer extends BaseLayer< APMapTileLayerOptions > {
 
     constructor ( options: APMapTileLayerOptions ) {
 
-        super( options );
-
-        this.tileOptions = this.mergeTileOptions( options );
-        this.init();
-
-    }
-
-    private mergeTileOptions ( options: APMapTileLayerOptions ) : APMapTileLayerOptions {
-
-        return deepmerge< APMapTileLayerOptions >( {
+        super( deepmerge( {
             url: '',
             subdomains: 'abc',
             tileSize: 256,
             detectRetina: true,
             crossOrigin: false
-        }, options );
+        }, options ) );
 
     }
 
     protected createLeafletLayer () : LeafletTileLayer {
 
-        return new LeafletTileLayer( this.tileOptions.url, this.tileOptions );
+        return new LeafletTileLayer( this.options.url, this.options );
 
     }
 

@@ -2,21 +2,21 @@ import { APMapLayerOptions } from '@airportmap/types';
 import deepmerge from 'deepmerge';
 import { Layer as LeafletLayer } from 'leaflet';
 
-export abstract class BaseLayer {
+export abstract class BaseLayer< T extends APMapLayerOptions > {
 
-    protected options: Required< APMapLayerOptions >;
+    protected options: Required< T >;
     protected visibility: boolean;
     protected leafletLayer: LeafletLayer;
 
-    public get id () : string { return this.options._id }
-    public get name () : string { return this.options.name }
+    public get id () : string { return this.options._id! }
+    public get name () : string { return this.options.name! }
     public get description () : string | undefined { return this.options.description }
     public get group () : string | undefined { return this.options.group }
-    public get minZoom () : number { return this.options.minZoom }
-    public get maxZoom () : number { return this.options.maxZoom }
-    public get performanceImpact () : 'low' | 'medium' | 'high' { return this.options.performanceImpact }
-    public get interactive () : boolean { return this.options.interactive }
-    public get opacity () : number { return this.options.opacity }
+    public get minZoom () : number { return this.options.minZoom! }
+    public get maxZoom () : number { return this.options.maxZoom! }
+    public get performanceImpact () : 'low' | 'medium' | 'high' { return this.options.performanceImpact! }
+    public get interactive () : boolean { return this.options.interactive! }
+    public get opacity () : number { return this.options.opacity! }
     public get attribution () : string | undefined { return this.options.attribution }
     public get pane () : string | undefined { return this.options.pane }
 
@@ -30,11 +30,14 @@ export abstract class BaseLayer {
         this.options = this.mergeDefaultOptions( options );
         this.visibility  = this.options.visible || false;
 
+        this.leafletLayer = this.createLeafletLayer();
+        this.initEventHandlers();
+
     }
 
-    private mergeDefaultOptions ( options: APMapLayerOptions ) : Required< APMapLayerOptions > {
+    private mergeDefaultOptions ( options: APMapLayerOptions ) : Required< T > {
 
-        return deepmerge< Required< APMapLayerOptions > >( {
+        return deepmerge< Required< T > >( {
             _id: '',
             name: '',
             description: undefined,
@@ -47,7 +50,7 @@ export abstract class BaseLayer {
             opacity: 1,
             attribution: undefined,
             pane: undefined
-        }, options );
+        } as any, options as any );
 
     }
 
@@ -55,15 +58,6 @@ export abstract class BaseLayer {
 
     protected abstract initEventHandlers() : void;
 
-    public init () : this {
-
-        this.leafletLayer = this.createLeafletLayer();
-        this.initEventHandlers();
-
-        return this;
-
-    }
-
-    public abstract update () : this;
+    public abstract update () : void;
 
 }

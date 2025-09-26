@@ -1,11 +1,11 @@
-import { APMapEventType } from '@airportmap/types';
+import { APMapEventType, APMapLayerOptions } from '@airportmap/types';
 import { APMap } from '@map/core/APMap';
 import { BaseLayer } from '@map/layers/BaseLayer';
 import { LayerGroup, LayerOptions } from 'leaflet';
 
 export class LayerManager {
 
-    private layers: Map< string, BaseLayer > = new Map ();
+    private layers: Map< string, BaseLayer< any > > = new Map ();
     private layerGroups: Map< string, LayerGroup > = new Map ();
     private defaultLayerGroup: LayerGroup;
 
@@ -42,11 +42,15 @@ export class LayerManager {
 
     }
 
-    public getLayers () : BaseLayer[] { return Array.from( this.layers.values() ) }
+    public getLayers () : BaseLayer< any >[] { return Array.from( this.layers.values() ) }
 
-    public getLayerById ( layerId: string ) : BaseLayer | undefined { return this.layers.get( layerId ) }
+    public getLayerById< T extends APMapLayerOptions > ( layerId: string ) : BaseLayer< T > | undefined {
 
-    public addLayer ( layer: BaseLayer ) : BaseLayer | false {
+        return this.layers.get( layerId ) as BaseLayer< T >;
+
+    }
+
+    public addLayer< T extends APMapLayerOptions > ( layer: BaseLayer< T > ) : BaseLayer< T > | false {
 
         if ( this.layers.has( layer.id ) ) return false;
 
@@ -74,21 +78,21 @@ export class LayerManager {
 
     }
 
-    public getLayersByGroup ( groupName: string ) : BaseLayer[] {
+    public getLayersByGroup< T extends APMapLayerOptions > ( groupName: string ) : BaseLayer< T >[] {
 
-        return this.getLayers().filter( l => l.group === groupName );
-
-    }
-
-    public getVisibleLayers () : BaseLayer[] {
-
-        return this.getLayers().filter( l => l.visible );
+        return this.getLayers().filter( l => l.group === groupName ) as BaseLayer< T >[];
 
     }
 
-    public getInteractiveLayers () : BaseLayer[] {
+    public getVisibleLayers< T extends APMapLayerOptions > () : BaseLayer< T >[] {
 
-        return this.getLayers().filter( l => l.interactive );
+        return this.getLayers().filter( l => l.visible ) as BaseLayer< T >[];
+
+    }
+
+    public getInteractiveLayers< T extends APMapLayerOptions > () : BaseLayer< T >[] {
+
+        return this.getLayers().filter( l => l.interactive ) as BaseLayer< T >[];
 
     }
 
