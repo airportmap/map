@@ -7,11 +7,13 @@ export class LayerManager {
 
     private layers: Map< string, BaseLayer > = new Map ();
     private layerGroups: Map< string, LayerGroup > = new Map ();
+    private defaultLayerGroup: LayerGroup;
 
-    constructor (
-        private map: APMap,
-        private defaultLayerGroup = this.addGroup( '__default__' )
-    ) {}
+    constructor ( private map: APMap ) {
+
+        this.defaultLayerGroup = this.addGroup( '__default__' );
+
+    }
 
     public getGroups () : string[] { return Object.keys( this.layerGroups ) }
 
