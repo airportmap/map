@@ -12,9 +12,11 @@ export abstract class BaseLayer {
     public get name () : string { return this.options.name }
     public get description () : string | undefined { return this.options.description }
     public get group () : string | undefined { return this.options.group }
+    public get isVisible () : boolean { return this.visible }
     public get minZoom () : number { return this.options.minZoom }
     public get maxZoom () : number { return this.options.maxZoom }
     public get performanceImpact () : 'low' | 'medium' | 'high' { return this.options.performanceImpact }
+    public get interactive () : boolean { return this.options.interactive }
     public get opacity () : number { return this.options.opacity }
     public get attribution () : string | undefined { return this.options.attribution }
     public get pane () : string | undefined { return this.options.pane }
@@ -22,7 +24,7 @@ export abstract class BaseLayer {
     constructor ( options: APMapLayerOptions ) {
 
         this.options = this.mergeDefaultOptions( options );
-        this.visible = this.options.visible || false;
+        this.visible  = this.options.visible || false;
 
         this.leafletLayer = this.createLeafletLayer();
         this.initEventHandlers();
@@ -51,5 +53,7 @@ export abstract class BaseLayer {
     protected abstract createLeafletLayer () : LeafletLayer;
 
     protected abstract initEventHandlers() : void;
+
+    public abstract update () : void;
 
 }
