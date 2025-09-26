@@ -109,9 +109,9 @@ export class LocationTracker {
 
     }
 
-    public startTracking ( options: { 
-        follow?: boolean, 
-        highAccuracy?: boolean 
+    public startTracking ( options: {
+        follow?: boolean,
+        highAccuracy?: boolean
     } = {} ) : void {
 
         this.followUser = options.follow ?? false;

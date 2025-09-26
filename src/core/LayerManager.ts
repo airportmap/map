@@ -50,13 +50,13 @@ export class LayerManager {
 
     }
 
-    public addLayer< T extends APMapLayerOptions > ( layer: BaseLayer< T > ) : BaseLayer< T > | false {
+    public addLayer< T extends APMapLayerOptions > ( layer: BaseLayer< T >, visible?: boolean ) : BaseLayer< T > | false {
 
         if ( this.layers.has( layer.id ) ) return false;
 
         this.layers.set( layer.id, layer );
 
-        this.setLayerVisibility( layer.id, layer.visible );
+        this.setLayerVisibility( layer.id, visible ?? layer.visible );
 
         this.map.dispatchEvent( 'layer-added' as APMapEventType, { layer } );
 

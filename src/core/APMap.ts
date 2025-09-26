@@ -34,10 +34,7 @@ export class APMap {
     public get stateStorage () : StateStorage | undefined { return this.utils.stateStorage }
     public get urlHandler () : URLHandler | undefined { return this.utils.urlHandler }
 
-    constructor (
-        element: HTMLElement,
-        options?: APMapOptions
-    ) {
+    constructor ( element: HTMLElement, options?: APMapOptions ) {
 
         if ( ! element || ! ( element instanceof HTMLElement ) ) throw new Error (
             `Given element is not a valid HTML element or does not exists`
