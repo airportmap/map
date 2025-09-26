@@ -1,4 +1,4 @@
-import { APMapState } from '@airportmap/types';
+import { APMapEventType, APMapState } from '@airportmap/types';
 import { APMap } from '@map/core/APMap';
 
 export class StateStorage {
@@ -17,6 +17,9 @@ export class StateStorage {
         this.enabled = enabled;
         this.restoreOnLoad = restoreOnLoad;
         this.storageKey = `__apmap_state_${ mapId ?? 'default' }`;
+
+        this.map.addEventListener( 'position-changed' as APMapEventType, this.save.bind( this ) );
+        this.map.addEventListener( 'zoom-changed' as APMapEventType, this.save.bind( this ) );
 
     }
 
