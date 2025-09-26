@@ -25,6 +25,4 @@ export class TileLayer extends BaseLayer< APMapTileLayerOptions > {
 
     protected initEventHandlers () : void {}
 
-    public update () : this { return this }
-
 }

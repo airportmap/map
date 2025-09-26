@@ -5,7 +5,7 @@ import { Layer as LeafletLayer } from 'leaflet';
 export abstract class BaseLayer< T extends APMapLayerOptions > {
 
     protected options: Required< T >;
-    protected visibility: boolean;
+    protected visibility: boolean = false;
     protected leafletLayer: LeafletLayer;
 
     public get id () : string { return this.options._id! }
@@ -18,7 +18,6 @@ export abstract class BaseLayer< T extends APMapLayerOptions > {
     public get interactive () : boolean { return this.options.interactive! }
     public get opacity () : number { return this.options.opacity! }
     public get attribution () : string | undefined { return this.options.attribution }
-    public get pane () : string | undefined { return this.options.pane }
 
     public set visible ( is: boolean ) { this.visibility = is }
     public get visible () : boolean { return this.visibility }
@@ -28,9 +27,8 @@ export abstract class BaseLayer< T extends APMapLayerOptions > {
     constructor ( options: APMapLayerOptions ) {
 
         this.options = this.mergeDefaultOptions( options );
-        this.visibility  = this.options.visible || false;
-
         this.leafletLayer = this.createLeafletLayer();
+
         this.initEventHandlers();
 
     }
@@ -48,8 +46,7 @@ export abstract class BaseLayer< T extends APMapLayerOptions > {
             performanceImpact: 'low',
             interactive: true,
             opacity: 1,
-            attribution: undefined,
-            pane: undefined
+            attribution: undefined
         } as any, options as any );
 
     }
@@ -57,7 +54,5 @@ export abstract class BaseLayer< T extends APMapLayerOptions > {
     protected abstract createLeafletLayer () : LeafletLayer;
 
     protected abstract initEventHandlers() : void;
-
-    public abstract update () : void;
 
 }
