@@ -19,7 +19,7 @@ export abstract class BaseLayer< T extends APMapLayerOptions > {
     public get attribution () : string | undefined { return this.options.attribution }
 
     public set visible ( is: boolean ) { this.options.visible = is }
-    public get visible () : boolean { return this.options.visible }
+    public get visible () : boolean { return this.options.visible! }
 
     public get layer () : LeafletLayer { return this.leafletLayer }
 
