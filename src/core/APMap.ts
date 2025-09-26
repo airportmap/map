@@ -20,6 +20,7 @@ export class APMap {
         urlHandler?: URLHandler
     } = {};
 
+    public get opt () : Required< APMapOptions > { return this.options }
     public get map () : LeafletMap { return this.leafletMap }
     public get bounds () : LatLngBounds { return this.leafletMap.getBounds() }
     public get zoom () : number { return this.leafletMap.getZoom() }
@@ -65,6 +66,11 @@ export class APMap {
             mode: 'normal',
             allowFullscreen: true,
             urlManipulation: false,
+            stateStorage: {
+                enabled: false,
+                restoreOnLoad: true,
+                mapId: null
+            },
             trackUserPosition: false,
             enableDeviceOrientation: false,
             showDayNightBoundary: false
@@ -80,14 +86,17 @@ export class APMap {
 
     private initUtils() : void {
 
+        if ( this.options.stateStorage.enabled )
+            this.utils.stateStorage = new StateStorage( this );
+
+        if ( this.options.urlManipulation )
+            this.utils.urlHandler = new URLHandler( this );
+
         if ( this.options.trackUserPosition )
             this.utils.locationTracker = new LocationTracker( this );
 
         if ( this.options.enableDeviceOrientation )
             this.utils.orientationHandler = new OrientationHandler( this );
-
-        if ( this.options.urlManipulation )
-            this.utils.urlHandler = new URLHandler( this );
 
     }
 
