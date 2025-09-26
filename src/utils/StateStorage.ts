@@ -63,4 +63,34 @@ export class StateStorage {
 
     }
 
+    public enable () : void { this.enabled = true }
+
+    public disable () : void { this.enabled = false }
+
+    public export () : string { return JSON.stringify( this.mapState ) }
+
+    public import ( stateString: string ) : boolean {
+
+        if ( ! this.enabled ) return false;
+
+        try {
+
+            this.mapState = JSON.parse( stateString ) as APMapState;
+            this.saveState();
+
+            return true;
+
+        } catch { return false }
+
+    }
+
+    public clear () : void {
+
+        localStorage.removeItem( this.storageKey );
+        this.mapState = {};
+
+    }
+
+    public destroy () : void { this.mapState = {} }
+
 }
