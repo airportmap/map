@@ -73,6 +73,9 @@ export class APMap {
 
         return deepmerge< Required< APMapOptions > >( {
             mapOptions: {
+                preferCanvas: true,
+                attributionControl: false,
+                zoomControl: false,
                 minZoom: 4,
                 maxZoom: 16
             },
