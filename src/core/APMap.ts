@@ -66,6 +66,7 @@ export class APMap {
         this.layerManager = new LayerManager( this );
 
         this.initUtils();
+        this.setStyles();
 
     }
 
@@ -110,7 +111,7 @@ export class APMap {
 
     }
 
-    private initUtils() : void {
+    private initUtils () : void {
 
         if ( this.options.stateStorage.enabled )
             this.utils.stateStorage = new StateStorage( this );
@@ -123,6 +124,12 @@ export class APMap {
 
         if ( this.options.enableDeviceOrientation )
             this.utils.orientationHandler = new OrientationHandler( this );
+
+    }
+
+    private setStyles () : void {
+
+        this.element.classList.add( '__apm_map', '__apm_map_' + this.opt.mode );
 
     }
 
