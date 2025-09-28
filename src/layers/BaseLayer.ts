@@ -1,4 +1,5 @@
 import { APMapLayerOptions } from '@airportmap/types';
+import { APMap } from '@map/core/APMap';
 import deepmerge from 'deepmerge';
 import { Layer as LeafletLayer } from 'leaflet';
 
@@ -23,7 +24,7 @@ export abstract class BaseLayer< T extends APMapLayerOptions > {
 
     public get layer () : LeafletLayer { return this.leafletLayer }
 
-    constructor ( options: APMapLayerOptions ) {
+    constructor ( protected map: APMap, options: APMapLayerOptions ) {
 
         this.options = this.mergeDefaultOptions( options );
         this.leafletLayer = this.createLeafletLayer();

@@ -1,4 +1,5 @@
 import { APMapDayNightLayerOptions } from '@airportmap/types';
+import { APMap } from '@map/core/APMap';
 import { BaseLayer } from '@map/layers/BaseLayer';
 import deepmerge from 'deepmerge';
 import { LatLngExpression, Polygon } from 'leaflet';
@@ -11,9 +12,9 @@ export class DayNightLayer extends BaseLayer< APMapDayNightLayerOptions > {
     public get updated () : number { return this.lastUpdate }
     public get speed () : number { return this.options.animationSpeed }
 
-    constructor ( options: Partial< APMapDayNightLayerOptions > ) {
+    constructor ( map: APMap, options: Partial< APMapDayNightLayerOptions > ) {
 
-        super( deepmerge( {
+        super( map, deepmerge( {
             _id: '__day_night_layer__',
             name: 'Day/Night Boundary',
             visible: true,

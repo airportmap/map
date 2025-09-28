@@ -1,13 +1,14 @@
 import { APMapTileLayerOptions } from '@airportmap/types';
+import { APMap } from '@map/core/APMap';
 import { BaseLayer } from '@map/layers/BaseLayer';
 import deepmerge from 'deepmerge';
 import { TileLayer as LeafletTileLayer } from 'leaflet';
 
 export class TileLayer extends BaseLayer< APMapTileLayerOptions > {
 
-    constructor ( options: APMapTileLayerOptions ) {
+    constructor ( map: APMap, options: APMapTileLayerOptions ) {
 
-        super( deepmerge( {
+        super( map, deepmerge( {
             url: '',
             subdomains: 'abc',
             tileSize: 256,

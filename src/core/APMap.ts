@@ -46,11 +46,7 @@ export class APMap {
 
     }
 
-    public get zoom () : number {
-
-        return Number ( this.leafletMap.getZoom().toFixed( this.ZOOM_PRECISION ) );
-
-    }
+    public get zoom () : number { return Number ( this.leafletMap.getZoom().toFixed( this.ZOOM_PRECISION ) ) }
 
     public get locationTracker () : LocationTracker | undefined { return this.utils.locationTracker }
     public get orientationHandler () : OrientationHandler | undefined { return this.utils.orientationHandler }
@@ -145,7 +141,7 @@ export class APMap {
 
         if ( this.options.dayNight.enabled ) {
 
-            this.components.dayNightLayer = new DayNightLayer( this.options.dayNight );
+            this.components.dayNightLayer = new DayNightLayer( this, this.options.dayNight );
             this.layer.addLayer( this.components.dayNightLayer );
 
         }

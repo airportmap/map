@@ -1,10 +1,11 @@
+import { APMap } from '@map/core/APMap';
 import { TileLayer } from '@map/layers/TileLayer';
 
 export class OSMTileLayer extends TileLayer {
 
-    constructor () {
+    constructor ( map: APMap ) {
 
-        super( {
+        super( map, {
             _id: '__tile_layer__osm__',
             group: '__tile_layer__',
             name: 'OSM Tile Layer',
