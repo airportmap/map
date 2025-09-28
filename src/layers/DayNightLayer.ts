@@ -3,6 +3,59 @@ import { BaseLayer } from '@map/layers/BaseLayer';
 import deepmerge from 'deepmerge';
 import { LatLng, LatLngExpression, Polygon } from 'leaflet';
 
+function julian(date: Date): number {
+    return (date.getTime() / 86400000) + 2440587.5;
+}
+
+function GMST(julianDay: number): number {
+    const d = julianDay - 2451545.0;
+    return (18.697374558 + 24.06570982441908 * d) % 24;
+}
+
+function sunEclipticPosition(julianDay: number) {
+    const n = julianDay - 2451545.0;
+    let L = 280.460 + 0.9856474 * n;
+    L %= 360;
+    let g = 357.528 + 0.9856003 * n;
+    g %= 360;
+    const lambda = L + 1.915 * Math.sin(g * Math.PI / 180) +
+        0.02 * Math.sin(2 * g * Math.PI / 180);
+    return { lambda, g };
+}
+
+function eclipticObliquity(julianDay: number): number {
+    const n = julianDay - 2451545.0;
+    const T = n / 36525;
+    return 23.43929111 -
+        T * (46.836769 / 3600
+            - T * (0.0001831 / 3600
+                + T * (0.00200340 / 3600
+                    - T * (0.576e-6 / 3600
+                        - T * 4.34e-8 / 3600))));
+}
+
+function sunEquatorialPosition(lambda: number, eclObliq: number) {
+    const D2R = Math.PI / 180;
+    const R2D = 180 / Math.PI;
+    let alpha = Math.atan(Math.cos(eclObliq * D2R) * Math.tan(lambda * D2R)) * R2D;
+    let delta = Math.asin(Math.sin(eclObliq * D2R) * Math.sin(lambda * D2R)) * R2D;
+    const lQuadrant = Math.floor(lambda / 90) * 90;
+    const raQuadrant = Math.floor(alpha / 90) * 90;
+    alpha = alpha + (lQuadrant - raQuadrant);
+    return { alpha, delta };
+}
+
+function hourAngle(lng: number, sunPos: { alpha: number }, gst: number): number {
+    const lst = gst + lng / 15;
+    return lst * 15 - sunPos.alpha;
+}
+
+function latitude(ha: number, sunPos: { delta: number }): number {
+    const D2R = Math.PI / 180;
+    const R2D = 180 / Math.PI;
+    return Math.atan(-Math.cos(ha * D2R) / Math.tan(sunPos.delta * D2R)) * R2D;
+}
+
 export class DayNightLayer extends BaseLayer< APMapDayNightLayerOptions > {
 
     private animationFrame: number | null = null;
@@ -25,73 +78,32 @@ export class DayNightLayer extends BaseLayer< APMapDayNightLayerOptions > {
 
     }
 
-    private calculateSunPosition ( date: Date ) : LatLng {
-
-        const start = new Date( date.getFullYear(), 0, 0 );
-        const diff = date.getTime() - start.getTime();
-        const dayOfYear = Math.floor( diff / 86.4e6 );
-
-        const declination = 23.45 * Math.sin( ( 2 * Math.PI / 365 ) * ( dayOfYear - 81 ) );
-
-        const b = ( 2 * Math.PI * ( dayOfYear - 81 ) ) / 364;
-        const eqTime = 9.87 * Math.sin( 2 * b ) - 7.53 * Math.cos( b ) - 1.5 * Math.sin( b );
-
-        const solarNoon = 12 - eqTime / 60;
-
-        const hoursFromNoon = date.getUTCHours() + date.getUTCMinutes() / 60 - solarNoon;
-        const longitude = hoursFromNoon * 15;
-
-        return new LatLng( declination, longitude );
-
-    }
-
     private calculateDayNightBoundary ( date: Date = new Date() ) : LatLngExpression[] {
 
-        const sunPos = this.calculateSunPosition( date );
+        const longitudeRange = 720;
+        const resolution = this.options.resolution || 2;
+        const today = date;
+        const julianDay = julian(today);
+        const gst = GMST(julianDay);
 
-        const resolution = this.options.resolution || 36;
-        const points: LatLngExpression[] = [];
+        const sunEclPos = sunEclipticPosition(julianDay);
+        const eclObliq = eclipticObliquity(julianDay);
+        const sunEqPos = sunEquatorialPosition(sunEclPos.lambda, eclObliq);
 
-        const antipodeLat = -sunPos.lat;
-        const antipodeLng = sunPos.lng > 0 ? sunPos.lng - 180 : sunPos.lng + 180;
-
-        for ( let i = 0; i < resolution; i++ ) {
-
-            const angle = ( i / resolution ) * 2 * Math.PI;
-            const latOffset = 90 * Math.cos( angle );
-            const lngOffset = 90 * Math.sin( angle ) / Math.cos(
-                ( antipodeLat + latOffset ) * Math.PI / 180
-            );
-
-            let lat = antipodeLat + latOffset;
-            let lng = antipodeLng + lngOffset;
-
-            if ( lat > 90 ) lat = 90;
-            if ( lat < -90 ) lat = -90;
-            if ( lng > 180 ) lng -= 360;
-            if ( lng < -180 ) lng += 360;
-
-            points.push( [ lat, lng ] );
-
+        const latLng: LatLngExpression[] = [];
+        for (let i = 0; i <= longitudeRange * resolution; i++) {
+            const lng = -longitudeRange / 2 + i / resolution;
+            const ha = hourAngle(lng, sunEqPos, gst);
+            latLng[i + 1] = [latitude(ha, sunEqPos), lng];
         }
-
-        if ( points.length > 0 ) points.push( points[ 0 ] );
-
-        if ( antipodeLat > 0 ) {
-
-            points.push( [ -90, -180 ] );
-            points.push( [ -90, 0 ] );
-            points.push( [ -90, 180 ] );
-
+        if (sunEqPos.delta < 0) {
+            latLng[0] = [90, -longitudeRange / 2];
+            latLng[latLng.length] = [90, longitudeRange / 2];
         } else {
-
-            points.push( [ 90, -180 ] );
-            points.push( [ 90, 0 ] );
-            points.push( [ 90, 180 ] );
-
+            latLng[0] = [-90, -longitudeRange / 2];
+            latLng[latLng.length] = [-90, longitudeRange / 2];
         }
-
-        return points;
+        return latLng;
 
     }
 
@@ -109,9 +121,9 @@ export class DayNightLayer extends BaseLayer< APMapDayNightLayerOptions > {
 
     protected initEventHandlers () : void {}
 
-    public update () : void {
+    public update ( date?: Date ) : void {
 
-        const boundary = this.calculateDayNightBoundary();
+        const boundary = this.calculateDayNightBoundary( date );
 
         ( this.leafletLayer as Polygon ).setLatLngs( boundary );
         this.lastUpdate = Date.now();
