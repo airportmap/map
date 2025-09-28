@@ -8,8 +8,6 @@ export class DayNightLayer extends BaseLayer< APMapDayNightLayerOptions > {
     private animationFrame: number | null = null;
     private lastUpdate: number = 0;
 
-    protected override leafletLayer: Polygon;
-
     constructor ( options: Partial< APMapDayNightLayerOptions > ) {
 
         super( deepmerge( {
@@ -145,7 +143,7 @@ export class DayNightLayer extends BaseLayer< APMapDayNightLayerOptions > {
 
         const boundary = this.calculateDayNightBoundary();
 
-        this.leafletLayer.setLatLngs( boundary );
+        ( this.leafletLayer as Polygon ).setLatLngs( boundary );
         this.lastUpdate = Date.now();
 
     }
