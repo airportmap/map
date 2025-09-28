@@ -8,6 +8,9 @@ export class DayNightLayer extends BaseLayer< APMapDayNightLayerOptions > {
     private animationFrame: number | null = null;
     private lastUpdate: number = 0;
 
+    public get updated () : number { return this.lastUpdate }
+    public get speed () : number { return this.options.animationSpeed }
+
     constructor ( options: Partial< APMapDayNightLayerOptions > ) {
 
         super( deepmerge( {
@@ -139,8 +142,8 @@ export class DayNightLayer extends BaseLayer< APMapDayNightLayerOptions > {
 
     protected initEventHandlers () : void {
 
-        this.leafletLayer.on( 'add', this.startAnimation.bind( this ) );
-        this.leafletLayer.on( 'remove', this.stopAnimation.bind( this ) );
+        this.layer.on( 'add', this.startAnimation.bind( this ) );
+        this.layer.on( 'remove', this.stopAnimation.bind( this ) );
 
     }
 
@@ -148,7 +151,7 @@ export class DayNightLayer extends BaseLayer< APMapDayNightLayerOptions > {
 
         const boundary = this.calculateDayNightBoundary( date );
 
-        ( this.leafletLayer as Polygon ).setLatLngs( boundary );
+        ( this.layer as Polygon ).setLatLngs( boundary );
         this.lastUpdate = Date.now();
 
     }
@@ -157,18 +160,22 @@ export class DayNightLayer extends BaseLayer< APMapDayNightLayerOptions > {
 
         this.stopAnimation();
 
-        const animate = () => {
+        if ( this.options.animationSpeed ) {
 
-            const now = Date.now();
-            const elapsed = now - this.lastUpdate;
+            const animate = () => {
 
-            if ( elapsed > 1000 / ( this.options.animationSpeed || 1 ) ) this.update();
+                const now = Date.now();
+                const elapsed = now - this.lastUpdate;
+
+                if ( elapsed > 1000 / ( this.options.animationSpeed || 1 ) ) this.update();
+
+                this.animationFrame = requestAnimationFrame( animate );
+
+            };
 
             this.animationFrame = requestAnimationFrame( animate );
 
-        };
-
-        this.animationFrame = requestAnimationFrame( animate );
+        }
 
     }
 
@@ -182,5 +189,28 @@ export class DayNightLayer extends BaseLayer< APMapDayNightLayerOptions > {
         }
 
     }
+
+    public setAnimationSpeed ( speed: number ) : void {
+
+        this.options.animationSpeed = speed;
+        this.startAnimation();
+
+    }
+
+    public setNightColor ( color: string ) : void {
+
+        this.options.nightColor = color;
+        ( this.layer as Polygon ).setStyle( { fillColor: color } );
+
+    }
+
+    public setNightOpacity ( opacity: number ) : void {
+
+        this.options.nightOpacity = opacity;
+        ( this.layer as Polygon ).setStyle( { fillOpacity: opacity } );
+
+    }
+
+    public destroy () : void { this.stopAnimation() }
 
 }
