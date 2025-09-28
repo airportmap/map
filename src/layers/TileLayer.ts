@@ -6,8 +6,6 @@ import { TileLayer as LeafletTileLayer } from 'leaflet';
 
 export class TileLayer extends BaseLayer< APMapTileLayerOptions > {
 
-    protected readonly themedURL: Partial< Record< APMapTheme, string > > = {};
-
     constructor ( map: APMap, options: APMapTileLayerOptions ) {
 
         super( map, deepmerge( {
@@ -17,6 +15,8 @@ export class TileLayer extends BaseLayer< APMapTileLayerOptions > {
             detectRetina: true,
             crossOrigin: false
         }, options ) );
+
+        this.setThemedURL();
 
     }
 
@@ -34,9 +34,9 @@ export class TileLayer extends BaseLayer< APMapTileLayerOptions > {
 
     protected setThemedURL ( theme?: APMapTheme ) : void {
 
-        if ( ( theme ??= this.map.opt.theme ) in this.themedURL ) {
+        if ( ( theme ??= this.map.opt.theme ) in ( this.options.themedURLs ?? {} ) ) {
 
-            ( this.layer as LeafletTileLayer ).setUrl( this.themedURL[ theme ]! );
+            ( this.layer as LeafletTileLayer ).setUrl( this.options.themedURLs![ theme ]! );
 
         }
 
