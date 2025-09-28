@@ -6,7 +6,7 @@ import { OrientationHandler } from '@map/utils/OrientationHandler';
 import { StateStorage } from '@map/utils/StateStorage';
 import { URLHandler } from '@map/utils/URLHandler';
 import deepmerge from 'deepmerge';
-import { Map as LeafletMap, LatLng, LatLngBounds } from 'leaflet';
+import { Map as LeafletMap, LeafletEvent, LatLng, LatLngBounds } from 'leaflet';
 
 export class APMap {
 
@@ -109,13 +109,8 @@ export class APMap {
             new LatLng(  90,  180 )
         ) );
 
-        map.on( 'zoomend', ( e ) => {
-            this.dispatchEvent( 'zoom-changed' as APMapEventType, { e } );
-        } );
-
-        map.on( 'moveend', ( e ) => {
-            this.dispatchEvent( 'position-changed' as APMapEventType, { e } );
-        } );
+        map.on( 'moveend', this.handlePositionChanged.bind( this ) );
+        map.on( 'zoomend', this.handleZoomChanged.bind( this ) );
 
         return map;
 
@@ -145,6 +140,22 @@ export class APMap {
             this.layer.addLayer( this.components.dayNightLayer );
 
         }
+
+    }
+
+    private handlePositionChanged ( event: LeafletEvent ) : void {
+
+        this.dispatchEvent( APMapEventType.POSITION_CHANGED, {
+            event, center: this.center
+        } );
+
+    }
+
+    private handleZoomChanged ( event: LeafletEvent ) : void {
+
+        this.dispatchEvent( APMapEventType.ZOOM_CHANGED, {
+            event, zoom: this.zoom
+        } );
 
     }
 
