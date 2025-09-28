@@ -10,4 +10,22 @@
         height: 100dvh;
     }
 
+    &_light {
+        --map-daynight-fill: #000000;
+    }
+
+    &_dark {
+        --map-daynight-fill: #2b2852;
+    }
+
+    &__layer {
+
+        &__day_night {
+            stroke-width: 0;
+            fill: var( --map-daynight-fill );
+            fill-opacity: 0.3;
+        }
+
+    }
+
 }
