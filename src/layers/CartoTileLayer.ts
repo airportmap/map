@@ -3,7 +3,7 @@ import { TileLayer } from '@map/layers/TileLayer';
 
 export class CartoTileLayer extends TileLayer {
 
-    protected override readonly themed_url = {
+    protected override readonly themedURL = {
         light: 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}@2x.png',
         dark: 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}@2x.png'
     };

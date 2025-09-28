@@ -6,7 +6,7 @@ import { TileLayer as LeafletTileLayer } from 'leaflet';
 
 export class TileLayer extends BaseLayer< APMapTileLayerOptions > {
 
-    protected readonly themed_url: Partial< Record< APMapTheme, string > > = {};
+    protected readonly themedURL: Partial< Record< APMapTheme, string > > = {};
 
     constructor ( map: APMap, options: APMapTileLayerOptions ) {
 
@@ -36,9 +36,9 @@ export class TileLayer extends BaseLayer< APMapTileLayerOptions > {
 
     protected setThemedURL ( theme?: APMapTheme ) : void {
 
-        if ( ( theme ??= this.map.opt.theme ) in this.themed_url ) {
+        if ( ( theme ??= this.map.opt.theme ) in this.themedURL ) {
 
-            ( this.layer as LeafletTileLayer ).setUrl( this.themed_url[ theme ]! );
+            ( this.layer as LeafletTileLayer ).setUrl( this.themedURL[ theme ]! );
 
         }
 
