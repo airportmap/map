@@ -139,8 +139,12 @@ export class APMap {
 
     private initLayer () : void {
 
-        if ( this.options.dayNight.enabled )
+        if ( this.options.dayNight.enabled ) {
+
             this.components.dayNightLayer = new DayNightLayer( this.options.dayNight );
+            this.layer.addLayer( this.components.dayNightLayer );
+
+        }
 
     }
 

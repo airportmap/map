@@ -95,36 +95,6 @@ export class DayNightLayer extends BaseLayer< APMapDayNightLayerOptions > {
 
     }
 
-    private startAnimation () : void {
-
-        this.stopAnimation();
-
-        const animate = () => {
-
-            const now = Date.now();
-            const elapsed = now - this.lastUpdate;
-
-            if ( elapsed > 1000 / ( this.options.animationSpeed || 1 ) ) this.update();
-
-            this.animationFrame = requestAnimationFrame( animate );
-
-        };
-
-        this.animationFrame = requestAnimationFrame( animate );
-
-    }
-
-    private stopAnimation () : void {
-
-        if ( this.animationFrame !== null ) {
-
-            cancelAnimationFrame( this.animationFrame );
-            this.animationFrame = null;
-
-        }
-
-    }
-
     protected createLeafletLayer () : Polygon {
 
         return new Polygon( [], {
@@ -145,6 +115,36 @@ export class DayNightLayer extends BaseLayer< APMapDayNightLayerOptions > {
 
         ( this.leafletLayer as Polygon ).setLatLngs( boundary );
         this.lastUpdate = Date.now();
+
+    }
+
+    public startAnimation () : void {
+
+        this.stopAnimation();
+
+        const animate = () => {
+
+            const now = Date.now();
+            const elapsed = now - this.lastUpdate;
+
+            if ( elapsed > 1000 / ( this.options.animationSpeed || 1 ) ) this.update();
+
+            this.animationFrame = requestAnimationFrame( animate );
+
+        };
+
+        this.animationFrame = requestAnimationFrame( animate );
+
+    }
+
+    public stopAnimation () : void {
+
+        if ( this.animationFrame !== null ) {
+
+            cancelAnimationFrame( this.animationFrame );
+            this.animationFrame = null;
+
+        }
 
     }
 
