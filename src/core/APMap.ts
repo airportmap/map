@@ -1,5 +1,6 @@
 import { APMapOptions, APMapEventType } from '@airportmap/types';
 import { LayerManager } from '@map/core/LayerManager';
+import { DayNightLayer } from '@map/layers/DayNightLayer';
 import { LocationTracker } from '@map/utils/LocationTracker';
 import { OrientationHandler } from '@map/utils/OrientationHandler';
 import { StateStorage } from '@map/utils/StateStorage';
@@ -23,6 +24,10 @@ export class APMap {
         orientationHandler?: OrientationHandler,
         stateStorage?: StateStorage,
         urlHandler?: URLHandler
+    } = {};
+
+    private components: {
+        dayNightLayer?: DayNightLayer
     } = {};
 
     public get opt () : Required< APMapOptions > { return this.options }
@@ -52,6 +57,8 @@ export class APMap {
     public get stateStorage () : StateStorage | undefined { return this.utils.stateStorage }
     public get urlHandler () : URLHandler | undefined { return this.utils.urlHandler }
 
+    public get dayNightLayer () : DayNightLayer | undefined { return this.components.dayNightLayer }
+
     constructor ( element: HTMLElement, options?: APMapOptions ) {
 
         if ( ! element || ! ( element instanceof HTMLElement ) ) throw new Error (
@@ -66,6 +73,7 @@ export class APMap {
         this.layerManager = new LayerManager( this );
 
         this.initUtils();
+        this.initLayer();
         this.setStyles();
 
     }
@@ -90,7 +98,9 @@ export class APMap {
             },
             trackUserPosition: false,
             enableDeviceOrientation: false,
-            showDayNightBoundary: false
+            dayNight: {
+                enabled: false
+            }
         }, options );
 
     }
@@ -124,6 +134,13 @@ export class APMap {
 
         if ( this.options.enableDeviceOrientation )
             this.utils.orientationHandler = new OrientationHandler( this );
+
+    }
+
+    private initLayer () : void {
+
+        if ( this.options.dayNight.enabled )
+            this.components.dayNightLayer = new DayNightLayer( this.options.dayNight );
 
     }
 

@@ -1,11 +1,16 @@
 import { APMapDayNightLayerOptions } from '@airportmap/types';
 import { BaseLayer } from '@map/layers/BaseLayer';
 import deepmerge from 'deepmerge';
-import { LatLng, LatLngExpression, Layer, Polygon } from 'leaflet';
+import { LatLng, LatLngExpression, Polygon } from 'leaflet';
 
 export class DayNightLayer extends BaseLayer< APMapDayNightLayerOptions > {
 
-    constructor ( options: APMapDayNightLayerOptions ) {
+    private animationFrame: number | null = null;
+    private lastUpdate: number = 0;
+
+    protected override leafletLayer: Polygon;
+
+    constructor ( options: Partial< APMapDayNightLayerOptions > ) {
 
         super( deepmerge( {
             _id: '__day_night_layer__',
@@ -17,6 +22,8 @@ export class DayNightLayer extends BaseLayer< APMapDayNightLayerOptions > {
             resolution: 36,
             interactive: false
         }, options ) );
+
+        if ( this.visible ) this.startAnimation();
 
     }
 
@@ -90,7 +97,37 @@ export class DayNightLayer extends BaseLayer< APMapDayNightLayerOptions > {
 
     }
 
-    protected createLeafletLayer () : Layer {
+    private startAnimation () : void {
+
+        this.stopAnimation();
+
+        const animate = () => {
+
+            const now = Date.now();
+            const elapsed = now - this.lastUpdate;
+
+            if ( elapsed > 1000 / ( this.options.animationSpeed || 1 ) ) this.update();
+
+            this.animationFrame = requestAnimationFrame( animate );
+
+        };
+
+        this.animationFrame = requestAnimationFrame( animate );
+
+    }
+
+    private stopAnimation () : void {
+
+        if ( this.animationFrame !== null ) {
+
+            cancelAnimationFrame( this.animationFrame );
+            this.animationFrame = null;
+
+        }
+
+    }
+
+    protected createLeafletLayer () : Polygon {
 
         return new Polygon( [], {
             stroke: false,
@@ -103,5 +140,14 @@ export class DayNightLayer extends BaseLayer< APMapDayNightLayerOptions > {
     }
 
     protected initEventHandlers () : void {}
+
+    public update () : void {
+
+        const boundary = this.calculateDayNightBoundary();
+
+        this.leafletLayer.setLatLngs( boundary );
+        this.lastUpdate = Date.now();
+
+    }
 
 }
