@@ -18,8 +18,6 @@ export class TileLayer extends BaseLayer< APMapTileLayerOptions > {
             crossOrigin: false
         }, options ) );
 
-        this.setThemedURL();
-
     }
 
     protected createLeafletLayer () : LeafletTileLayer {

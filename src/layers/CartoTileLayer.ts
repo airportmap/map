@@ -22,6 +22,8 @@ export class CartoTileLayer extends TileLayer {
             maxZoom: 15
         } );
 
+        this.setThemedURL();
+
     }
 
 }
