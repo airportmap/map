@@ -32,7 +32,7 @@ export class APMap {
 
     public get opt () : Required< APMapOptions > { return this.options }
     public get map () : LeafletMap { return this.leafletMap }
-    public get layer () : LayerManager | undefined { return this.layerManager }
+    public get layer () : LayerManager { return this.layerManager }
     public get bounds () : LatLngBounds { return this.leafletMap.getBounds() }
 
     public get center () : { lat: number, lng: number } {
@@ -67,9 +67,7 @@ export class APMap {
 
         this.element = element;
         this.options = this.mergeDefaultOptions( options ?? {} );
-
         this.leafletMap = this.createMap();
-
         this.layerManager = new LayerManager( this );
 
         this.initUtils();
@@ -142,7 +140,7 @@ export class APMap {
         if ( this.options.dayNight.enabled ) {
 
             this.components.dayNightLayer = new DayNightLayer( this.options.dayNight );
-            this.layer.addLayer( this.components.dayNightLayer! );
+            this.layer.addLayer( this.components.dayNightLayer );
 
         }
 
