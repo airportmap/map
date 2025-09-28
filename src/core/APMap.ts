@@ -142,7 +142,7 @@ export class APMap {
         if ( this.options.dayNight.enabled ) {
 
             this.components.dayNightLayer = new DayNightLayer( this.options.dayNight );
-            this.layer.addLayer( this.components.dayNightLayer );
+            this.layer.addLayer( this.components.dayNightLayer! );
 
         }
 
