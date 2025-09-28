@@ -16,7 +16,6 @@ export class CartoTileLayer extends TileLayer {
             },
             subdomains: 'abcd',
             attribution: '<a href="https://openstreetmap.org/copyright">OSM</a> & <a href="https://carto.com/attributions">CARTO</a>',
-            performanceImpact: 'low',
             minZoom: 4,
             maxZoom: 15
         } );

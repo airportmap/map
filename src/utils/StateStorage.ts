@@ -21,11 +21,11 @@ export class StateStorage {
         if ( this.enabled ) this.mapState = this.getState();
         if ( this.enabled && this.restoreOnLoad ) this.restoreState();
 
-        this.map.addEventListener( 'position-changed' as APMapEventType, () => {
+        this.map.addEventListener( APMapEventType.POSITION_CHANGED, () => {
             this.merge( this.map.center );
         } );
 
-        this.map.addEventListener( 'zoom-changed' as APMapEventType, () => {
+        this.map.addEventListener( APMapEventType.ZOOM_CHANGED, () => {
             this.set( 'zoom', this.map.zoom );
         } );
 

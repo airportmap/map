@@ -14,8 +14,8 @@ export class URLHandler {
 
         this.initFromURL();
 
-        this.map.addEventListener( 'position-changed' as APMapEventType, this.updateURL.bind( this ) );
-        this.map.addEventListener( 'zoom-changed' as APMapEventType, this.updateURL.bind( this ) );
+        this.map.addEventListener( APMapEventType.POSITION_CHANGED, this.updateURL.bind( this ) );
+        this.map.addEventListener( APMapEventType.ZOOM_CHANGED, this.updateURL.bind( this ) );
 
     }
 

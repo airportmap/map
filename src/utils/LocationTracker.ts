@@ -25,16 +25,14 @@ export class LocationTracker {
     private handlePositionUpdate ( position: GeolocationPosition ) : void {
 
         const { latitude, longitude, accuracy } = position.coords;
-
         const latLng = new LatLng( latitude, longitude );
 
         this.currentPosition = latLng;
-
         this.updateMarkers( latLng, accuracy );
 
         if ( this.followUser ) this.map.setCenter( latitude, longitude );
 
-        this.map.dispatchEvent( 'user-position-changed' as APMapEventType, {
+        this.map.dispatchEvent( APMapEventType.USER_POSITION_CHANGED, {
             lat: latitude, lng: longitude, accuracy
         } );
 

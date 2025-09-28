@@ -55,10 +55,9 @@ export class LayerManager {
         if ( this.layers.has( layer.id ) ) return false;
 
         this.layers.set( layer.id, layer );
-
         this.setLayerVisibility( layer.id, visible ?? layer.visible );
 
-        this.map.dispatchEvent( 'layer-added' as APMapEventType, { layer } );
+        this.map.dispatchEvent( APMapEventType.LAYER_ADDED, { layer } );
 
         return layer;
 
@@ -69,10 +68,9 @@ export class LayerManager {
         if ( ! this.layers.has( layerId ) ) return false;
 
         this.setLayerVisibility( layerId, false );
-
         this.layers.delete( layerId );
 
-        this.map.dispatchEvent( 'layer-removed' as APMapEventType, { layerId } );
+        this.map.dispatchEvent( APMapEventType.LAYER_REMOVED, { layerId } );
 
         return true;
 
@@ -116,7 +114,7 @@ export class LayerManager {
 
         }
 
-        this.map.dispatchEvent( 'layer-toggled' as APMapEventType, { layerId, visible, layer } );
+        this.map.dispatchEvent( APMapEventType.LAYER_TOGGLED, { layerId, visible, layer } );
 
         return layer.visible;
 

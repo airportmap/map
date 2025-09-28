@@ -1,4 +1,4 @@
-import { APMapEventType, APMapOptions, APMapTheme } from '@airportmap/types';
+import { APMapEventType, APMapMode, APMapOptions, APMapTheme } from '@airportmap/types';
 import { LayerManager } from '@map/core/LayerManager';
 import { DayNightLayer } from '@map/layers/DayNightLayer';
 import { LocationTracker } from '@map/utils/LocationTracker';
@@ -82,8 +82,8 @@ export class APMap {
                 maxZoom: 16,
                 maxBoundsViscosity: 1
             },
-            mode: 'normal',
-            theme: 'light',
+            mode: APMapMode.NORMAL,
+            theme: APMapTheme.LIGHT,
             allowFullscreen: true,
             urlManipulation: false,
             stateStorage: {
@@ -222,20 +222,20 @@ export class APMap {
         this.element.classList.remove( '__apm_map_light __apm_map_dark' );
         this.element.classList.add( '__apm_map_' + theme );
 
-        this.dispatchEvent( 'theme-changed' as APMapEventType, { theme } );
+        this.dispatchEvent( APMapEventType.THEME_CHANGED, { theme } );
 
     }
 
     public destroy () : void {
-
-        this.leafletMap.remove();
-        this.eventListeners.clear();
 
         this.utils.locationTracker?.destroy();
         this.utils.orientationHandler?.destroy();
         this.utils.urlHandler?.destroy();
 
         this.components.dayNightLayer?.destroy();
+
+        this.leafletMap.remove();
+        this.eventListeners.clear();
 
     }
 

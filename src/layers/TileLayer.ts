@@ -28,7 +28,7 @@ export class TileLayer extends BaseLayer< APMapTileLayerOptions > {
 
     protected initEventHandlers () : void {
 
-        this.map.addEventListener( 'theme-changed' as APMapEventType, this.setThemedURL.bind( this ) );
+        this.map.addEventListener( APMapEventType.THEME_CHANGED, this.setThemedURL.bind( this ) );
 
     }
 

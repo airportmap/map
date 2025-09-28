@@ -11,7 +11,6 @@ export class OSMTileLayer extends TileLayer {
             name: 'OSM Tile Layer',
             url: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
             attribution: '<a href="https://openstreetmap.org/copyright">OSM</a>',
-            performanceImpact: 'low',
             minZoom: 0,
             maxZoom: 19
         } );
