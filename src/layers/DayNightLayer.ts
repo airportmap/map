@@ -19,8 +19,6 @@ export class DayNightLayer extends BaseLayer< APMapDayNightLayerOptions > {
             name: 'Day/Night Boundary',
             visible: true,
             animationSpeed: 1,
-            nightColor: '#000',
-            nightOpacity: 0.3,
             longitudeRange: 720,
             resolution: 36,
             interactive: false
@@ -132,9 +130,7 @@ export class DayNightLayer extends BaseLayer< APMapDayNightLayerOptions > {
     protected createLeafletLayer () : Polygon {
 
         return new Polygon( [], {
-            stroke: false,
-            fillColor: this.options.nightColor,
-            fillOpacity: this.options.nightOpacity,
+            className: '__apm_map__layer__day_night',
             smoothFactor: 1,
             interactive: false
         } );
@@ -195,20 +191,6 @@ export class DayNightLayer extends BaseLayer< APMapDayNightLayerOptions > {
 
         this.options.animationSpeed = speed;
         this.startAnimation();
-
-    }
-
-    public setNightColor ( color: string ) : void {
-
-        this.options.nightColor = color;
-        ( this.layer as Polygon ).setStyle( { fillColor: color } );
-
-    }
-
-    public setNightOpacity ( opacity: number ) : void {
-
-        this.options.nightOpacity = opacity;
-        ( this.layer as Polygon ).setStyle( { fillOpacity: opacity } );
 
     }
 
