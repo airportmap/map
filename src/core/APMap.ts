@@ -1,4 +1,4 @@
-import { APMapOptions, APMapEventType } from '@airportmap/types';
+import { APMapEventType, APMapOptions, APMapTheme } from '@airportmap/types';
 import { LayerManager } from '@map/core/LayerManager';
 import { DayNightLayer } from '@map/layers/DayNightLayer';
 import { LocationTracker } from '@map/utils/LocationTracker';
@@ -150,13 +150,11 @@ export class APMap {
 
     private setStyles () : void {
 
-        const classes = this.element.classList;
-
-        classes.add( '__apm_map', '__apm_map_' + this.opt.mode, '__apm_map_' + this.opt.theme );
-
-        if ( this.opt.allowFullscreen ) classes.add( '__apm_map_allowFullscreen' );
-        if ( this.opt.trackUserPosition ) classes.add( '__apm_map_trackUserPosition' );
-        if ( this.opt.enableDeviceOrientation ) classes.add( '__apm_map_enableDeviceOrientation' );
+        this.element.classList.add(
+            '__apm_map',
+            '__apm_map_' + this.opt.mode,
+            '__apm_map_' + this.opt.theme
+        );
 
     }
 
@@ -206,7 +204,7 @@ export class APMap {
 
     }
 
-    public setTheme ( theme: 'light' | 'dark' ) : void {
+    public setTheme ( theme: APMapTheme ) : void {
 
         this.opt.theme = theme;
 

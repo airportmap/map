@@ -1,10 +1,12 @@
-import { APMapTileLayerOptions } from '@airportmap/types';
+import { APMapEventType, APMapTheme, APMapTileLayerOptions } from '@airportmap/types';
 import { APMap } from '@map/core/APMap';
 import { BaseLayer } from '@map/layers/BaseLayer';
 import deepmerge from 'deepmerge';
 import { TileLayer as LeafletTileLayer } from 'leaflet';
 
 export class TileLayer extends BaseLayer< APMapTileLayerOptions > {
+
+    protected readonly themed_url: Partial< Record< APMapTheme, string > > = {};
 
     constructor ( map: APMap, options: APMapTileLayerOptions ) {
 
@@ -16,6 +18,8 @@ export class TileLayer extends BaseLayer< APMapTileLayerOptions > {
             crossOrigin: false
         }, options ) );
 
+        this.setThemedURL();
+
     }
 
     protected createLeafletLayer () : LeafletTileLayer {
@@ -24,6 +28,20 @@ export class TileLayer extends BaseLayer< APMapTileLayerOptions > {
 
     }
 
-    protected initEventHandlers () : void {}
+    protected initEventHandlers () : void {
+
+        this.map.addEventListener( 'theme-changed' as APMapEventType, this.setThemedURL.bind( this ) );
+
+    }
+
+    protected setThemedURL ( theme?: APMapTheme ) : void {
+
+        if ( ( theme ??= this.map.opt.theme ) in this.themed_url ) {
+
+            ( this.layer as LeafletTileLayer ).setUrl( this.themed_url[ theme ]! );
+
+        }
+
+    }
 
 }
