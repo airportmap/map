@@ -1,7 +1,7 @@
 import { APMapDayNightLayerOptions } from '@airportmap/types';
 import { BaseLayer } from '@map/layers/BaseLayer';
 import deepmerge from 'deepmerge';
-import { LatLng, LatLngExpression, Polygon } from 'leaflet';
+import { LatLngExpression, Polygon } from 'leaflet';
 
 function julian(date: Date): number {
     return (date.getTime() / 86400000) + 2440587.5;
