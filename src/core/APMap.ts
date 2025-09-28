@@ -87,6 +87,7 @@ export class APMap {
                 maxBoundsViscosity: 1
             },
             mode: 'normal',
+            theme: 'light',
             allowFullscreen: true,
             urlManipulation: false,
             stateStorage: {
@@ -200,6 +201,12 @@ export class APMap {
     public setView ( lat: number, lng: number, zoom: number ) : void {
 
         this.leafletMap.setView( [ lat, lng ], zoom );
+
+    }
+
+    public setTheme ( theme: 'light' | 'dark' ) : void {
+
+        this.options.theme = theme;
 
     }
 
