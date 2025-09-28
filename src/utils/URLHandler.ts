@@ -1,4 +1,3 @@
-import { APMapEventType } from '@airportmap/types';
 import { APMap } from '@map/core/APMap';
 
 export class URLHandler {
@@ -14,8 +13,8 @@ export class URLHandler {
 
         this.initFromURL();
 
-        this.map.addEventListener( APMapEventType.POSITION_CHANGED, this.updateURL.bind( this ) );
-        this.map.addEventListener( APMapEventType.ZOOM_CHANGED, this.updateURL.bind( this ) );
+        this.map.addEventListener( 'position-changed', this.updateURL.bind( this ) );
+        this.map.addEventListener( 'zoom-changed', this.updateURL.bind( this ) );
 
     }
 

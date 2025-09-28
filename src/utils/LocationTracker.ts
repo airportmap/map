@@ -1,4 +1,3 @@
-import { APMapEventType } from '@airportmap/types';
 import { APMap } from '@map/core/APMap';
 import { LatLng, CircleMarker, Circle } from 'leaflet';
 
@@ -32,7 +31,7 @@ export class LocationTracker {
 
         if ( this.followUser ) this.map.setCenter( latitude, longitude );
 
-        this.map.dispatchEvent( APMapEventType.USER_POSITION_CHANGED, {
+        this.map.dispatchEvent( 'user-position-changed', {
             lat: latitude, lng: longitude, accuracy
         } );
 

@@ -1,4 +1,4 @@
-import { APMapEventType, APMapTheme, APMapTileLayerOptions } from '@airportmap/types';
+import { APMapTheme, APMapTileLayerOptions } from '@airportmap/types';
 import { APMap } from '@map/core/APMap';
 import { BaseLayer } from '@map/layers/BaseLayer';
 import deepmerge from 'deepmerge';
@@ -28,7 +28,7 @@ export class TileLayer extends BaseLayer< APMapTileLayerOptions > {
 
     protected initEventHandlers () : void {
 
-        this.map.addEventListener( APMapEventType.THEME_CHANGED, this.setThemedURL.bind( this ) );
+        this.map.addEventListener( 'theme-changed', this.setThemedURL.bind( this ) );
 
     }
 

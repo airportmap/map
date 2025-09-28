@@ -1,4 +1,4 @@
-import { APMapEventType, APMapMode, APMapOptions, APMapTheme } from '@airportmap/types';
+import { APMapEventType, APMapOptions, APMapTheme } from '@airportmap/types';
 import { LayerManager } from '@map/core/LayerManager';
 import { DayNightLayer } from '@map/layers/DayNightLayer';
 import { LocationTracker } from '@map/utils/LocationTracker';
@@ -82,8 +82,8 @@ export class APMap {
                 maxZoom: 16,
                 maxBoundsViscosity: 1
             },
-            mode: APMapMode.NORMAL,
-            theme: APMapTheme.LIGHT,
+            mode: 'normal',
+            theme: 'light',
             allowFullscreen: true,
             urlManipulation: false,
             stateStorage: {
@@ -145,17 +145,13 @@ export class APMap {
 
     private handlePositionChanged ( event: LeafletEvent ) : void {
 
-        this.dispatchEvent( APMapEventType.POSITION_CHANGED, {
-            event, center: this.center
-        } );
+        this.dispatchEvent( 'position-changed', { event, center: this.center } );
 
     }
 
     private handleZoomChanged ( event: LeafletEvent ) : void {
 
-        this.dispatchEvent( APMapEventType.ZOOM_CHANGED, {
-            event, zoom: this.zoom
-        } );
+        this.dispatchEvent( 'zoom-changed', { event, zoom: this.zoom } );
 
     }
 
@@ -222,7 +218,7 @@ export class APMap {
         this.element.classList.remove( '__apm_map_light __apm_map_dark' );
         this.element.classList.add( '__apm_map_' + theme );
 
-        this.dispatchEvent( APMapEventType.THEME_CHANGED, { theme } );
+        this.dispatchEvent( 'theme-changed', { theme } );
 
     }
 

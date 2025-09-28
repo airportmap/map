@@ -43,7 +43,7 @@ export abstract class BaseLayer< T extends APMapLayerOptions > {
             visible: false,
             minZoom: 0,
             maxZoom: Infinity,
-            performanceImpact: APMapPerformance.LOW,
+            performanceImpact: 'low',
             interactive: true,
             opacity: 1,
             attribution: undefined

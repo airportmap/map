@@ -1,4 +1,4 @@
-import { APMapEventType, APMapLayerOptions } from '@airportmap/types';
+import { APMapLayerOptions } from '@airportmap/types';
 import { APMap } from '@map/core/APMap';
 import { BaseLayer } from '@map/layers/BaseLayer';
 import { LayerGroup, LayerOptions } from 'leaflet';
@@ -57,7 +57,7 @@ export class LayerManager {
         this.layers.set( layer.id, layer );
         this.setLayerVisibility( layer.id, visible ?? layer.visible );
 
-        this.map.dispatchEvent( APMapEventType.LAYER_ADDED, { layer } );
+        this.map.dispatchEvent( 'layer-added', { layer } );
 
         return layer;
 
@@ -70,7 +70,7 @@ export class LayerManager {
         this.setLayerVisibility( layerId, false );
         this.layers.delete( layerId );
 
-        this.map.dispatchEvent( APMapEventType.LAYER_REMOVED, { layerId } );
+        this.map.dispatchEvent( 'layer-removed', { layerId } );
 
         return true;
 
@@ -114,7 +114,7 @@ export class LayerManager {
 
         }
 
-        this.map.dispatchEvent( APMapEventType.LAYER_TOGGLED, { layerId, visible, layer } );
+        this.map.dispatchEvent( 'layer-toggled', { layerId, visible, layer } );
 
         return layer.visible;
 

@@ -1,4 +1,4 @@
-import { APMapEventType, APMapState } from '@airportmap/types';
+import { APMapState } from '@airportmap/types';
 import { APMap } from '@map/core/APMap';
 import deepmerge from 'deepmerge';
 
@@ -21,11 +21,11 @@ export class StateStorage {
         if ( this.enabled ) this.mapState = this.getState();
         if ( this.enabled && this.restoreOnLoad ) this.restoreState();
 
-        this.map.addEventListener( APMapEventType.POSITION_CHANGED, () => {
+        this.map.addEventListener( 'position-changed', () => {
             this.merge( this.map.center );
         } );
 
-        this.map.addEventListener( APMapEventType.ZOOM_CHANGED, () => {
+        this.map.addEventListener( 'zoom-changed', () => {
             this.set( 'zoom', this.map.zoom );
         } );
 
