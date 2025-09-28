@@ -1,7 +1,7 @@
 import { APMapDayNightLayerOptions } from '@airportmap/types';
 import { BaseLayer } from '@map/layers/BaseLayer';
 import deepmerge from 'deepmerge';
-import { LatLng, Layer, Polygon } from 'leaflet';
+import { LatLng, LatLngExpression, Layer, Polygon } from 'leaflet';
 
 export class DayNightLayer extends BaseLayer< APMapDayNightLayerOptions > {
 
@@ -37,6 +37,56 @@ export class DayNightLayer extends BaseLayer< APMapDayNightLayerOptions > {
         const longitude = hoursFromNoon * 15;
 
         return new LatLng( declination, longitude );
+
+    }
+
+    private calculateDayNightBoundary ( date: Date = new Date() ) : LatLngExpression[] {
+
+        const sunPos = this.calculateSunPosition( date );
+
+        const resolution = this.options.resolution || 36;
+        const points: LatLngExpression[] = [];
+
+        const antipodeLat = -sunPos.lat;
+        const antipodeLng = sunPos.lng > 0 ? sunPos.lng - 180 : sunPos.lng + 180;
+
+        for ( let i = 0; i < resolution; i++ ) {
+
+            const angle = ( i / resolution ) * 2 * Math.PI;
+            const latOffset = 90 * Math.cos( angle );
+            const lngOffset = 90 * Math.sin( angle ) / Math.cos(
+                ( antipodeLat + latOffset ) * Math.PI / 180
+            );
+
+            let lat = antipodeLat + latOffset;
+            let lng = antipodeLng + lngOffset;
+
+            if ( lat > 90 ) lat = 90;
+            if ( lat < -90 ) lat = -90;
+            if ( lng > 180 ) lng -= 360;
+            if ( lng < -180 ) lng += 360;
+
+            points.push( [ lat, lng ] );
+
+        }
+
+        if ( points.length > 0 ) points.push( points[ 0 ] );
+
+        if ( antipodeLat > 0 ) {
+
+            points.push( [ -90, -180 ] );
+            points.push( [ -90, 0 ] );
+            points.push( [ -90, 180 ] );
+
+        } else {
+
+            points.push( [ 90, -180 ] );
+            points.push( [ 90, 0 ] );
+            points.push( [ 90, 180 ] );
+
+        }
+
+        return points;
 
     }
 
