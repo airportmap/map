@@ -210,6 +210,17 @@ export class APMap {
 
     }
 
+    public setTheme ( theme: 'light' | 'dark' ) : void {
+
+        this.opt.theme = theme;
+
+        this.element.classList.remove( '__apm_map_light __apm_map_dark' );
+        this.element.classList.add( '__apm_map_' + theme );
+
+        this.dispatchEvent( 'theme-changed' as APMapEventType, { theme } );
+
+    }
+
     public destroy () : void {
 
         this.leafletMap.remove();
