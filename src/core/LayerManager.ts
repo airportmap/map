@@ -101,7 +101,6 @@ export class LayerManager {
         const layer = this.getLayerById( layerId );
 
         if ( ! layer ) return false;
-        if ( layer.visible === visible ) return true;
 
         const group = layer.group ? this.addGroup( layer.group ) : this.defaultLayerGroup;
 
