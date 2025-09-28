@@ -9,7 +9,7 @@ export class OSMTileLayer extends TileLayer {
             group: '__tile_layer__',
             name: 'OSM Tile Layer',
             url: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-            attribution: '&copy; <a href="https://openstreetmap.org/copyright">OSM</a> contributors',
+            attribution: '<a href="https://openstreetmap.org/copyright">OSM</a>',
             performanceImpact: 'low',
             minZoom: 0,
             maxZoom: 19
