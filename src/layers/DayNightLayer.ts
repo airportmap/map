@@ -22,8 +22,6 @@ export class DayNightLayer extends BaseLayer< APMapDayNightLayerOptions > {
             interactive: false
         }, options ) );
 
-        if ( this.visible ) this.startAnimation();
-
     }
 
     private julian ( date: Date ) : number {
@@ -54,15 +52,9 @@ export class DayNightLayer extends BaseLayer< APMapDayNightLayerOptions > {
 
         const T = ( julianDay - 2451545.0 ) / 36525;
 
-        return 23.43929111 - T * (
-            46.836769 / 3600 - T * (
-                0.0001831 / 3600 + T * (
-                    0.00200340 / 3600 - T * (
-                        0.576e-6 / 3600 - T * 4.34e-8 / 3600
-                    )
-                )
-            )
-        );
+        return 23.43929111 - T * ( 46.836769 / 3600 - T * ( 0.0001831 / 3600 + T * (
+            0.00200340 / 3600 - T * ( 0.576e-6 / 3600 - T * 4.34e-8 / 3600 )
+        ) ) );
 
     }
 
@@ -145,7 +137,12 @@ export class DayNightLayer extends BaseLayer< APMapDayNightLayerOptions > {
 
     }
 
-    protected initEventHandlers () : void {}
+    protected initEventHandlers () : void {
+
+        this.leafletLayer.on( 'add', this.startAnimation.bind( this ) );
+        this.leafletLayer.on( 'remove', this.stopAnimation.bind( this ) );
+
+    }
 
     public update ( date?: Date ) : void {
 
