@@ -206,6 +206,8 @@ export class APMap {
         this.utils.orientationHandler?.destroy();
         this.utils.urlHandler?.destroy();
 
+        this.components.dayNightLayer?.destroy();
+
     }
 
 }
