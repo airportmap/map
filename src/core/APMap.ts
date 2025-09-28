@@ -210,12 +210,6 @@ export class APMap {
 
     }
 
-    public setTheme ( theme: 'light' | 'dark' ) : void {
-
-        this.options.theme = theme;
-
-    }
-
     public destroy () : void {
 
         this.leafletMap.remove();
