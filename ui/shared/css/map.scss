@@ -11,10 +11,12 @@
     }
 
     &_light {
+        --map-ui-fill: #fffd;
         --map-daynight-fill: #000;
     }
 
     &_dark {
+        --map-ui-fill: #000d;
         --map-daynight-fill: #446;
     }
 
@@ -24,6 +26,34 @@
             stroke-width: 0;
             fill: var( --map-daynight-fill );
             fill-opacity: 0.3;
+        }
+
+    }
+
+    &__ui {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 90;
+
+        &_attribution {
+            position: absolute;
+            right: 12px;
+            bottom: 12px;
+            height: 22px;
+            padding: 0 8px;
+            line-height: 22px;
+            font-size: 10px;
+            background: var( --map-ui-fill );
+            border-radius: 4px;
+            box-shadow: 0 0 6px -4px rgba( 0 0 0 / 0.2 );
+
+            a:hover {
+                text-decoration: underline;
+            }
+
         }
 
     }
