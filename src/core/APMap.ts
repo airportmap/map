@@ -1,6 +1,7 @@
 import { APMapEventType, APMapOptions, APMapTheme } from '@airportmap/types';
 import { LayerManager } from '@map/core/LayerManager';
 import { DayNightLayer } from '@map/layers/DayNightLayer';
+import { UIManager } from '@map/ui/UIManager';
 import { LocationTracker } from '@map/utils/LocationTracker';
 import { OrientationHandler } from '@map/utils/OrientationHandler';
 import { StateStorage } from '@map/utils/StateStorage';
@@ -17,6 +18,7 @@ export class APMap {
     private options: Required< APMapOptions >;
     private leafletMap: LeafletMap;
     private layerManager: LayerManager;
+    private uiManager: UIManager;
     private eventListeners: Map< string, Function[] > = new Map();
 
     private utils: {
@@ -30,11 +32,14 @@ export class APMap {
         dayNightLayer?: DayNightLayer
     } = {};
 
+    public get el () : HTMLElement { return this.element }
     public get opt () : Required< APMapOptions > { return this.options }
     public get map () : LeafletMap { return this.leafletMap }
     public get layer () : LayerManager { return this.layerManager }
-    public get bounds () : LatLngBounds { return this.leafletMap.getBounds() }
+    public get ui () : UIManager { return this.uiManager }
 
+    public get bounds () : LatLngBounds { return this.leafletMap.getBounds() }
+    public get zoom () : number { return Number ( this.leafletMap.getZoom().toFixed( this.ZOOM_PRECISION ) ) }
     public get center () : { lat: number, lng: number } {
 
         const { lat, lng } = this.leafletMap.getCenter();
@@ -45,8 +50,6 @@ export class APMap {
         };
 
     }
-
-    public get zoom () : number { return Number ( this.leafletMap.getZoom().toFixed( this.ZOOM_PRECISION ) ) }
 
     public get locationTracker () : LocationTracker | undefined { return this.utils.locationTracker }
     public get orientationHandler () : OrientationHandler | undefined { return this.utils.orientationHandler }
@@ -64,6 +67,8 @@ export class APMap {
         this.element = element;
         this.options = this.mergeDefaultOptions( options ?? {} );
         this.leafletMap = this.createMap();
+
+        this.uiManager = new UIManager( this );
         this.layerManager = new LayerManager( this );
 
         this.initUtils();
