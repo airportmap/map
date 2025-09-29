@@ -27,14 +27,10 @@ export abstract class UIControl {
 
     public hasControl () : boolean { return !! this.element }
 
+    public isVisible () : boolean { return !! this.element && ! this.element.classList.contains( 'hidden' ) }
+
     public show () : void { this.el?.classList.remove( 'hidden' ) }
 
     public hide () : void { this.el?.classList.add( 'hidden' ) }
-
-    public isVisible () : boolean {
-
-        return this.el && ! this.el?.classList.contains( 'hidden' );
-
-    }
 
 }
