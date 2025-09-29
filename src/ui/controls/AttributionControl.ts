@@ -17,17 +17,27 @@ export class AttributionControl extends UIControl {
 
     }
 
-    protected initEventHandlers () : void {}
+    protected initEventHandlers () : void {
+
+        this.UIManager.map.addEventListener( 'layer-added', this.update.bind( this ) );
+        this.UIManager.map.addEventListener( 'layer-removed', this.update.bind( this ) );
+        this.UIManager.map.addEventListener( 'layer-toggled', this.update.bind( this ) );
+
+    }
 
     public update () : void {
 
-        let attr = [ '© <a href="https://airportmap.de/license">Airportmap</a>' ];
+        if ( this.isVisible() ) {
 
-        this.UIManager.map.layer.getVisibleLayers().forEach(
-            layer => layer.attribution && attr.push( layer.attribution )
-        );
+            let attr = [ '© <a href="https://airportmap.de/license">Airportmap</a>' ];
 
-        this.element.innerHTML = attr.join( ' | ' );
+            this.UIManager.map.layer.getVisibleLayers().forEach(
+                layer => layer.attribution && attr.push( layer.attribution )
+            );
+
+            this.element!.innerHTML = attr.join( ' | ' );
+
+        }
 
     }
 
