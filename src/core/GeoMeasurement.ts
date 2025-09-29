@@ -10,8 +10,8 @@ export class GeoMeasurement {
     private static readonly METERS_TO_MILES = 0.000621371;
     
     private static readonly UNIT_SYSTEMS: Record< APMapUnitSystems, {
-        distance: string, speed: string, altitude: string,
-        toMeters: number, fromMeters: number
+        distance: string; speed: string; altitude: string;
+        toMeters: number; fromMeters: number;
     } > = {
         metric: { 
             distance: 'm', 
@@ -183,6 +183,21 @@ export class GeoMeasurement {
             pixels: Math.round( pixels ),
             scale: this.getScaleRatio()
         };
+
+    }
+
+    public formatDistance ( distanceMeters: number, options: {
+        precision?: number; forceUnit?: APMapUnitSystems; compact?: boolean; avionics?: boolean;
+    } = {} ) : string {
+
+        const units = options.avionics && this.map.opt.units === 'default'
+            ? 'avionic' : options.forceUnit ?? this.effectiveUnits;
+
+        const { value, unit } = this.formatDistanceValue( distanceMeters, units );
+        const precision = options.precision ?? ( value >= 100 ? 0 : value >= 10 ? 1 : 2 );
+        const formattedValue = value.toFixed( precision ).replace( /\.?0+$/, '' );
+
+        return options.compact ? `${formattedValue}${unit}` : `${formattedValue} ${unit}`;
 
     }
 
