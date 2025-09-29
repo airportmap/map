@@ -34,6 +34,12 @@ export class UnitConverter {
 
     }
 
+    private getMetersPerPixel ( lat: number, zoom: number ) : number {
+
+        return 40075016.686 * Math.cos( lat * Math.PI / 180 ) / Math.pow( 2, zoom + 8 );
+
+    }
+
     private roundNice ( val: number ) : number {
 
         if ( val >= 100 ) return Math.round( val / 10 ) * 10;
@@ -73,7 +79,7 @@ export class UnitConverter {
 
     }
 
-    public formatDistance ( distance: number, options: {
+    public formatDistance ( dist: number, options: {
         precision?: number,
         nice?: boolean,
         avionic?: boolean,
@@ -82,24 +88,34 @@ export class UnitConverter {
 
         let unit = 'km';
 
-        if ( options.avionic ) {
+        if ( options.avionic ) { dist *= 0.539957, unit = 'nm' }
+        if ( options.force ?? this.map.opt.units === 'imperial' ) { dist *= 0.621371, unit = 'mi' }
 
-            distance *= 0.539957;
-            unit = 'nm';
+        return `${ options.nice ? this.roundNice( dist ) : dist.toFixed( options.precision ?? 2 ) } ${unit}`;
 
-        }
+    }
 
-        if ( ( options.force ?? this.map.opt.units ) === 'imperial' ) {
+    public getScaleRatio () : string {
 
-            distance *= 0.621371;
-            unit = 'mi';
+        const metersPerPixel = this.getMetersPerPixel( this.map.center.lat, this.map.zoom );
+        const dpi = window.devicePixelRatio ?? 1 * 96;
 
-        }
+        const scale = 1 / ( metersPerPixel / ( 0.0254 / dpi ) );
 
-        return `${ options.nice
-            ? this.roundNice( distance )
-            : distance.toFixed( options.precision ?? 2 )
-        } ${unit}`;
+        return `1:${ Math.round( scale ) }`;
+
+    }
+
+    public getScaleBar ( px: number = 120 ) : { label: string, meters: number, pixels: number } {
+
+        const metersPerPixel = this.getMetersPerPixel( this.map.center.lat, this.map.zoom );
+        const nice = this.niceScale( metersPerPixel * px );
+        const pixels = nice / metersPerPixel;
+
+        return {
+            label: this.formatDistance( nice / 1000 ),
+            meters: nice, pixels: Math.round( pixels )
+        };
 
     }
 
