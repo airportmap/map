@@ -68,8 +68,8 @@ export class APMap {
         this.options = this.mergeDefaultOptions( options ?? {} );
         this.leafletMap = this.createMap();
 
-        this.uiManager = new UIManager( this );
         this.layerManager = new LayerManager( this );
+        this.uiManager = new UIManager( this );
 
         this.initUtils();
         this.initLayer();
