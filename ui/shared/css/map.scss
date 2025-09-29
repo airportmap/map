@@ -68,23 +68,11 @@
             left: 12px;
 
             span {
-                position: relative;
                 display: inline-block;
                 margin: 0 6px;
                 height: 7px;
-                border-left: 1px solid var( --map-text );
-                border-right: 1px solid var( --map-text );
-
-                &::after {
-                    content: '';
-                    position: absolute;
-                    top: 3px;
-                    left: 0;
-                    right: 0;
-                    height: 1px;
-                    background: var( --map-text );
-                }
-
+                border: 1px solid var( --map-text );
+                border-top: 0;
             }
 
         }

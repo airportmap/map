@@ -1,5 +1,5 @@
 import { APMapEventType, APMapOptions, APMapTheme, APMapUnits } from '@airportmap/types';
-import { UnitConverter } from '@map/core/UnitConverter';
+import { GeoMeasurement } from '@map/core/GeoMeasurement';
 import { LayerManager } from '@map/core/LayerManager';
 import { DayNightLayer } from '@map/layers/DayNightLayer';
 import { UIManager } from '@map/ui/UIManager';
@@ -18,7 +18,7 @@ export class APMap {
     private element: HTMLElement;
     private options: Required< APMapOptions >;
     private leafletMap: LeafletMap;
-    private unitConverter: UnitConverter;
+    private geoMeasurement: GeoMeasurement;
     private layerManager: LayerManager;
     private uiManager: UIManager;
     private eventListeners: Map< string, Function[] > = new Map();
@@ -37,7 +37,7 @@ export class APMap {
     public get el () : HTMLElement { return this.element }
     public get opt () : Required< APMapOptions > { return this.options }
     public get map () : LeafletMap { return this.leafletMap }
-    public get units () : UnitConverter { return this.unitConverter }
+    public get geo () : GeoMeasurement { return this.geoMeasurement }
     public get layer () : LayerManager { return this.layerManager }
     public get ui () : UIManager { return this.uiManager }
 
@@ -71,7 +71,7 @@ export class APMap {
         this.options = this.mergeDefaultOptions( options ?? {} );
         this.leafletMap = this.createMap();
 
-        this.unitConverter = new UnitConverter( this );
+        this.geoMeasurement = new GeoMeasurement( this );
         this.layerManager = new LayerManager( this );
         this.uiManager = new UIManager( this );
 

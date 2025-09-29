@@ -28,8 +28,8 @@ export class StateControl extends UIControl {
 
         if ( this.isVisible() ) {
 
-            const { label, pixels } = this.UIManager.map.units.getScaleBar();
-            const coords = this.UIManager.map.units.coords();
+            const { label, pixels } = this.UIManager.map.geo.getScaleBar();
+            const coords = this.UIManager.map.geo.getCoordinates();
 
             this.element!.innerHTML = `${label} <span style="width: ${pixels}px;"></span> @ ${coords}`;
 
