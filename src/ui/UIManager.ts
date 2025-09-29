@@ -1,7 +1,8 @@
 import { APMapUIControlGroup } from '@airportmap/types';
 import { APMap } from '@map/core/APMap';
 import { UIControl } from '@map/ui/controls/UIControl';
-import { AttributionControl } from './controls/AttributionControl';
+import { AttributionControl } from '@map/ui/controls/AttributionControl';
+import { StateControl } from '@map/ui/controls/StateControl';
 
 export class UIManager {
 
@@ -33,6 +34,7 @@ export class UIManager {
     private initUIControls () : void {
 
         this.UIControls.attributionControl = new AttributionControl( this );
+        this.UIControls.stateControl = new StateControl( this );
 
     }
 

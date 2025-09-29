@@ -40,9 +40,8 @@
         bottom: 0;
         z-index: 90;
 
-        &_attribution {
+        &_attribution, &_state {
             position: absolute;
-            right: 12px;
             bottom: 12px;
             height: 22px;
             padding: 0 8px;
@@ -51,11 +50,19 @@
             background: var( --map-ui-fill );
             border-radius: 4px;
             box-shadow: 0 0 6px -4px rgba( 0 0 0 / 0.2 );
+        }
+
+        &_attribution {
+            right: 12px;
 
             a:hover {
                 text-decoration: underline;
             }
 
+        }
+
+        &_state {
+            left: 12px;
         }
 
     }
