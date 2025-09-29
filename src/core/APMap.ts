@@ -89,6 +89,32 @@ export class APMap {
             },
             mode: 'normal',
             theme: 'light',
+            uiControl: {
+                attributionControl: {
+                    enabled: true
+                },
+                fullscreenControl: {
+                    enabled: options.allowFullscreen || true
+                },
+                headingControl: {
+                    enabled: options.enableDeviceOrientation || false
+                },
+                settingsControl: {
+                    enabled: true
+                },
+                stateControl: {
+                    enabled: true
+                },
+                theaterControl: {
+                    enabled: options.mode === 'theater'
+                },
+                trackingControl: {
+                    enabled: options.trackUserPosition || false
+                },
+                zoomControl: {
+                    enabled: true
+                }
+            },
             allowFullscreen: true,
             urlManipulation: false,
             stateStorage: {
