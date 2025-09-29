@@ -106,7 +106,7 @@ export class UnitConverter {
     public getScaleRatio () : string {
 
         const metersPerPixel = this.getMetersPerPixel( this.map.center.lat, this.map.zoom );
-        const dpi = window.devicePixelRatio ?? 1 * 96;
+        const dpi = ( window.devicePixelRatio ?? 1 ) * 96;
 
         const scale = 1 / ( metersPerPixel / ( 0.0254 / dpi ) );
 
@@ -114,7 +114,7 @@ export class UnitConverter {
 
     }
 
-    public getScaleBar ( px: number = 120 ) : { label: string, distance: number, pixels: number } {
+    public getScaleBar ( px: number = 80 ) : { label: string, distance: number, pixels: number } {
 
         const metersPerPixel = this.getMetersPerPixel( this.map.center.lat, this.map.zoom );
         const nice = this.niceScale( metersPerPixel * px );
