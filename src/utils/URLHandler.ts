@@ -2,9 +2,6 @@ import { APMap } from '@map/core/APMap';
 
 export class URLHandler {
 
-    private readonly TIMEOUT: number = 250;
-
-    private updateTimer: number | null = null;
     private enabled: boolean = true;
 
     public get isEnabled () : boolean { return this.enabled }
@@ -27,7 +24,7 @@ export class URLHandler {
 
     }
 
-    private updateURLImmediate () : void {
+    public updateURL () : void {
 
         const { lat, lng } = this.map.center;
         const zoom = this.map.zoom;
@@ -36,27 +33,8 @@ export class URLHandler {
 
     }
 
-    public updateURL () : void {
-
-        if ( ! this.enabled ) return;
-
-        this.destroy();
-
-        this.updateTimer = window.setTimeout(
-            this.updateURLImmediate.bind( this ),
-            this.TIMEOUT
-        );
-
-    }
-
     public enable () : void { this.enabled = true }
 
     public disable () : void { this.enabled = false }
-
-    public destroy () : void {
-
-        if ( this.updateTimer !== null ) window.clearTimeout( this.updateTimer );
-
-    }
 
 }
