@@ -156,4 +156,34 @@ export class GeoMeasurement {
 
     }
 
+    public getScaleRatio () : string {
+
+        const metersPerPixel = this.getMetersPerPixel( this.map.center.lat, this.map.zoom );
+        const dpi = ( window.devicePixelRatio ?? 1 ) * 96;
+        const scale = 1 / ( metersPerPixel / ( 0.0254 / dpi ) );
+
+        return `1:${ Math.round( scale ).toLocaleString() }`;
+
+    }
+
+    public getScaleBar ( targetPixels: number = 80 ) : {
+        label: string, distance: number, units: APMapUnitSystems,
+        pixels: number, scale: string
+    } {
+
+        const units = this.effectiveUnits;
+        const targetMeters = this.getMetersPerPixel( this.map.center.lat, this.map.zoom ) * targetPixels;
+        const { meters, pixels } = this.findOptimalScale( targetMeters, units );
+        const { value, unit } = this.formatDistanceValue( meters, units );
+        const formattedValue = value % 1 === 0 ? value.toString() : value.toFixed( 1 );
+
+        return {
+            label: `${formattedValue} ${unit}`,
+            distance: meters, units,
+            pixels: Math.round( pixels ),
+            scale: this.getScaleRatio()
+        };
+
+    }
+
 }
