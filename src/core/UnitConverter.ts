@@ -61,7 +61,7 @@ export class UnitConverter {
 
     }
 
-    public latLngToHuman ( coords: LatLng ) : { lat: string, lng: string } {
+    public latLngToHuman ( coords: LatLng | { lat: number, lng: number } ) : { lat: string, lng: string } {
 
         return {
             lat: this.degToDMS( coords.lat, true ),
@@ -92,6 +92,14 @@ export class UnitConverter {
         if ( options.force ?? this.map.opt.units === 'imperial' ) { dist *= 0.621371, unit = 'mi' }
 
         return `${ options.nice ? this.roundNice( dist ) : dist.toFixed( options.precision ?? 2 ) } ${unit}`;
+
+    }
+
+    public coords () : string {
+
+        const { lat, lng } = this.latLngToHuman( this.map.center );
+
+        return `${lat}, ${lng}`;
 
     }
 

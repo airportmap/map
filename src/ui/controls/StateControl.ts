@@ -19,7 +19,8 @@ export class StateControl extends UIControl {
 
     protected initEventHandlers () : void {
 
-        //
+        this.UIManager.map.addEventListener( 'position-changed', this.update.bind( this ) );
+        this.UIManager.map.addEventListener( 'zoom-changed', this.update.bind( this ) );
 
     }
 
@@ -27,7 +28,7 @@ export class StateControl extends UIControl {
 
         if ( this.isVisible() ) {
 
-            //
+            this.element!.innerHTML = `... @ ${ this.UIManager.map.units.coords() }`;
 
         }
 
