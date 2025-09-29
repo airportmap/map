@@ -19,4 +19,16 @@ export class AttributionControl extends UIControl {
 
     protected initEventHandlers () : void {}
 
+    public update () : void {
+
+        let attr = [ '© <a href="https://airportmap.de/license">Airportmap</a>' ];
+
+        this.UIManager.map.layer.getVisibleLayers().forEach(
+            layer => layer.attribution && attr.push( layer.attribution )
+        );
+
+        this.element.innerHTML = attr.join( ' | ' );
+
+    }
+
 }
