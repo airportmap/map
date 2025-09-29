@@ -40,16 +40,19 @@
         bottom: 0;
         z-index: 90;
 
-        &_attribution, &_state {
+        &_control {
             position: absolute;
-            bottom: 12px;
-            height: 22px;
-            padding: 0 8px;
             line-height: 22px;
             font-size: 10px;
             background: var( --map-ui-fill );
             border-radius: 4px;
             box-shadow: 0 0 6px -4px rgba( 0 0 0 / 0.2 );
+        }
+
+        &_attribution, &_state {
+            bottom: 12px;
+            height: 22px;
+            padding: 0 8px;
         }
 
         &_attribution {
@@ -63,6 +66,26 @@
 
         &_state {
             left: 12px;
+
+            span {
+                position: relative;
+                display: inline-block;
+                height: 7px;
+                border-left: 1px solid var( --map-text );
+                border-right: 1px solid var( --map-text );
+
+                &::after {
+                    content: '';
+                    position: absolute;
+                    top: 3px;
+                    left: 0;
+                    right: 0;
+                    height: 1px;
+                    background: var( --map-text );
+                }
+
+            }
+
         }
 
     }
