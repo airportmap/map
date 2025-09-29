@@ -1,4 +1,5 @@
-import { APMapEventType, APMapOptions, APMapTheme } from '@airportmap/types';
+import { APMapEventType, APMapOptions, APMapTheme, APMapUnits } from '@airportmap/types';
+import { UnitConverter } from '@map/core/UnitConverter';
 import { LayerManager } from '@map/core/LayerManager';
 import { DayNightLayer } from '@map/layers/DayNightLayer';
 import { UIManager } from '@map/ui/UIManager';
@@ -17,6 +18,7 @@ export class APMap {
     private element: HTMLElement;
     private options: Required< APMapOptions >;
     private leafletMap: LeafletMap;
+    private unitConverter: UnitConverter;
     private layerManager: LayerManager;
     private uiManager: UIManager;
     private eventListeners: Map< string, Function[] > = new Map();
@@ -35,6 +37,7 @@ export class APMap {
     public get el () : HTMLElement { return this.element }
     public get opt () : Required< APMapOptions > { return this.options }
     public get map () : LeafletMap { return this.leafletMap }
+    public get units () : UnitConverter { return this.unitConverter }
     public get layer () : LayerManager { return this.layerManager }
     public get ui () : UIManager { return this.uiManager }
 
@@ -68,6 +71,7 @@ export class APMap {
         this.options = this.mergeDefaultOptions( options ?? {} );
         this.leafletMap = this.createMap();
 
+        this.unitConverter = new UnitConverter( this );
         this.layerManager = new LayerManager( this );
         this.uiManager = new UIManager( this );
 
@@ -89,6 +93,7 @@ export class APMap {
             },
             mode: 'normal',
             theme: 'light',
+            units: 'default',
             uiControl: {
                 attributionControl: {
                     enabled: true
@@ -250,6 +255,14 @@ export class APMap {
         this.element.classList.add( '__apm_map_' + theme );
 
         this.dispatchEvent( 'theme-changed', { theme } );
+
+    }
+
+    public setUnits ( units: APMapUnits ) : void {
+
+        this.opt.units = units;
+
+        this.dispatchEvent( 'units-changed', { units } );
 
     }
 
