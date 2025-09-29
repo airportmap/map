@@ -8,6 +8,11 @@ export class GeoMeasurement {
     private static readonly METERS_TO_FEET = 3.28084;
     private static readonly METERS_TO_NM = 0.000539957;
     private static readonly METERS_TO_MILES = 0.000621371;
+
+    private static readonly COMPASS_LABELS: Record< number, string > = {
+        0: 'N', 45: 'NE', 90: 'E', 135: 'SE',
+        180: 'S', 225: 'SW', 270: 'W', 315: 'NW'
+    };
     
     private static readonly UNIT_SYSTEMS: Record< APMapUnitSystems, {
         distance: string; speed: string; altitude: string;
@@ -226,34 +231,25 @@ export class GeoMeasurement {
 
     }
 
-    public getHeadingIndicator ( stepSize: number = 30 ) : {
-        heading: number; label: string; isMayor: boolean;
+    public getHeadingIndicator ( heading: number, options: {
+        stepSize?: number; range?: number;
+    } = {} ) : {
+        angle: number; major: boolean;
+        position: number; label: string;
     }[] {
 
+        const { stepSize = 30, range = 3 } = options;
+        const centerStep = Math.round( heading / stepSize );
         const indicators = [];
 
-        for ( let heading = 0; heading < 360; heading += stepSize ) {
+        for ( let i = -range; i <= range; i++ ) {
 
-            const isMajor = heading % 90 === 0;
-            let label = '';
+            const angle = ( ( centerStep + i ) * stepSize + 360 ) % 360;
 
-            if ( isMajor ) {
-
-                const cardinals = [ 'N', 'E', 'S', 'W' ];
-                label = cardinals[ heading / 90 ];
-
-            } else if ( heading % 45 === 0 ) {
-
-                const intercardinals = [ 'NE', 'SE', 'SW', 'NW' ];
-                label = intercardinals[ ( heading - 45 ) / 90 ];
-
-            } else {
-
-                label = `${heading}°`;
-
-            }
-
-            indicators.push( { heading, label, isMajor } );
+            indicators.push( {
+                angle, major: angle % 90 === 0, position: i,
+                label: GeoMeasurement.COMPASS_LABELS[ angle ] ?? `${angle}°`
+            } );
 
         }
 
