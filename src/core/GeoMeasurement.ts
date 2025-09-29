@@ -1,4 +1,4 @@
-import { APMapUnits, APMapUnitSystems } from '@airportmap/types';
+import { APMapUnitSystems } from '@airportmap/types';
 import { APMap } from '@map/core/APMap';
 import { LatLng } from 'leaflet';
 
@@ -223,6 +223,41 @@ export class GeoMeasurement {
     public humanToLatLng ( lat: string, lng: string ) : LatLng {
 
         return new LatLng( this.dmsToDeg( lat ), this.dmsToDeg( lng ) );
+
+    }
+
+    public getHeadingIndicator ( stepSize: number = 30 ) : {
+        heading: number; label: string; isMayor: boolean;
+    }[] {
+
+        const indicators = [];
+
+        for ( let heading = 0; heading < 360; heading += stepSize ) {
+
+            const isMajor = heading % 90 === 0;
+            let label = '';
+
+            if ( isMajor ) {
+
+                const cardinals = [ 'N', 'E', 'S', 'W' ];
+                label = cardinals[ heading / 90 ];
+
+            } else if ( heading % 45 === 0 ) {
+
+                const intercardinals = [ 'NE', 'SE', 'SW', 'NW' ];
+                label = intercardinals[ ( heading - 45 ) / 90 ];
+
+            } else {
+
+                label = `${heading}°`;
+
+            }
+
+            indicators.push( { heading, label, isMajor } );
+
+        }
+
+        return indicators;
 
     }
 
