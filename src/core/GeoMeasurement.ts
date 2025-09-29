@@ -38,10 +38,10 @@ export class GeoMeasurement {
 
     constructor ( private map: APMap ) {}
 
-    private get effectiveUnitSystem () : APMapUnits {
+    private get effectiveUnits () : APMapUnitSystems {
 
         const units = this.map.opt.units;
-        return this.map.opt.units === 'default' ? 'metric' : units;
+        return this.map.opt.units === 'default' ? 'metric' : units as APMapUnitSystems;
 
     }
 
@@ -78,7 +78,7 @@ export class GeoMeasurement {
                 2640, 5280, 10560, 26400, 52800
             ];
 
-            case 'avionic': [
+            case 'avionic': return [
                 1, 2, 5, 10, 20, 50, 100, 200, 500, 1000,
                 6076, 12152, 30380, 60760
             ];
@@ -104,6 +104,55 @@ export class GeoMeasurement {
                 : { value: Math.round( meters * GeoMeasurement.METERS_TO_FEET ), unit: 'ft' };
 
         }
+
+    }
+
+    private findOptimalScale (
+        targetMeters: number, units: APMapUnitSystems,
+        maxPixels: number = 120, minPixels: number = 60
+    ) : { meters: number, pixels: number } {
+
+        const value = this.convertDistance( targetMeters, 'metric', units );
+        const scales = this.getNiceScales( units );
+        const perPixel = this.convertDistance(
+            this.getMetersPerPixel( this.map.center.lat, this.map.zoom ),
+            'metric', units
+        );
+
+        for ( const meters of scales ) {
+
+            const pixels = meters / perPixel;
+
+            if ( pixels >= minPixels && pixels <= maxPixels ) return { meters, pixels };
+
+        }
+
+        return { meters: value, pixels: value / perPixel };
+
+    }
+
+    private degToDMS ( deg: number, isLat: boolean, precision: number = 2 ) : string {
+
+        const abs = Math.abs( deg );
+        const d = Math.floor( abs );
+        const m = Math.floor( ( abs - d ) * 60 );
+        const s = ( ( abs - d - m / 60 ) * 3600 ).toFixed( precision );
+        const dir = isLat ? ( deg >= 0 ? 'N' : 'S' ) : ( deg >= 0 ? 'E' : 'W' );
+
+        return `${d}° ${m}′ ${s}″ ${dir}`;
+
+    }
+
+    private dmsToDeg ( dms: string ) : number {
+
+        const match = dms.match( /(\d+)[°]\s*(\d+)[′]\s*([\d.]+)[″]\s*([NSEW])/ );
+        if ( ! match ) return 0;
+
+        const [ , d, m, s, dir ] = match;
+        let deg = Number( d ) + Number( m ) / 60 + Number( s ) / 3600;
+        if ( dir === 'S' || dir === 'W' ) deg *= -1;
+
+        return deg;
 
     }
 
