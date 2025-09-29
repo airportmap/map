@@ -7,7 +7,7 @@ export class AttributionControl extends UIControl {
         if ( this.UIManager.map.opt.uiControl?.attributionControl?.enabled ) {
 
             const el = document.createElement( 'div' );
-            el.classList.add( '__apm_map__ui_control __apm_map__ui_attribution' );
+            el.classList.add( '__apm_map__ui_control', '__apm_map__ui_attribution' );
 
             return el;
 
