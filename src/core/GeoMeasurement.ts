@@ -201,4 +201,29 @@ export class GeoMeasurement {
 
     }
 
+    public getCoordinates () : string {
+
+        const center = this.map.center;
+        const lat = this.degToDMS( center.lat, true );
+        const lng = this.degToDMS( center.lng, false );
+
+        return `${lat}, ${lng}`;
+
+    }
+
+    public latLngToHuman ( coords: LatLng | { lat: number; lng: number } ) : { lat: string; lng: string } {
+
+        return {
+            lat: this.degToDMS( coords.lat, true ),
+            lng: this.degToDMS( coords.lng, false )
+        };
+
+    }
+
+    public humanToLatLng ( lat: string, lng: string ) : LatLng {
+
+        return new LatLng( this.dmsToDeg( lat ), this.dmsToDeg( lng ) );
+
+    }
+
 }
