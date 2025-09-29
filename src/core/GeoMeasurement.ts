@@ -71,9 +71,53 @@ export class GeoMeasurement {
         value: number, type: APMapUnitSystemType,
         from: APMapUnitSystems, to: APMapUnitSystems,
         unit: string | boolean = true, precision: number = 2
-    ) : number {
+    ) : { value: number; unit: string } {
 
-        //
+        const fromEntry = GeoMeasurement.UNIT_SYSTEMS[ from ][ type ];
+        const toEntry = GeoMeasurement.UNIT_SYSTEMS[ to ][ type ];
+
+        let baseValue = value;
+
+        if ( from !== to ) {
+
+            const factor = fromEntry.convert[ to ];
+
+            if ( ! factor ) throw new Error (
+                `No conversion from ${from} to ${to} for ${type}`
+            );
+
+            baseValue = value * factor;
+
+        }
+
+        if ( unit === false ) return { value: +baseValue.toFixed( precision ), unit: toEntry.base };
+
+        if ( typeof unit === 'string' ) {
+
+            const factor = toEntry.units[ unit ];
+
+            if ( factor ) return { value: +( baseValue * factor ).toFixed( precision ), unit };
+            return { value: +baseValue.toFixed( precision ), unit: toEntry.base };
+
+        }
+
+        let bestUnit = toEntry.base;
+        let bestValue = baseValue;
+
+        for ( const [ u, f ] of Object.entries( toEntry.units ) ) {
+
+            const v = baseValue * f;
+
+            if ( v >= 1 && v < 1000 ) {
+
+                bestUnit = u, bestValue = v;
+                break;
+
+            }
+
+        }
+
+        return { value: +bestValue.toFixed( precision ), unit: bestUnit };
 
     }
 
