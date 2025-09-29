@@ -15,7 +15,7 @@ export class CartoTileLayer extends TileLayer {
                 dark: 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}@2x.png'
             },
             subdomains: 'abcd',
-            attribution: '<a href="https://openstreetmap.org/copyright">OSM</a> & <a href="https://carto.com/attributions">CARTO</a>',
+            attribution: '<a href="https://openstreetmap.org/copyright">OSM</a> & <a href="https://carto.com/attributions">Carto</a>',
             minZoom: 4,
             maxZoom: 15
         } );

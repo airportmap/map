@@ -11,11 +11,13 @@
     }
 
     &_light {
+        --map-text: #000;
         --map-ui-fill: #fffd;
         --map-daynight-fill: #000;
     }
 
     &_dark {
+        --map-text: #fff;
         --map-ui-fill: #000d;
         --map-daynight-fill: #446;
     }
@@ -45,6 +47,7 @@
             height: 22px;
             padding: 0 8px;
             line-height: 22px;
+            font-family: monospace;
             font-size: 10px;
             background: var( --map-ui-fill );
             border-radius: 4px;

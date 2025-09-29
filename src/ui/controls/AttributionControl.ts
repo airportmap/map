@@ -29,7 +29,7 @@ export class AttributionControl extends UIControl {
 
         if ( this.isVisible() ) {
 
-            let attr = [ '© <a href="https://airportmap.de/license">Airportmap</a>' ];
+            let attr = [ '&copy; <a href="https://airportmap.de/license">Airportmap</a>' ];
 
             this.UIManager.map.layer.getVisibleLayers().forEach(
                 layer => layer.attribution && attr.push( layer.attribution )
