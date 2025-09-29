@@ -28,10 +28,10 @@ export class StateControl extends UIControl {
 
         if ( this.isVisible() ) {
 
-            const ratio = this.UIManager.map.units.getScaleRatio();
+            const { label, pixels } = this.UIManager.map.units.getScaleBar();
             const coords = this.UIManager.map.units.coords();
 
-            this.element!.innerHTML = `${ ratio } @ ${ coords }`;
+            this.element!.innerHTML = `${label} <span style="width: ${pixels}px;"></span> @ ${coords}`;
 
         }
 

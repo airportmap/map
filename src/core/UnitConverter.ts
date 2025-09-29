@@ -114,15 +114,15 @@ export class UnitConverter {
 
     }
 
-    public getScaleBar ( px: number = 120 ) : { label: string, meters: number, pixels: number } {
+    public getScaleBar ( px: number = 120 ) : { label: string, distance: number, pixels: number } {
 
         const metersPerPixel = this.getMetersPerPixel( this.map.center.lat, this.map.zoom );
         const nice = this.niceScale( metersPerPixel * px );
         const pixels = nice / metersPerPixel;
 
         return {
-            label: this.formatDistance( nice / 1000 ),
-            meters: nice, pixels: Math.round( pixels )
+            label: this.formatDistance( nice / 1000, { nice: true } ),
+            distance: nice, pixels: Math.round( pixels )
         };
 
     }
