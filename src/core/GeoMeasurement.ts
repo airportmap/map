@@ -120,7 +120,7 @@ export class GeoMeasurement {
 
     private findOptimalScale (
         targetMeters: number, units: APMapUnitSystems,
-        maxPixels: number = 120, minPixels: number = 60
+        maxPixels: number = 150, minPixels: number = 50
     ) : { meters: number, pixels: number } {
 
         const value = this.convertDistance( targetMeters, 'metric', units );
