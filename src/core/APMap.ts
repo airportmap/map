@@ -140,9 +140,8 @@ export class APMap {
 
         const map = new LeafletMap ( this.element, this.options.mapOptions );
 
-        map.setMaxBounds( new LatLngBounds(
-            new LatLng( -90, -180 ),
-            new LatLng(  90,  180 )
+        map.setView( [ 0, 0 ], 4 ).setMaxBounds( new LatLngBounds(
+            new LatLng( -90, -180 ), new LatLng(  90,  180 )
         ) );
 
         map.on( 'moveend', this.handlePositionChanged.bind( this ) );
