@@ -171,7 +171,7 @@ export class GeoMeasurement {
 
         const metersPerPixel = this.getMetersPerPixel( this.map.center.lat, this.map.zoom );
         const dpi = ( window.devicePixelRatio ?? 1 ) * 96;
-        const scale = 1 / ( metersPerPixel / ( 0.0254 / dpi ) );
+        const scale = metersPerPixel / ( 0.0254 / dpi );
 
         return `1:${ Math.round( scale ).toLocaleString() }`;
 
