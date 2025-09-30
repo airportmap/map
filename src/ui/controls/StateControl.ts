@@ -7,7 +7,7 @@ export class StateControl extends UIControl {
         if ( this.UIManager.map.opt.uiControl?.stateControl?.enabled ) {
 
             const el = document.createElement( 'div' );
-            el.classList.add( '__apm_map__ui_control', '__apm_map__ui_state' );
+            el.classList.add( '__apm_map__ui_group', '__apm_map__ui_state' );
 
             return el;
 
@@ -31,7 +31,10 @@ export class StateControl extends UIControl {
             const { label, pixels } = this.UIManager.map.geo.getScaleBar();
             const coords = this.UIManager.map.geo.getCoordinates();
 
-            this.element!.innerHTML = `${label} <span style="width: ${pixels}px;"></span> @ ${coords}`;
+            this.setContent( [
+                this.getUIBox( `${label} <span style="width: ${pixels}px;"></span>` ),
+                this.getUIBox( `${coords}` )
+            ] );
 
         }
 

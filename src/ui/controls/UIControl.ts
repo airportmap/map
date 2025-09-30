@@ -19,6 +19,33 @@ export abstract class UIControl {
 
     }
 
+    protected clearElement () : void {
+
+        if ( ! ( this.element instanceof HTMLElement ) ) return;
+
+        while ( this.element.firstChild ) this.element.removeChild( this.element.firstChild );
+
+    }
+
+    protected setContent ( nodes: HTMLElement[], clear: boolean = true ) : void {
+
+        if ( clear ) this.clearElement();
+
+        nodes.forEach( node => this.element!.appendChild( node ) );
+
+    }
+
+    protected getUIBox ( content?: string ) : HTMLElement {
+
+        const el = document.createElement( 'div' );
+
+        el.innerHTML = content ?? '';
+        el.classList.add( '__apm_map__ui_box' );
+
+        return el;
+
+    }
+
     protected abstract createUIControls () : HTMLElement | undefined;
 
     protected abstract initEventHandlers () : void;
