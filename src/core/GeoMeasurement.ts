@@ -1,4 +1,4 @@
-import { APMapUnitSystems, APMapUnitSystemType, APMapUnitSystem } from '@airportmap/types';
+import { APMapUnitSystems, APMapUnitSystemType, APMapUnitSystem, APMapScaleBar } from '@airportmap/types';
 import { APMap } from '@map/core/APMap';
 import { LatLng } from 'leaflet';
 
@@ -67,7 +67,7 @@ export class GeoMeasurement {
 
     }
 
-    private getDPI () : number { return ( window.devicePixelRatio ?? 1 ) * 96 }
+    //private getDPI () : number { return ( window.devicePixelRatio ?? 1 ) * 96 }
 
     private getMetersPerPixel ( lat: number, zoom: number ) : number {
 
@@ -94,7 +94,7 @@ export class GeoMeasurement {
 
         if ( from !== to ) {
 
-            const factor = fromEntry.convert[ to ];
+            const factor = ( fromEntry.convert as any )[ to ];
 
             if ( ! factor ) throw new Error (
                 `No conversion from ${from} to ${to} for ${type}`
@@ -192,9 +192,16 @@ export class GeoMeasurement {
 
     }
 
-    public getScaleBar ( targetPixels: number = 80, by: 'meters' | 'scale' = 'meters' ) {
+    public getScaleBar ( targetPixels: number = 80, by: 'meters' | 'scale' = 'meters' ) : APMapScaleBar {
 
-        return {};
+        void [ by ];
+
+        const metersPerPixel = this.getMetersPerPixel( this.map.center.lat, this.map.zoom );
+        const targetMeters = metersPerPixel * targetPixels;
+        const { value: distance, unit } = this.unitConverter( targetMeters, 'distance', 'metric', this.effectiveUnits, true, 1, true );
+        const pixels = this.unitConverter( distance, 'distance', this.effectiveUnits, 'metric', 'm' ).value / metersPerPixel;
+
+        return { ratio: 0, scale: '', distance, unit, pixels, label: `${distance} ${unit}` };
 
     }
 
