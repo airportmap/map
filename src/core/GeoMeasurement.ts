@@ -67,10 +67,26 @@ export class GeoMeasurement {
 
     }
 
+    private getDPI () : number { return ( window.devicePixelRatio ?? 1 ) * 96 }
+
+    private getMetersPerPixel ( lat: number, zoom: number ) : number {
+
+        return 40075016.686 * Math.cos( lat * Math.PI / 180 ) / Math.pow( 2, zoom + 8 );
+
+    }
+
+    private roundNice ( value: number ) : number {
+
+        if ( value === 0 ) return 0;
+
+        const magnitude = Math.pow( 10, Math.floor( Math.log10( Math.abs( value ) ) ) );
+        return Number ( ( Math.round( value / magnitude ) * magnitude ).toFixed( 8 ) );
+
+    }
+
     private unitConverter (
-        target: number, type: APMapUnitSystemType,
-        from: APMapUnitSystems, to: APMapUnitSystems,
-        unit: string | boolean = true, precision: number = 2
+        target: number, type: APMapUnitSystemType, from: APMapUnitSystems, to: APMapUnitSystems,
+        unit: string | boolean = true, precision: number = 2, nice: boolean = false
     ) : { value: number; unit: string } {
 
         const fromEntry = GeoMeasurement.UNIT_SYSTEMS[ from ][ type ];
@@ -109,7 +125,10 @@ export class GeoMeasurement {
 
         }
 
-        return { value: Number ( +chosenValue.toFixed( precision ) ), unit: chosenUnit };
+        return {
+            value: nice ? this.roundNice( chosenValue ) : Number ( +chosenValue.toFixed( precision ) ),
+            unit: chosenUnit
+        };
 
     }
 
@@ -139,12 +158,11 @@ export class GeoMeasurement {
     }
 
     public convert (
-        target: number, type: APMapUnitSystemType,
-        raw: boolean = false, precision: number = 2
+        target: number, type: APMapUnitSystemType, raw: boolean = false,
+        precision: number = 2, nice: boolean = false
     ) : string | { value: number; unit: string } {
 
-        const { value, unit } = this.unitConverter( target, type, 'metric', this.effectiveUnits, true, precision );
-
+        const { value, unit } = this.unitConverter( target, type, 'metric', this.effectiveUnits, true, precision, nice );
         return raw ? { value, unit } : `${value} ${unit}`;
 
     }
@@ -171,6 +189,12 @@ export class GeoMeasurement {
         const lng = this.degToDMS( center.lng, false );
 
         return `${lat}, ${lng}`;
+
+    }
+
+    public getScaleBar ( targetPixels: number = 80, by: 'meters' | 'scale' = 'meters' ) {
+
+        return {};
 
     }
 
