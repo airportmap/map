@@ -6,55 +6,19 @@ export class GeoMeasurement {
 
     private static readonly UNIT_SYSTEMS: Record< APMapUnitSystems, APMapUnitSystem > = {
         metric: {
-            distance: {
-                base: 'm',
-                convert: { imperial: 3.2808399, avionic: 3.2808399 },
-                units: { m: 1, km: 0.001 }
-            },
-            speed: {
-                base: 'km/h',
-                convert: { imperial: 0.62137119, avionic: 0.539957 },
-                units: { 'km/h': 1 }
-            },
-            altitude: {
-                base: 'm',
-                convert: { imperial: 3.2808399, avionic: 3.2808399 },
-                units: { 'm': 1 }
-            }
+            distance: { base: 'm', convert: { imperial: 3.2808399, avionic: 3.2808399 }, units: { m: 1, km: 0.001 } },
+            speed: { base: 'km/h', convert: { imperial: 0.62137119, avionic: 0.539957 }, units: { 'km/h': 1 } },
+            altitude: { base: 'm', convert: { imperial: 3.2808399, avionic: 3.2808399 }, units: { 'm': 1 } }
         },
         imperial: {
-            distance: {
-                base: 'ft',
-                convert: { metric: 0.3048, avionic: 1 },
-                units: { ft: 1, mi: 0.00018939 }
-            },
-            speed: {
-                base: 'mph',
-                convert: { metric: 1.609344, avionic: 0.86897624 },
-                units: { mph: 1 }
-            },
-            altitude: {
-                base: 'ft',
-                convert: { metric: 0.3048, avionic: 1 },
-                units: { ft: 1 }
-            }
+            distance: { base: 'ft', convert: { metric: 0.3048, avionic: 1 }, units: { ft: 1, mi: 0.00018939 } },
+            speed: { base: 'mph', convert: { metric: 1.609344, avionic: 0.86897624 }, units: { mph: 1 } },
+            altitude: { base: 'ft', convert: { metric: 0.3048, avionic: 1 }, units: { ft: 1 } }
         },
         avionic: {
-            distance: {
-                base: 'ft',
-                convert: { metric: 0.3048, imperial: 1 },
-                units: { ft: 1, nm: 0.00016458 }
-            },
-            speed: {
-                base: 'kn',
-                convert: { metric: 1.852, imperial: 1.15077945 },
-                units: { kn: 1 }
-            },
-            altitude: {
-                base: 'ft',
-                convert: { metric: 0.3048, imperial: 1 },
-                units: { ft: 1 }
-            }
+            distance: { base: 'ft', convert: { metric: 0.3048, imperial: 1 }, units: { ft: 1, nm: 0.00016458 } },
+            speed: { base: 'kn', convert: { metric: 1.852, imperial: 1.15077945 }, units: { kn: 1 } },
+            altitude: { base: 'ft', convert: { metric: 0.3048, imperial: 1 }, units: { ft: 1 } }
         }
     };
 
@@ -67,7 +31,7 @@ export class GeoMeasurement {
 
     }
 
-    //private getDPI () : number { return ( window.devicePixelRatio ?? 1 ) * 96 }
+    private getDPI () : number { return ( window.devicePixelRatio ?? 1 ) * 96 }
 
     private getMetersPerPixel ( lat: number, zoom: number ) : number {
 
@@ -75,12 +39,17 @@ export class GeoMeasurement {
 
     }
 
-    private roundNice ( value: number ) : number {
+    private roundNice ( value: number, steps: number[] = [ 1, 2, 5, 10 ] ) : number {
 
         if ( value === 0 ) return 0;
 
         const magnitude = Math.pow( 10, Math.floor( Math.log10( Math.abs( value ) ) ) );
-        return Number ( ( Math.round( value / magnitude ) * magnitude ).toFixed( 8 ) );
+        const normalized = value / magnitude;
+
+        let best = steps[ 0 ];
+        for ( const step of steps ) if ( normalized <= step ) { best = step; break }
+
+        return best * magnitude;
 
     }
 
@@ -193,7 +162,7 @@ export class GeoMeasurement {
 
     }
 
-    public getScaleBar ( targetPixels: number = 80, by: 'meters' | 'scale' = 'meters' ) : APMapScaleBar {
+    public getScaleBar ( targetPixels: number = 80, by: 'meters' | 'ratio' = 'meters' ) : APMapScaleBar {
 
         const system = this.effectiveUnits;
         const metersPerPixel = this.getMetersPerPixel( this.map.center.lat, this.map.zoom );
