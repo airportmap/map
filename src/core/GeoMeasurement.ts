@@ -31,7 +31,7 @@ export class GeoMeasurement {
 
     }
 
-    private getDPI () : number { return ( window.devicePixelRatio ?? 1 ) * 96 }
+    //private getDPI () : number { return ( window.devicePixelRatio ?? 1 ) * 96 }
 
     private getMetersPerPixel ( lat: number, zoom: number ) : number {
 
