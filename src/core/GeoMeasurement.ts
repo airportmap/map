@@ -68,15 +68,13 @@ export class GeoMeasurement {
     }
 
     private unitConverter (
-        value: number, type: APMapUnitSystemType,
+        target: number, type: APMapUnitSystemType,
         from: APMapUnitSystems, to: APMapUnitSystems,
         unit: string | boolean = true, precision: number = 2
     ) : { value: number; unit: string } {
 
         const fromEntry = GeoMeasurement.UNIT_SYSTEMS[ from ][ type ];
         const toEntry = GeoMeasurement.UNIT_SYSTEMS[ to ][ type ];
-
-        let baseValue = value;
 
         if ( from !== to ) {
 
@@ -86,38 +84,32 @@ export class GeoMeasurement {
                 `No conversion from ${from} to ${to} for ${type}`
             );
 
-            baseValue = value * factor;
+            target *= factor;
 
         }
 
-        if ( unit === false ) return { value: +baseValue.toFixed( precision ), unit: toEntry.base };
+        let chosenUnit = toEntry.base;
+        let chosenValue = target;
 
         if ( typeof unit === 'string' ) {
 
-            const factor = toEntry.units[ unit ];
-
-            if ( factor ) return { value: +( baseValue * factor ).toFixed( precision ), unit };
-            return { value: +baseValue.toFixed( precision ), unit: toEntry.base };
+            const f = toEntry.units[ unit ];
+            if ( f ) { chosenUnit = unit, chosenValue = target * f }
 
         }
 
-        let bestUnit = toEntry.base;
-        let bestValue = baseValue;
+        if ( unit === true ) {
 
-        for ( const [ u, f ] of Object.entries( toEntry.units ) ) {
+            for ( const [ u, f ] of Object.entries( toEntry.units ) ) {
 
-            const v = baseValue * f;
-
-            if ( v >= 1 && v < 1000 ) {
-
-                bestUnit = u, bestValue = v;
-                break;
+                const v = target * f;
+                if ( v >= 1 && v < 1000 ) { chosenUnit = u, chosenValue = v; break }
 
             }
 
         }
 
-        return { value: +bestValue.toFixed( precision ), unit: bestUnit };
+        return { value: Number ( +chosenValue.toFixed( precision ) ), unit: chosenUnit };
 
     }
 
@@ -143,6 +135,17 @@ export class GeoMeasurement {
         if ( dir === 'S' || dir === 'W' ) deg *= -1;
 
         return deg;
+
+    }
+
+    public convert (
+        target: number, type: APMapUnitSystemType,
+        raw: boolean = false, precision: number = 2
+    ) : string | { value: number; unit: string } {
+
+        const { value, unit } = this.unitConverter( target, type, 'metric', this.effectiveUnits, true, precision );
+
+        return raw ? { value, unit } : `${value} ${unit}`;
 
     }
 
