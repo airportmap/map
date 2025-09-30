@@ -128,7 +128,7 @@ export class GeoMeasurement {
 
         return {
             value: nice ? this.roundNice( chosenValue ) : Number ( +chosenValue.toFixed( precision ) ),
-            unit: chosenUnit, factor
+            unit: chosenUnit, factor: 1 / factor
         };
 
     }
