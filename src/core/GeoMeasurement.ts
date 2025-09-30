@@ -87,7 +87,7 @@ export class GeoMeasurement {
     private unitConverter (
         target: number, type: APMapUnitSystemType, from: APMapUnitSystems, to: APMapUnitSystems,
         unit: string | boolean = true, precision: number = 2, nice: boolean = false
-    ) : { value: number; unit: string } {
+    ) : { value: number; unit: string, factor: number } {
 
         const fromEntry = GeoMeasurement.UNIT_SYSTEMS[ from ][ type ];
         const toEntry = GeoMeasurement.UNIT_SYSTEMS[ to ][ type ];
@@ -106,11 +106,12 @@ export class GeoMeasurement {
 
         let chosenUnit = toEntry.base;
         let chosenValue = target;
+        let factor = 1;
 
         if ( typeof unit === 'string' ) {
 
             const f = toEntry.units[ unit ];
-            if ( f ) { chosenUnit = unit, chosenValue = target * f }
+            if ( f ) { chosenUnit = unit, chosenValue = target * f, factor = f }
 
         }
 
@@ -119,7 +120,7 @@ export class GeoMeasurement {
             for ( const [ u, f ] of Object.entries( toEntry.units ) ) {
 
                 const v = target * f;
-                if ( v >= 1 && v < 1000 ) { chosenUnit = u, chosenValue = v; break }
+                if ( v >= 1 && v < 1000 ) { chosenUnit = u, chosenValue = v, factor = f; break }
 
             }
 
@@ -127,7 +128,7 @@ export class GeoMeasurement {
 
         return {
             value: nice ? this.roundNice( chosenValue ) : Number ( +chosenValue.toFixed( precision ) ),
-            unit: chosenUnit
+            unit: chosenUnit, factor
         };
 
     }
@@ -160,10 +161,10 @@ export class GeoMeasurement {
     public convert (
         target: number, type: APMapUnitSystemType, raw: boolean = false,
         precision: number = 2, nice: boolean = false
-    ) : string | { value: number; unit: string } {
+    ) : string | { value: number; unit: string, factor: number } {
 
-        const { value, unit } = this.unitConverter( target, type, 'metric', this.effectiveUnits, true, precision, nice );
-        return raw ? { value, unit } : `${value} ${unit}`;
+        const c = this.unitConverter( target, type, 'metric', this.effectiveUnits, true, precision, nice );
+        return raw ? c : `${c.value} ${c.unit}`;
 
     }
 
@@ -194,14 +195,17 @@ export class GeoMeasurement {
 
     public getScaleBar ( targetPixels: number = 80, by: 'meters' | 'scale' = 'meters' ) : APMapScaleBar {
 
-        void [ by ];
-
+        const system = this.effectiveUnits;
         const metersPerPixel = this.getMetersPerPixel( this.map.center.lat, this.map.zoom );
-        const targetMeters = metersPerPixel * targetPixels;
-        const { value: distance, unit } = this.unitConverter( targetMeters, 'distance', 'metric', this.effectiveUnits, true, 1, true );
-        const pixels = this.unitConverter( distance, 'distance', this.effectiveUnits, 'metric', 'm' ).value / metersPerPixel;
 
-        return { ratio: 0, scale: '', distance, unit, pixels, label: `${distance} ${unit}` };
+        let targetMeters: number;
+        if ( by === 'meters' ) targetMeters = metersPerPixel * targetPixels;
+        else targetMeters = 0;
+
+        const { value, unit, factor } = this.unitConverter( targetMeters, 'distance', 'metric', system, true, 1, true );
+        const pixels = this.unitConverter( value * factor, 'distance', system, 'metric', 'm' ).value / metersPerPixel;
+
+        return { ratio: 0, scale: '', distance: value, unit, pixels, label: `${value} ${unit}` };
 
     }
 
