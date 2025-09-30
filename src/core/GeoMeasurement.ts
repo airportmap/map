@@ -166,12 +166,15 @@ export class GeoMeasurement {
 
         const dpi = this.getDPI();
         const { getSize, distance, containerPointToLatLng: c } = this.map.map;
-        const { x, y } = getSize();
 
-        const meters = distance( c( [ 0, y / 2 ] ), c( [ 1 / ( 2.54 / dpi ), y / 2 ] ) );
-        const ratio = Math.round( ( meters * 1000 ) / ( x / dpi * 2.54 ) );
+        try {
 
-        return ratio;
+            const { x, y } = getSize();
+            const meters = distance( c( [ 0, y / 2 ] ), c( [ 1 / ( 2.54 / dpi ), y / 2 ] ) );
+
+            return Math.round( ( meters * 1000 ) / ( x / dpi * 2.54 ) );
+
+        } catch { return 0 }
 
     }
 
