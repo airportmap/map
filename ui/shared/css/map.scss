@@ -40,13 +40,30 @@
         bottom: 0;
         z-index: 90;
 
-        &_control {
+        &_group {
+            display: flex;
+            flex-flow: row nowrap;
+            align-items: stretch;
+            gap: 1px;
+        }
+
+        &_box {
             position: absolute;
             line-height: 22px;
             font-size: 10px;
             background: var( --map-ui-fill );
-            border-radius: 4px;
             box-shadow: 0 0 6px -4px rgba( 0 0 0 / 0.2 );
+
+            &:first-child {
+                border-top-left-radius: 4px;
+                border-bottom-left-radius: 4px;
+            }
+
+            &:last-child {
+                border-top-right-radius: 4px;
+                border-bottom-right-radius: 4px;
+            }
+
         }
 
         &_attribution, &_state {
@@ -69,7 +86,7 @@
 
             span {
                 display: inline-block;
-                margin: 0 6px;
+                margin-left: 6px;
                 height: 6px;
                 border: 1px solid var( --map-text );
                 border-top: 0;
