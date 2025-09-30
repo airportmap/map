@@ -31,7 +31,7 @@ export class GeoMeasurement {
 
     }
 
-    //private getDPI () : number { return ( window.devicePixelRatio ?? 1 ) * 96 }
+    private getDPI () : number { return ( window.devicePixelRatio ?? 1 ) * 96 }
 
     private getMetersPerPixel ( lat: number, zoom: number ) : number {
 
@@ -162,19 +162,30 @@ export class GeoMeasurement {
 
     }
 
-    public getScaleBar ( targetPixels: number = 80, by: 'meters' | 'ratio' = 'meters' ) : APMapScaleBar {
+    public getRatio () : number {
+
+        const dpi = this.getDPI();
+        const { getSize, distance, containerPointToLatLng: c } = this.map.map;
+        const { x, y } = getSize();
+
+        const meters = distance( c( [ 0, y / 2 ] ), c( [ 1 / ( 2.54 / dpi ), y / 2 ] ) );
+        const ratio = Math.round( ( meters * 1000 ) / ( x / dpi * 2.54 ) );
+
+        return ratio;
+
+    }
+
+    public getScaleBar ( targetPixels: number = 60 ) : APMapScaleBar {
 
         const system = this.effectiveUnits;
         const metersPerPixel = this.getMetersPerPixel( this.map.center.lat, this.map.zoom );
-
-        let targetMeters: number;
-        if ( by === 'meters' ) targetMeters = metersPerPixel * targetPixels;
-        else targetMeters = 0;
+        const targetMeters = metersPerPixel * targetPixels;
+        const ratio = this.getRatio();
 
         const { value, unit, factor } = this.unitConverter( targetMeters, 'distance', 'metric', system, true, 1, true );
         const pixels = this.unitConverter( value * factor, 'distance', system, 'metric', 'm' ).value / metersPerPixel;
 
-        return { ratio: 0, scale: '', distance: value, unit, pixels, label: `${value} ${unit}` };
+        return { ratio, scale: `1:${ratio}`, distance: value, unit, pixels, label: `${value} ${unit}` };
 
     }
 
