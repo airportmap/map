@@ -3,6 +3,7 @@ import { APMap } from '@map/core/APMap';
 import { UIControl } from '@map/ui/controls/UIControl';
 import { AttributionControl } from '@map/ui/controls/AttributionControl';
 import { FullscreenControl } from '@map/ui/controls/FullscreenControl';
+import { ScrollControl } from '@map/ui/controls/ScrollControl';
 import { SettingsControl } from '@map/ui/controls/SettingsControl';
 import { StateControl } from '@map/ui/controls/StateControl';
 import { ZoomControl } from '@map/ui/controls/ZoomControl';
@@ -52,7 +53,9 @@ export class UIManager {
 
         this.UIControls.settingsControl = new SettingsControl( this );
         this.UIControls.zoomControl = new ZoomControl( this );
+
         this.UIControls.fullscreenControl = new FullscreenControl( this );
+        this.UIControls.scrollControl = new ScrollControl( this );
 
         this.UIControls.attributionControl = new AttributionControl( this );
         this.UIControls.stateControl = new StateControl( this );
