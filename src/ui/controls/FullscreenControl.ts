@@ -2,6 +2,10 @@ import { UIControl } from '@map/ui/controls/UIControl';
 
 export class FullscreenControl extends UIControl {
 
+    private fs: boolean = false;
+
+    public get isFullscreen () : boolean { return this.fs }
+
     protected createUIControls () : HTMLElement | undefined {
 
         if (
@@ -24,7 +28,16 @@ export class FullscreenControl extends UIControl {
 
     protected initEventHandlers () : void {}
 
-    private handleFullscreen () : void {}
+    private handleFullscreen () : void {
+
+        const el = this.UIManager.map.el;
+
+        if ( ! this.fs && el.requestFullscreen ) el.requestFullscreen();
+        else if ( document.exitFullscreen ) document.exitFullscreen();
+
+        this.fs = document.fullscreenElement === el;
+
+    }
 
     public update () : void {
 
@@ -34,7 +47,8 @@ export class FullscreenControl extends UIControl {
 
             this.setChildrenAsContent();
 
-            //
+            if ( this.fs ) fs.classList.add( '___active' );
+            else fs.classList.remove( '___active' );
 
         }
 
