@@ -75,16 +75,17 @@ export abstract class UIControl {
 
     protected getUIBtn ( options: APMapUIBntOptions ) : HTMLButtonElement {
 
-        const { handler, icon, activeIcon, ariaLabel = 'Button', classes = [] } = options;
+        const { handler, icon, text, activeIcon, ariaLabel = 'Button', classes = [] } = options;
 
         const btn = document.createElement( 'button' );
-        btn.innerHTML = UIControl.ICON( icon );
         btn.classList.add( '__apm_map__ui_btn', ...classes );
         btn.ariaLabel = ariaLabel;
+        btn.innerHTML = UIControl.ICON( icon );
+
+        if ( text ) btn.innerHTML += `<span>${text}</span>`;
+        if ( activeIcon ) btn.innerHTML += UIControl.ICON( activeIcon, '___active' );
 
         btn.addEventListener( 'click', ( e ) => handler( e ) );
-
-        if ( activeIcon ) btn.innerHTML += UIControl.ICON( activeIcon, '___active' );
 
         return btn;
 

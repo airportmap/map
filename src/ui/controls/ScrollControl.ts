@@ -26,7 +26,7 @@ export class ScrollControl extends UIControl {
 
     }
 
-    protected handleScrollDown () : void { window.scrollBy( { top: 240, behavior: 'smooth' } ) }
+    protected handleScrollDown () : void { window.scrollBy( { top: 480, behavior: 'smooth' } ) }
 
     protected initEventHandlers () : void {}
 
