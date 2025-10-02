@@ -9,7 +9,7 @@ export class SettingsControl extends UIWidgetControl {
             this.addChild( 'settings', this.getUIBtn( this.handleSettings.bind( this ), 'cog', 'close' ) );
 
             const el = document.createElement( 'div' );
-            el.classList.add( '__apm_map__ui_widget_box', '__apm_map__ui_settings' );
+            el.classList.add( '__apm_map__ui_widget_box', '__apm_map__ui_btnBox', '__apm_map__ui_settings' );
 
             return el;
 
