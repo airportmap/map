@@ -2,18 +2,15 @@ import { UIWidgetControl } from '@map/ui/controls/UIWidgetControl';
 
 export class ZoomControl extends UIWidgetControl {
 
-    private zoomIn?: HTMLButtonElement;
-    private zoomOut?: HTMLButtonElement;
-
     protected createUIControls () : HTMLElement | undefined {
 
         if ( this.UIManager.map.opt.uiControl?.zoomControl?.enabled ) {
 
+            this.childElements.set( 'zoomIn', this.getUIBtn( this.handleZoomIn.bind( this ), 'plus' ) );
+            this.childElements.set( 'zoomOut', this.getUIBtn( this.handleZoomOut.bind( this ), 'minus' ) );
+
             const el = document.createElement( 'div' );
             el.classList.add( '__apm_map__ui_group', '__apm_map__ui_zoom' );
-
-            this.zoomIn = this.getUIBtn( this.handleZoomIn, 'plus' );
-            this.zoomOut = this.getUIBtn( this.handleZoomOut, 'minus' );
 
             return el;
 
@@ -35,13 +32,16 @@ export class ZoomControl extends UIWidgetControl {
 
     public update () : void {
 
-        if ( this.isVisible() && this.zoomIn && this.zoomOut ) {
+        const zoomIn = this.getChild< HTMLButtonElement >( 'zoomIn' );
+        const zoomOut = this.getChild< HTMLButtonElement >( 'zoomOut' );
 
-            if ( this.empty ) this.setContent( [ this.zoomIn, this.zoomOut ] );
+        if ( this.isVisible() && zoomIn && zoomOut ) {
+
+            this.setContent( [ zoomIn, zoomOut ] );
 
             const zoom = this.UIManager.map.zoom;
-            this.zoomIn.disabled = zoom === this.UIManager.map.map.getMaxZoom();
-            this.zoomOut.disabled = zoom === this.UIManager.map.map.getMinZoom();
+            zoomIn.disabled = zoom === this.UIManager.map.map.getMaxZoom();
+            zoomOut.disabled = zoom === this.UIManager.map.map.getMinZoom();
 
         }
 

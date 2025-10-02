@@ -11,6 +11,7 @@ export abstract class UIControl {
     };
 
     protected element: HTMLElement | undefined;
+    protected childElements: Map< string, HTMLElement > = new Map();
 
     protected get parent () : HTMLElement { return this.UIManager.pane }
 
@@ -42,6 +43,12 @@ export abstract class UIControl {
         if ( clear ) this.clearElement();
 
         nodes.forEach( node => this.element!.appendChild( node ) );
+
+    }
+
+    protected getChild< T extends HTMLElement = HTMLElement > ( key: string ) : T | undefined {
+
+        return this.childElements.get( key ) as T | undefined;
 
     }
 
