@@ -2,9 +2,7 @@ import { UIControl } from '@map/ui/controls/UIControl';
 
 export class FullscreenControl extends UIControl {
 
-    private fs: boolean = false;
-
-    public get isFullscreen () : boolean { return this.fs }
+    public get isFullscreen () : boolean { return document.fullscreenElement === this.UIManager.map.el }
 
     protected createUIControls () : HTMLElement | undefined {
 
@@ -30,12 +28,7 @@ export class FullscreenControl extends UIControl {
 
         if ( this.UIManager.map.opt.allowFullscreen ) {
 
-            document.addEventListener( 'fullscreenchange', () => {
-
-                this.fs = document.fullscreenElement === this.UIManager.map.el;
-                this.update();
-
-            } );
+            document.addEventListener( 'fullscreenchange', this.update.bind( this ) );
 
             document.addEventListener( 'keydown', async ( e ) => {
 
@@ -56,7 +49,7 @@ export class FullscreenControl extends UIControl {
 
         const el = this.UIManager.map.el;
 
-        if ( ! this.fs && el.requestFullscreen ) await el.requestFullscreen();
+        if ( ! this.isFullscreen && el.requestFullscreen ) await el.requestFullscreen();
         else if ( document.exitFullscreen ) await document.exitFullscreen();
 
     }
@@ -67,7 +60,7 @@ export class FullscreenControl extends UIControl {
 
         if ( this.isVisible() && fs ) {
 
-            if ( this.fs ) fs.classList.add( '___active' );
+            if ( this.isFullscreen ) fs.classList.add( '___active' );
             else fs.classList.remove( '___active' );
 
             if ( this.empty ) this.setChildrenAsContent();
