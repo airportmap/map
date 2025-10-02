@@ -2,6 +2,14 @@ import { UIManager } from '@map/ui/UIManager';
 
 export abstract class UIControl {
 
+    protected static ICON ( icon: string, classes?: string ) : string {
+
+        return `<svg class="___icon {CLASS}" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <use xlink:href="/assets/images/icons.svg#{ICON}"></use>
+        </svg>`.replace( '{CLASS}', classes ).replace( '{ICON}', icon );
+
+    };
+
     protected element: HTMLElement | undefined;
 
     public get el () : HTMLElement | undefined { return this.element }
@@ -37,12 +45,26 @@ export abstract class UIControl {
 
     protected getUIBox ( content?: string ) : HTMLElement {
 
-        const el = document.createElement( 'div' );
+        const box = document.createElement( 'div' );
 
-        el.innerHTML = content ?? '';
-        el.classList.add( '__apm_map__ui_box' );
+        box.innerHTML = content ?? '';
+        box.classList.add( '__apm_map__ui_box' );
 
-        return el;
+        return box;
+
+    }
+
+    protected getUIBtn ( handler: CallableFunction, icon: string, activeIcon?: string ) : HTMLButtonElement {
+
+        const btn = document.createElement( 'button' );
+
+        btn.addEventListener( 'click', ( e ) => handler( e ) );
+        btn.innerHTML = UIControl.ICON( icon );
+        btn.classList.add( '__apm_map__ui_btn' );
+
+        if ( activeIcon ) btn.innerHTML += UIControl.ICON( activeIcon, '___active' );
+
+        return btn;
 
     }
 
