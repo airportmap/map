@@ -89,6 +89,11 @@
                 fill: currentColor;
             }
 
+            &.___active > :not( .___active ),
+            &:not( .___active ) > .___active {
+                display: none;
+            }
+
         }
 
         &_widget {
