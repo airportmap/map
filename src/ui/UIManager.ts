@@ -2,6 +2,7 @@ import { APMapUIControlGroup } from '@airportmap/types';
 import { APMap } from '@map/core/APMap';
 import { UIControl } from '@map/ui/controls/UIControl';
 import { AttributionControl } from '@map/ui/controls/AttributionControl';
+import { SettingsControl } from '@map/ui/controls/SettingsControl';
 import { StateControl } from '@map/ui/controls/StateControl';
 import { ZoomControl } from '@map/ui/controls/ZoomControl';
 
@@ -49,6 +50,7 @@ export class UIManager {
     private initUIControls () : void {
 
         this.UIControls.attributionControl = new AttributionControl( this );
+        this.UIControls.settingsControl = new SettingsControl( this );
         this.UIControls.stateControl = new StateControl( this );
         this.UIControls.zoomControl = new ZoomControl( this );
 
