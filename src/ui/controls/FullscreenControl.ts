@@ -30,6 +30,13 @@ export class FullscreenControl extends UIControl {
 
         if ( this.UIManager.map.opt.allowFullscreen ) {
 
+            document.addEventListener( 'fullscreenchange', () => {
+
+                this.fs = document.fullscreenElement === this.UIManager.map.el;
+                this.update();
+
+            } );
+
             document.addEventListener( 'keydown', async ( e ) => {
 
                 if ( e.key === 'F11' ) {
@@ -51,9 +58,6 @@ export class FullscreenControl extends UIControl {
 
         if ( ! this.fs && el.requestFullscreen ) await el.requestFullscreen();
         else if ( document.exitFullscreen ) await document.exitFullscreen();
-
-        this.fs = document.fullscreenElement instanceof Element && document.fullscreenElement === el;
-        this.update();
 
     }
 
