@@ -52,7 +52,7 @@ export class FullscreenControl extends UIControl {
         if ( ! this.fs && el.requestFullscreen ) await el.requestFullscreen();
         else if ( document.exitFullscreen ) await document.exitFullscreen();
 
-        this.fs = document.fullscreenElement && document.fullscreenElement === el;
+        this.fs = document.fullscreenElement instanceof Element && document.fullscreenElement === el;
         this.update();
 
     }
