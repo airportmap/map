@@ -12,7 +12,7 @@ export class FullscreenControl extends UIControl {
         ) {
 
             this.addChild( 'fs', this.getUIBtn( {
-                handler: async () => await this.handleFullscreen(),
+                handler: this.handleFullscreen.bind( this ),
                 icon: 'fullscreen',
                 activeIcon: 'fullscreen-exit',
                 ariaLabel: 'Fullscreen'
