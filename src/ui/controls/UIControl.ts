@@ -14,6 +14,7 @@ export abstract class UIControl {
 
     protected get parent () : HTMLElement { return this.UIManager.pane }
 
+    public get empty () : boolean { return ! this.element || this.element.childNodes.length === 0 }
     public get el () : HTMLElement | undefined { return this.element }
 
     constructor ( protected UIManager: UIManager ) {
