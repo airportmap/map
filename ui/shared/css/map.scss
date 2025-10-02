@@ -40,8 +40,11 @@
         bottom: 0;
         z-index: 90;
 
-        &_group {
+        &_group, &_single {
             position: absolute;
+        }
+
+        &_group {
             display: flex;
             flex-flow: row nowrap;
             align-items: stretch;
@@ -51,11 +54,8 @@
         &_txtBox, &_btnBox {
             background: var( --map-ui-fill );
             box-shadow: 0 0 6px -4px rgba( 0 0 0 / 0.2 );
-        }
 
-        &_single {
-
-            &_txtBox, &_btnBox {
+            &.__apm_map__ui_single {
                 border-radius: 4px;
             }
 
