@@ -2,7 +2,7 @@ import { UIManager } from '@map/ui/UIManager';
 
 export abstract class UIControl {
 
-    protected static ICON ( icon: string, classes?: string ) : string {
+    protected static ICON ( icon: string, classes: string = '' ) : string {
 
         return `<svg class="___icon {CLASS}" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
             <use xlink:href="/assets/images/icons.svg#{ICON}"></use>
