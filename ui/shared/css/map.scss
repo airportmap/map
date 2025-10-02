@@ -82,8 +82,6 @@
         &_btnBox {
             display: flex;
             flex-flow: column nowrap;
-            width: 36px;
-            min-height: 36px;
             background: var( --map-ui-fill );
             box-shadow: 0 0 6px -4px rgba( 0 0 0 / 0.2 );
 
@@ -103,7 +101,10 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            aspect-ratio: 1 / 1;
+            gap: 6px;
+            min-width: 36px;
+            min-height: 36px;
+            padding: 0px 6px;
             color: var( --map-text );
             background: none;
             border: 0;
@@ -165,6 +166,16 @@
         &_fullscreen {
             top: 12px;
             right: 12px;
+        }
+
+        &_scroll {
+            border-radius: 18px;
+
+            .__apm_map__ui_btn {
+                padding: 0 16px;
+                height: 42px;
+            }
+
         }
 
     }
