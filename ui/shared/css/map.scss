@@ -53,6 +53,14 @@
             box-shadow: 0 0 6px -4px rgba( 0 0 0 / 0.2 );
         }
 
+        &_single {
+
+            &_txtBox, &_btnBox {
+                border-radius: 4px;
+            }
+
+        }
+
         &_txtBox {
             height: 22px;
             padding: 0 10px;
