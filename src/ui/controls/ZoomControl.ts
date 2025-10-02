@@ -35,7 +35,7 @@ export class ZoomControl extends UIWidgetControl {
 
     public update () : void {
 
-        if ( this.isVisible() ) {
+        if ( this.isVisible() && this.zoomIn && this.zoomOut ) {
 
             this.setContent( [ this.zoomIn, this.zoomOut ] );
 
