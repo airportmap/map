@@ -104,14 +104,14 @@ export class APMap {
                 headingControl: {
                     enabled: options.enableDeviceOrientation || false
                 },
+                scrollControl: {
+                    enabled: options.mode === 'theater'
+                },
                 settingsControl: {
                     enabled: true
                 },
                 stateControl: {
                     enabled: true
-                },
-                theaterControl: {
-                    enabled: options.mode === 'theater'
                 },
                 trackingControl: {
                     enabled: options.trackUserPosition || false
