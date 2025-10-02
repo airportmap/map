@@ -12,7 +12,7 @@ export abstract class UIControl {
 
     protected element: HTMLElement | undefined;
 
-    protected parent: 'pane' | 'widget' = 'pane';
+    protected get parent () : HTMLElement { return this.UIManager.pane }
 
     public get el () : HTMLElement | undefined { return this.element }
 
@@ -20,12 +20,11 @@ export abstract class UIControl {
 
         if ( this.element = this.createUIControls() ) {
 
-            this.UIManager[ this.parent ].appendChild( this.element );
+            this.parent.appendChild( this.element );
+            this.initEventHandlers();
             this.update();
 
         }
-
-        this.initEventHandlers();
 
     }
 

@@ -1,8 +1,6 @@
-import { UIControl } from '@map/ui/controls/UIControl';
+import { UIWidgetControl } from '@map/ui/controls/UIWidgetControl';
 
-export class ZoomControl extends UIControl {
-
-    protected override parent: 'pane' | 'widget' = 'widget';
+export class ZoomControl extends UIWidgetControl {
 
     protected createUIControls () : HTMLElement | undefined {
 
