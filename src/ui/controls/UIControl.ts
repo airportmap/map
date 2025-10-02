@@ -30,6 +30,22 @@ export abstract class UIControl {
 
     }
 
+    protected clearChildren () : void { this.childElements.clear() }
+
+    protected addChild ( key: string, node: HTMLElement ) : void { this.childElements.set( key, node ) }
+
+    protected getChild< T extends HTMLElement > ( key: string ) : T | undefined {
+
+        return this.childElements.get( key ) as T | undefined;
+
+    }
+
+    protected setChildrenAsContent ( clear: boolean = true ) : void {
+
+        this.setContent( Array.from( this.childElements.values() ), clear );
+
+    }
+
     protected clearElement () : void {
 
         if ( ! ( this.element instanceof HTMLElement ) ) return;
@@ -43,12 +59,6 @@ export abstract class UIControl {
         if ( clear ) this.clearElement();
 
         nodes.forEach( node => this.element!.appendChild( node ) );
-
-    }
-
-    protected getChild< T extends HTMLElement = HTMLElement > ( key: string ) : T | undefined {
-
-        return this.childElements.get( key ) as T | undefined;
 
     }
 
