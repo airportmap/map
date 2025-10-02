@@ -1,3 +1,4 @@
+import { APMapUIBntOptions } from '@airportmap/types';
 import { UIManager } from '@map/ui/UIManager';
 
 export abstract class UIControl {
@@ -15,8 +16,8 @@ export abstract class UIControl {
 
     protected get parent () : HTMLElement { return this.UIManager.pane }
 
-    public get empty () : boolean { return ! this.element || this.element.childNodes.length === 0 }
     public get el () : HTMLElement | undefined { return this.element }
+    public get empty () : boolean { return ! this.element || this.element.childNodes.length === 0 }
 
     constructor ( protected UIManager: UIManager ) {
 
@@ -72,12 +73,16 @@ export abstract class UIControl {
 
     }
 
-    protected getUIBtn ( handler: CallableFunction, icon: string, activeIcon?: string ) : HTMLButtonElement {
+    protected getUIBtn ( options: APMapUIBntOptions ) : HTMLButtonElement {
+
+        const { handler, icon, activeIcon, ariaLabel = 'Button', classes = [] } = options;
 
         const btn = document.createElement( 'button' );
-        btn.addEventListener( 'click', ( e ) => handler( e ) );
         btn.innerHTML = UIControl.ICON( icon );
-        btn.classList.add( '__apm_map__ui_btn' );
+        btn.classList.add( '__apm_map__ui_btn', ...classes );
+        btn.ariaLabel = ariaLabel;
+
+        btn.addEventListener( 'click', ( e ) => handler( e ) );
 
         if ( activeIcon ) btn.innerHTML += UIControl.ICON( activeIcon, '___active' );
 

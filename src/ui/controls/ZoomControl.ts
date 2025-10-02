@@ -6,8 +6,17 @@ export class ZoomControl extends UIWidgetControl {
 
         if ( this.UIManager.map.opt.uiControl?.zoomControl?.enabled ) {
 
-            this.addChild( 'zoomIn', this.getUIBtn( this.handleZoomIn.bind( this ), 'plus' ) );
-            this.addChild( 'zoomOut', this.getUIBtn( this.handleZoomOut.bind( this ), 'minus' ) );
+            this.addChild( 'zoomIn', this.getUIBtn( {
+                handler: this.handleZoomIn.bind( this ),
+                icon: 'plus',
+                ariaLabel: 'Zoom in'
+            } ) );
+
+            this.addChild( 'zoomOut', this.getUIBtn( {
+                handler: this.handleZoomOut.bind( this ),
+                icon: 'minus',
+                ariaLabel: 'Zoom out'
+            } ) );
 
             const el = document.createElement( 'div' );
             el.classList.add( '__apm_map__ui_widget_box', '__apm_map__ui_btnBox', '__apm_map__ui_zoom' );

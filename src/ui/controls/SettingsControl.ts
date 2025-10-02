@@ -6,7 +6,12 @@ export class SettingsControl extends UIWidgetControl {
 
         if ( this.UIManager.map.opt.uiControl?.settingsControl?.enabled ) {
 
-            this.addChild( 'settings', this.getUIBtn( this.handleSettings.bind( this ), 'cog', 'close' ) );
+            this.addChild( 'settings', this.getUIBtn( {
+                handler: this.handleSettings.bind( this ),
+                icon: 'cog',
+                activeIcon: 'close',
+                ariaLabel: 'Settings'
+            } ) );
 
             const el = document.createElement( 'div' );
             el.classList.add( '__apm_map__ui_widget_box', '__apm_map__ui_btnBox', '__apm_map__ui_settings' );
