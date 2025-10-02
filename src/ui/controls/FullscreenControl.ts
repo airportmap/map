@@ -26,7 +26,24 @@ export class FullscreenControl extends UIControl {
 
     }
 
-    protected initEventHandlers () : void {}
+    protected initEventHandlers () : void {
+
+        if ( this.UIManager.map.opt.allowFullscreen ) {
+
+            document.addEventListener( 'keydown', async ( e ) => {
+
+                if ( e.key === 'F11' ) {
+
+                    e.preventDefault();
+                    await this.handleFullscreen();
+
+                }
+
+            } );
+
+        }
+
+    }
 
     private async handleFullscreen () : Promise< void > {
 

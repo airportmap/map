@@ -10,7 +10,7 @@ export class ZoomControl extends UIWidgetControl {
             this.addChild( 'zoomOut', this.getUIBtn( this.handleZoomOut.bind( this ), 'minus' ) );
 
             const el = document.createElement( 'div' );
-            el.classList.add( '__apm_map__ui_widget_box', '__apm_map__ui_zoom' );
+            el.classList.add( '__apm_map__ui_widget_box', '__apm_map__ui_btnBox', '__apm_map__ui_zoom' );
 
             return el;
 
