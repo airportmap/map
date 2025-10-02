@@ -46,7 +46,6 @@ export abstract class UIControl {
     protected getUIBox ( content?: string ) : HTMLElement {
 
         const box = document.createElement( 'div' );
-
         box.innerHTML = content ?? '';
         box.classList.add( '__apm_map__ui_box' );
 
@@ -57,7 +56,6 @@ export abstract class UIControl {
     protected getUIBtn ( handler: CallableFunction, icon: string, activeIcon?: string ) : HTMLButtonElement {
 
         const btn = document.createElement( 'button' );
-
         btn.addEventListener( 'click', ( e ) => handler( e ) );
         btn.innerHTML = UIControl.ICON( icon );
         btn.classList.add( '__apm_map__ui_btn' );
