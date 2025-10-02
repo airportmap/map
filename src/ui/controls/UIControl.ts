@@ -66,7 +66,7 @@ export abstract class UIControl {
 
         const box = document.createElement( 'div' );
         box.innerHTML = content ?? '';
-        box.classList.add( '__apm_map__ui_box' );
+        box.classList.add( '__apm_map__ui_txtBox' );
 
         return box;
 

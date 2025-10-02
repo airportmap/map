@@ -37,11 +37,12 @@ export class ZoomControl extends UIWidgetControl {
 
         if ( this.isVisible() && zoomIn && zoomOut ) {
 
-            this.setChildrenAsContent();
-
             const zoom = this.UIManager.map.zoom;
+
             zoomIn.disabled = zoom === this.UIManager.map.map.getMaxZoom();
             zoomOut.disabled = zoom === this.UIManager.map.map.getMinZoom();
+
+            if ( this.empty ) this.setChildrenAsContent();
 
         }
 

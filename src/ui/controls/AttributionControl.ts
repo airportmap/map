@@ -6,6 +6,8 @@ export class AttributionControl extends UIControl {
 
         if ( this.UIManager.map.opt.uiControl?.attributionControl?.enabled ) {
 
+            this.addChild( 'attr', this.getUIBox() );
+
             const el = document.createElement( 'div' );
             el.classList.add( '__apm_map__ui_group', '__apm_map__ui_attribution' );
 
@@ -27,15 +29,19 @@ export class AttributionControl extends UIControl {
 
     public update () : void {
 
-        if ( this.isVisible() ) {
+        const attr = this.getChild( 'attr' );
 
-            let attr = [ `Copyright ${ new Date().getFullYear() } <a href="https://airportmap.de/license">Airportmap</a>` ];
+        if ( this.isVisible() && attr ) {
+
+            let content = [ `Copyright ${ new Date().getFullYear() } <a href="https://airportmap.de/license">Airportmap</a>` ];
 
             this.UIManager.map.layer.getVisibleLayers().forEach(
-                layer => layer.attribution && attr.push( layer.attribution )
+                layer => layer.attribution && content.push( layer.attribution )
             );
 
-            this.setContent( [ this.getUIBox( attr.join( ' | ' ) ) ] );
+            attr.innerHTML = content.join( ' | ' );
+
+            if ( this.empty ) this.setChildrenAsContent();
 
         }
 

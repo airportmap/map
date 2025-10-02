@@ -16,7 +16,7 @@ export class FullscreenControl extends UIControl {
             this.addChild( 'fs', this.getUIBtn( async () => await this.handleFullscreen(), 'fullscreen', 'fullscreen-exit' ) );
 
             const el = document.createElement( 'div' );
-            el.classList.add( '__apm_map__ui_group', '__apm_map__ui_fullscreen' );
+            el.classList.add( '__apm_map__ui_group', '__apm_map__ui_btnBox', '__apm_map__ui_fullscreen' );
 
             return el;
 
@@ -46,10 +46,10 @@ export class FullscreenControl extends UIControl {
 
         if ( this.isVisible() && fs ) {
 
-            this.setChildrenAsContent();
-
             if ( this.fs ) fs.classList.add( '___active' );
             else fs.classList.remove( '___active' );
+
+            if ( this.empty ) this.setChildrenAsContent();
 
         }
 
