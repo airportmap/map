@@ -67,6 +67,46 @@
 
         }
 
+        &_btn {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            aspect-ratio: 1 / 1;
+            background: none;
+            border: 0;
+            cursor: pointer;
+
+            &:disabled {
+                pointer-events: none;
+                opacity: 0.3;
+                cursor: not-allowed;
+            }
+
+            .___icon {
+                width: 22px;
+                height: 22px;
+            }
+
+        }
+
+        &_widget {
+            position: absolute;
+            top: 50%;
+            left: 12px;
+            transform: translateY( -50% );
+            width: 36px;
+            background: var( --map-ui-fill );
+            border-radius: 4px;
+            box-shadow: 0 0 6px -4px rgba( 0 0 0 / 0.2 );
+
+            &_group {
+                position: relative;
+                flex-direction: column;
+                gap: 0;
+            }
+
+        }
+
         &_attribution, &_state {
             bottom: 12px;
             height: 22px;
