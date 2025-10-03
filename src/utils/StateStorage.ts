@@ -21,15 +21,12 @@ export class StateStorage {
         if ( this.enabled ) this.mapState = this.getState();
         if ( this.enabled && this.restoreOnLoad ) this.restoreState();
 
-        this.map.addEventListener( 'position-changed', () => {
-            this.merge( this.map.center );
-        } );
-
-        this.map.addEventListener( 'zoom-changed', () => {
-            this.set( 'zoom', this.map.zoom );
-        } );
+        this.map.addEventListener( 'position-changed', this.handleMapChange.bind( this ) );
+        this.map.addEventListener( 'zoom-changed', this.handleMapChange.bind( this ) );
 
     }
+
+    private handleMapChange () : void { this.merge( { ...this.map.center, zoom: this.map.zoom } ) }
 
     public getState () : APMapState {
 
@@ -73,7 +70,7 @@ export class StateStorage {
 
     public disable () : void { this.enabled = false }
 
-    public get< T > ( key: keyof APMapState ) : T { return this.mapState[ key ] as T }
+    public get< T = keyof APMapState > ( key: keyof APMapState ) : T { return this.mapState[ key ] as T }
 
     public set ( key: keyof APMapState, value: any ) : APMapState {
 
