@@ -97,4 +97,8 @@ export class HeadingIndicator {
 
     }
 
+    public show () : void { this.container.classList.add( 'hidden' ) }
+
+    public hide () : void { this.container.classList.remove( 'hidden' ) }
+
 }
