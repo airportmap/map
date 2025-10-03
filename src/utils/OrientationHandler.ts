@@ -1,4 +1,3 @@
-import { APMapEventType } from '@airportmap/types';
 import { APMap } from '@map/core/APMap';
 
 export class OrientationHandler {
@@ -43,7 +42,7 @@ export class OrientationHandler {
 
         if ( this.autoRotate ) this.rotateMap( heading );
 
-        this.map.dispatchEvent( '' as APMapEventType, {
+        this.map.dispatchEvent( 'device-orientation-changed', {
             heading, beta: event.beta, gamma: event.gamma
         } );
 
