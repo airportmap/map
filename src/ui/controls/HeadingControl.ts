@@ -1,12 +1,10 @@
 import { HeadingIndicator } from '@map/core/HeadingIndicator';
 import { UIWidgetControl } from '@map/ui/controls/UIWidgetControl';
 import { UIManager } from '@map/ui/UIManager';
-import { OrientationHandler } from '@map/utils/OrientationHandler';
 
 export class HeadingControl extends UIWidgetControl {
 
     private headingIndicator: HeadingIndicator;
-    private handler: OrientationHandler | undefined;
 
     constructor ( UIManager: UIManager ) {
 
@@ -15,9 +13,7 @@ export class HeadingControl extends UIWidgetControl {
         const container = document.createElement( 'div' );
         container.classList.add( '__apm_map__ui_single', '__apm_map__ui_hdg' );
         this.parent.appendChild( container );
-
         this.headingIndicator = new HeadingIndicator( container );
-        this.handler = this.UIManager.map.orientationHandler;
 
     }
 
@@ -52,19 +48,26 @@ export class HeadingControl extends UIWidgetControl {
 
     }
 
-    protected handleHdgToggle () : void { if ( this.handler ) this.handler.toggleAutoRotate() }
+    protected handleHdgToggle () : void {
+
+        const handler = this.UIManager.map.orientationHandler;
+
+        if ( handler ) handler.toggleAutoRotate();
+
+    }
 
     public update () : void {
 
+        const handler = this.UIManager.map.orientationHandler;
         const hdg = this.getChild< HTMLButtonElement >( 'hdg' );
 
-        if ( this.empty ) this.setChildrenAsContent();
+        if ( this.isVisible() && this.headingIndicator && handler && hdg ) {
 
-        if ( this.isVisible() && hdg && this.headingIndicator && this.handler ) {
+            if ( this.empty ) this.setChildrenAsContent();
 
-            if ( this.handler.isActive && this.handler.isAutoRotateEnabled ) {
+            if ( handler.isActive && handler.isAutoRotateEnabled ) {
 
-                this.headingIndicator.update( this.handler.currentHeading );
+                this.headingIndicator.update( handler.currentHeading );
                 hdg.classList.add( '___active' );
 
             } else {

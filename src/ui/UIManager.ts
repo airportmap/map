@@ -53,6 +53,7 @@ export class UIManager {
     private initUIControls () : void {
 
         this.UIControls.settingsControl = new SettingsControl( this );
+        this.UIControls.headingControl = new HeadingControl( this );
         this.UIControls.zoomControl = new ZoomControl( this );
 
         this.UIControls.fullscreenControl = new FullscreenControl( this );
@@ -60,7 +61,6 @@ export class UIManager {
 
         this.UIControls.attributionControl = new AttributionControl( this );
         this.UIControls.stateControl = new StateControl( this );
-        this.UIControls.headingControl = new HeadingControl( this );
 
     }
 
