@@ -14,12 +14,14 @@
         --map-text: #000;
         --map-ui-fill: #fffd;
         --map-daynight-fill: #000;
+        --map-shadow: 0 0 4px #fff6;
     }
 
     &_dark {
         --map-text: #fff;
         --map-ui-fill: #000d;
         --map-daynight-fill: #000;
+        --map-shadow: 0 0 4px #0006;
     }
 
     &__layer {
@@ -193,14 +195,15 @@
 
             &_center {
                 position: absolute;
-                top: -2px;
+                top: -3px;
                 left: 50%;
                 transform: translateX( -50% );
                 width: 56px;
-                height: 24px;
+                height: 26px;
                 text-align: center;
-                line-height: 24px;
+                line-height: 26px;
                 font-weight: 600;
+                letter-spacing: 0.25px;
                 border-radius: 4px;
             }
 
@@ -221,7 +224,7 @@
                     font-size: 11px;
                     font-weight: 500;
                     color: #fffa;
-                    text-shadow: 0 0 4px rgba( 0 0 0 / 0.4 );
+                    text-shadow: var( --map-shadow );
                 }
 
                 &.minor {
@@ -229,7 +232,7 @@
                     width: 1px;
                     height: 14px;
                     background: #fff8;
-                    box-shadow: 0 0 4px rgba( 0 0 0 / 0.4 );
+                    box-shadow: var( --map-shadow );
                 }
 
             }
