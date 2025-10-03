@@ -3,11 +3,10 @@ import deepmerge from 'deepmerge';
 
 export class HeadingIndicator {
 
-    private static readonly HDG_SYMBOLS = [ 'N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW' ];
-
     private options: Required< APMapHdgOptions >;
     private container: HTMLElement;
     private scale: HTMLElement;
+    private center: HTMLElement;
 
     constructor ( el: HTMLElement, options?: APMapHdgOptions ) {
 
@@ -20,12 +19,15 @@ export class HeadingIndicator {
 
         this.container = el;
         this.scale = this.initScale();
+        this.center = this.initCenter();
 
     }
 
-    private getCardinal ( angle: number ) : string { return HeadingIndicator.HDG_SYMBOLS[
-        Math.round( angle / 45 ) % 8
-    ] }
+    private getCardinal ( angle: number ) : string {
+
+        return [ 'N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW' ][ Math.round( angle / 45 ) % 8 ];
+
+    }
 
     private initScale () : HTMLElement {
 
@@ -33,7 +35,7 @@ export class HeadingIndicator {
 
         const width = 720 * pxPerDeg;
         const scale = document.createElement( 'div' );
-        scale.className = '__apm_map__ui_hdg_scale';
+        scale.classList.add( '__apm_map__ui_hdg_scale' );
         scale.style.width = `${width}px`;
         this.container.appendChild( scale );
 
@@ -70,9 +72,28 @@ export class HeadingIndicator {
 
     }
 
+    private initCenter () : HTMLElement {
+
+        const center = document.createElement( 'div' );
+        center.classList.add( '__apm_map__ui_hdg_center' );
+        center.textContent = '—';
+        this.container.appendChild( center );
+
+        return center;
+
+    }
+
     public update ( hdg: number ) : void {
 
-        // ...
+        const { pxPerDeg } = this.options;
+
+        const norm = ( ( hdg % 360 ) + 360 ) % 360;
+
+        const center = this.container.clientWidth / 2;
+        const offset = -( norm * pxPerDeg % ( 360 * pxPerDeg ) ) + center;
+        this.scale.style.transform = `translateX(${offset}px)`;
+
+        this.center.textContent = `${norm}°`;
 
     }
 
