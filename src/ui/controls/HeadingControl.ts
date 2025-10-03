@@ -48,7 +48,7 @@ export class HeadingControl extends UIControl {
 
             this.headingIndicator.update( handler.currentHeading );
 
-        } else {
+        } else if ( handler ) {
 
             this.headingIndicator.hide();
 

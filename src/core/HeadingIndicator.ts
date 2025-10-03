@@ -21,6 +21,8 @@ export class HeadingIndicator {
         this.scale = this.initScale();
         this.center = this.initCenter();
 
+        this.hide();
+
     }
 
     private getCardinal ( angle: number ) : string {
@@ -94,6 +96,8 @@ export class HeadingIndicator {
         this.scale.style.transform = `translateX(${offset}px)`;
 
         this.center.textContent = `${norm}°`;
+
+        this.show();
 
     }
 
