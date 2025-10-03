@@ -192,6 +192,7 @@ export class APMap {
 
     private setStyles () : void {
 
+        this.element.ariaLabel = 'Map';
         this.element.classList.add(
             '__apm_map',
             '__apm_map_' + this.opt.mode,
