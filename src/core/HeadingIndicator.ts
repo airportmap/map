@@ -101,8 +101,8 @@ export class HeadingIndicator {
 
     }
 
-    public show () : void { this.container.classList.add( 'hidden' ) }
+    public show () : void { this.container.classList.remove( 'hidden' ) }
 
-    public hide () : void { this.container.classList.remove( 'hidden' ) }
+    public hide () : void { this.container.classList.add( 'hidden' ) }
 
 }
