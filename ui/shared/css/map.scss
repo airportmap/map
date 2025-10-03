@@ -193,11 +193,14 @@
 
             &_center {
                 position: absolute;
-                top: -1px;
+                top: -2px;
                 left: 50%;
                 transform: translateX( -50% );
                 width: 56px;
+                height: 24px;
                 text-align: center;
+                line-height: 24px;
+                font-weight: 600;
                 border-radius: 4px;
             }
 
