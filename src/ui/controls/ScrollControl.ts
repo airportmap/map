@@ -28,7 +28,7 @@ export class ScrollControl extends UIControl {
 
     protected async handleScrollDown () : Promise< void > {
 
-        await document.exitFullscreen();
+        try { await document.exitFullscreen() } catch {}
         window.scrollBy( { top: 480, behavior: 'smooth' } );
 
     }
