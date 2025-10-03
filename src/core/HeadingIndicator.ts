@@ -15,7 +15,9 @@ export class HeadingIndicator {
             pxPerDeg: 6,
             majorStep: 15,
             minorStep: 5
-        }, options );
+        }, options ?? {} );
+
+        void [ this.container, this.options ];
 
     }
 
