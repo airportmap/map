@@ -15,7 +15,11 @@ export class URLHandler {
 
     }
 
-    private initFromURL () : void {
+    private initFromURL () : void { this.setFromURL() }
+
+    public setFromURL () : void {
+
+        if ( ! this.isEnabled ) return;
 
         const hash = new URL( window.location.href ).hash;
         const [ zoom, lat, lng ] = hash.slice( 1 ).split( '/' ).map( Number );
@@ -25,6 +29,8 @@ export class URLHandler {
     }
 
     public updateURL () : void {
+
+        if ( ! this.isEnabled ) return;
 
         const { lat, lng } = this.map.center;
         const zoom = this.map.zoom;
