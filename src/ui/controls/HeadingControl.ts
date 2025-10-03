@@ -12,7 +12,7 @@ export class HeadingControl extends UIWidgetControl {
 
         const container = document.createElement( 'div' );
         container.classList.add( '__apm_map__ui_single', '__apm_map__ui_hdg' );
-        this.parent.appendChild( container );
+        this.UIManager.pane.appendChild( container );
         this.headingIndicator = new HeadingIndicator( container );
 
     }
