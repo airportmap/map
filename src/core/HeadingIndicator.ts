@@ -3,6 +3,8 @@ import deepmerge from 'deepmerge';
 
 export class HeadingIndicator {
 
+    private static readonly HDG_SYMBOLS = [ 'N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW' ];
+
     private container: HTMLElement;
     private options: Required< APMapHdgOptions >;
 
@@ -17,13 +19,15 @@ export class HeadingIndicator {
             minorStep: 5
         }, options ?? {} );
 
-        void [ this.container, this.options ];
-
     }
+
+    private getCardinal ( angle: number ) : string { return HeadingIndicator.HDG_SYMBOLS[
+        Math.round( angle / 45 ) % 8
+    ] }
 
     public update ( hdg: number ) : void {
 
-        console.log( hdg );
+        // ...
 
     }
 
