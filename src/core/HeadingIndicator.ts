@@ -77,7 +77,7 @@ export class HeadingIndicator {
     private initCenter () : HTMLElement {
 
         const center = document.createElement( 'div' );
-        center.classList.add( '__apm_map__ui_hdg_center' );
+        center.classList.add( '__apm_map__ui_txtBox', '__apm_map__ui_hdg_center' );
         center.textContent = '—';
         this.container.appendChild( center );
 
