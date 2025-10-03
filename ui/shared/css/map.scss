@@ -190,12 +190,12 @@
             width: 100%;
             min-width: 360px;
             max-width: 860px;
-            height: 20px;
+            height: 26px;
             overflow: hidden;
 
             &_center {
                 position: absolute;
-                top: -3px;
+                top: 0;
                 left: 50%;
                 transform: translateX( -50% );
                 width: 56px;
@@ -207,10 +207,15 @@
                 border-radius: 4px;
             }
 
+            &.hidden {
+                display: none;
+            }
+
             &_scale {
                 position: absolute;
-                top: 0;
+                top: 3px;
                 height: 20px;
+                transition: transform 1s ease-out;
             }
 
             .tick {
