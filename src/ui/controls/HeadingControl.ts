@@ -58,9 +58,9 @@ export class HeadingControl extends UIWidgetControl {
 
         const hdg = this.getChild< HTMLButtonElement >( 'hdg' );
 
-        if ( this.isVisible() && hdg && this.headingIndicator && this.handler ) {
+        if ( this.empty ) this.setChildrenAsContent();
 
-            if ( this.empty ) this.setChildrenAsContent();
+        if ( this.isVisible() && hdg && this.headingIndicator && this.handler ) {
 
             if ( this.handler.isActive && this.handler.isAutoRotateEnabled ) {
 
