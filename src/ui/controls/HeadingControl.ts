@@ -39,13 +39,14 @@ export class HeadingControl extends UIControl {
 
     public update () : void {
 
+        const handler = this.UIManager.map.orientationHandler;
+
         if (
             this.isVisible() && this.headingIndicator &&
-            this.UIManager.map.orientationHandler?.isActive
+            handler && handler.isActive && handler.isAutoRotateEnabled
         ) {
 
-            const hdg = this.UIManager.map.orientationHandler!.currentHeading ?? 0;
-            console.log( hdg );
+            this.headingIndicator.update( handler.currentHeading );
 
         }
 

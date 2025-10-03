@@ -23,13 +23,8 @@ export class OrientationHandler {
 
     private init () : void {
 
-        window.addEventListener( 'deviceorientation',
-            this.handleOrientationChange.bind( this )
-        );
-
-        screen.orientation?.addEventListener( 'change',
-            this.handleScreenOrientationChange.bind( this )
-        );
+        window.addEventListener( 'deviceorientation', this.handleOrientationChange.bind( this ) );
+        screen.orientation?.addEventListener( 'change', this.handleScreenOrientationChange.bind( this ) );
 
         this.active = true;
 
@@ -54,7 +49,7 @@ export class OrientationHandler {
 
     }
 
-    public rotateMap ( heading: number ) : void {
+    private rotateMap ( heading: number ) : void {
 
         const container = this.map.map.getContainer();
 
@@ -104,13 +99,8 @@ export class OrientationHandler {
 
         if ( this.supported ) {
 
-            window.removeEventListener( 'deviceorientation',
-                this.handleOrientationChange.bind( this )
-            );
-
-            screen.orientation?.removeEventListener( 'change',
-                this.handleScreenOrientationChange.bind( this )
-            );
+            window.removeEventListener( 'deviceorientation', this.handleOrientationChange.bind( this ) );
+            screen.orientation?.removeEventListener( 'change', this.handleScreenOrientationChange.bind( this ) );
 
             this.resetRotation();
 

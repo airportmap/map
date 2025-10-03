@@ -21,4 +21,10 @@ export class HeadingIndicator {
 
     }
 
+    public update ( hdg: number ) : void {
+
+        console.log( hdg );
+
+    }
+
 }
