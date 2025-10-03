@@ -3,6 +3,7 @@ import { APMap } from '@map/core/APMap';
 import { UIControl } from '@map/ui/controls/UIControl';
 import { AttributionControl } from '@map/ui/controls/AttributionControl';
 import { FullscreenControl } from '@map/ui/controls/FullscreenControl';
+import { HeadingControl } from '@map/ui/controls/HeadingControl';
 import { ScrollControl } from '@map/ui/controls/ScrollControl';
 import { SettingsControl } from '@map/ui/controls/SettingsControl';
 import { StateControl } from '@map/ui/controls/StateControl';
@@ -59,6 +60,7 @@ export class UIManager {
 
         this.UIControls.attributionControl = new AttributionControl( this );
         this.UIControls.stateControl = new StateControl( this );
+        this.UIControls.headingControl = new HeadingControl( this );
 
     }
 
