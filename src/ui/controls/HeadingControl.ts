@@ -6,7 +6,7 @@ import { OrientationHandler } from '@map/utils/OrientationHandler';
 export class HeadingControl extends UIWidgetControl {
 
     private headingIndicator: HeadingIndicator;
-    private handler: OrientationHandler;
+    private handler: OrientationHandler | undefined;
 
     constructor ( UIManager: UIManager ) {
 
@@ -56,9 +56,9 @@ export class HeadingControl extends UIWidgetControl {
 
     public update () : void {
 
-        if ( this.isVisible() && this.headingIndicator && this.handler ) {
+        const hdg = this.getChild< HTMLButtonElement >( 'hdg' );
 
-            const hdg = this.getChild< HTMLButtonElement >( 'hdg' );
+        if ( this.isVisible() && hdg && this.headingIndicator && this.handler ) {
 
             if ( this.empty ) this.setChildrenAsContent();
 
