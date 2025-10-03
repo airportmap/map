@@ -1,15 +1,23 @@
 import { HeadingIndicator } from '@map/core/HeadingIndicator';
-import { UIControl } from '@map/ui/controls/UIControl';
+import { UIWidgetControl } from '@map/ui/controls/UIWidgetControl';
 import { UIManager } from '@map/ui/UIManager';
+import { OrientationHandler } from '@map/utils/OrientationHandler';
 
-export class HeadingControl extends UIControl {
+export class HeadingControl extends UIWidgetControl {
 
     private headingIndicator: HeadingIndicator;
+    private handler: OrientationHandler;
 
     constructor ( UIManager: UIManager ) {
 
         super( UIManager );
-        this.headingIndicator = new HeadingIndicator( this.element! );
+
+        const container = document.createElement( 'div' );
+        container.classList.add( '__apm_map__ui_single', '__apm_map__ui_hdg' );
+        this.parent.appendChild( container );
+
+        this.headingIndicator = new HeadingIndicator( container );
+        this.handler = this.UIManager.map.orientationHandler;
 
     }
 
@@ -20,8 +28,15 @@ export class HeadingControl extends UIControl {
             this.UIManager.map.opt.uiControl?.headingControl?.enabled
         ) {
 
+            this.addChild( 'hdg', this.getUIBtn( {
+                handler: this.handleHdgToggle.bind( this ),
+                icon: '',
+                activeIcon: '',
+                ariaLabel: 'Device Orientation'
+            } ) );
+
             const el = document.createElement( 'div' );
-            el.classList.add( '__apm_map__ui_single', '__apm_map__ui_hdg' );
+            el.classList.add( '__apm_map__ui_widget_box', '__apm_map__ui_btnBox', '__apm_map__ui_hdgControl' );
 
             return el;
 
@@ -37,20 +52,27 @@ export class HeadingControl extends UIControl {
 
     }
 
+    protected handleHdgToggle () : void { if ( this.handler ) this.handler.toggleAutoRotate() }
+
     public update () : void {
 
-        const handler = this.UIManager.map.orientationHandler;
+        if ( this.isVisible() && this.headingIndicator && this.handler ) {
 
-        if (
-            this.isVisible() && this.headingIndicator &&
-            handler && handler.isActive && handler.isAutoRotateEnabled
-        ) {
+            const hdg = this.getChild< HTMLButtonElement >( 'hdg' );
 
-            this.headingIndicator.update( handler.currentHeading );
+            if ( this.empty ) this.setChildrenAsContent();
 
-        } else if ( handler ) {
+            if ( this.handler.isActive && this.handler.isAutoRotateEnabled ) {
 
-            this.headingIndicator.hide();
+                this.headingIndicator.update( this.handler.currentHeading );
+                hdg.classList.add( '___active' );
+
+            } else {
+
+                this.headingIndicator.hide();
+                hdg.classList.remove( '___active' );
+
+            }
 
         }
 
