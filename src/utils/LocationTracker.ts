@@ -40,7 +40,6 @@ export class LocationTracker {
     private handlePositionError ( err: GeolocationPositionError ) : void {
 
         console.error( `Error getting user position:`, err.message );
-
         this.stopTracking();
 
     }
@@ -53,11 +52,7 @@ export class LocationTracker {
 
             this.positionMarker = new CircleMarker( position, {
                 radius: 10,
-                weight: 2,
-                color: '#ffffff',
-                fillColor: '#176db3',
-                fillOpacity: 1,
-                opacity: 1
+                className: '__apm_map__mypos_marker'
             } ).addTo( leafletMap );
 
         } else {
@@ -70,11 +65,7 @@ export class LocationTracker {
 
             this.accuracyCircle = new Circle( position, {
                 radius: accuracy,
-                weight: 1,
-                color: '#176db3',
-                fillColor: '#176db3',
-                fillOpacity: 0.15,
-                opacity: 0.3
+                className: '__apm_map__mypos_accuracy'
             } ).addTo( leafletMap );
 
         } else {
