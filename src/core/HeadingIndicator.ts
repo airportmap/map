@@ -8,6 +8,9 @@ export class HeadingIndicator {
     private scale: HTMLElement;
     private center: HTMLElement;
 
+    private lastHeading?: number;
+    private offsetX: number = 0;
+
     constructor ( el: HTMLElement, options?: APMapHdgOptions ) {
 
         this.options = deepmerge< Required< APMapHdgOptions > >( {
@@ -24,6 +27,8 @@ export class HeadingIndicator {
         this.hide();
 
     }
+
+    private normalize ( angle: number ) : number { return ( ( angle % 360 ) + 360 ) % 360 }
 
     private getCardinal ( angle: number ) : string {
 
@@ -49,7 +54,7 @@ export class HeadingIndicator {
 
             if ( deg % majorStep === 0 ) {
 
-                const angle = ( ( deg % 360 ) + 360 ) % 360;
+                const angle = this.normalize( deg );
                 let label: string | undefined;
 
                 if ( labels === 'degrees' ) label = `${angle}°`;
@@ -88,13 +93,20 @@ export class HeadingIndicator {
     public update ( hdg: number ) : void {
 
         const { pxPerDeg } = this.options;
-
-        const norm = ( ( hdg % 360 ) + 360 ) % 360;
         const center = this.container.clientWidth / 2;
-        const offset = -( norm * pxPerDeg % ( 360 * pxPerDeg ) ) + center;
+        const norm = this.normalize( hdg );
 
-        this.scale.style.transform = `translateX(${offset}px)`;
-        this.center.textContent = `${norm}°`;
+        if ( this.lastHeading === undefined ) this.lastHeading = norm;
+
+        let delta = norm - this.lastHeading;
+        if ( delta >  180 ) delta -= 360;
+        if ( delta < -180 ) delta += 360;
+
+        this.offsetX -= delta * pxPerDeg;
+        this.lastHeading = norm;
+
+        this.scale.style.transform = `translateX(${ this.offsetX + center }px)`;
+        this.center.textContent = `${ Math.round( norm ) }°`;
 
         this.show();
 
