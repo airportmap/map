@@ -121,7 +121,7 @@ export class HeadingIndicator {
             handleAnimate( 'hdg' ) || handleAnimate( 'center' )
         ) ) {
 
-            this.animationId = requestAnimationFrame( this.animate );
+            this.animationId = requestAnimationFrame( this.animate.bind( this ) );
 
         }
 
@@ -148,7 +148,7 @@ export class HeadingIndicator {
 
         if ( ! this.container.classList.contains( 'hidden' ) && this.animationId === null ) {
 
-            this.animationId = requestAnimationFrame( this.animate );
+            this.animationId = requestAnimationFrame( this.animate.bind( this ) );
 
         }
 
