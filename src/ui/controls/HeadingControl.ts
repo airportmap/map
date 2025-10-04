@@ -52,7 +52,12 @@ export class HeadingControl extends UIWidgetControl {
 
         const handler = this.UIManager.map.orientationHandler;
 
-        if ( handler ) handler.toggleAutoRotate();
+        if ( handler ) {
+
+            handler.toggleAutoRotate();
+            this.update();
+
+        }
 
     }
 
