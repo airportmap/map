@@ -49,7 +49,7 @@ export class HeadingIndicator {
 
             if ( deg % majorStep === 0 ) {
 
-                const angle = deg % 360;
+                const angle = ( ( deg % 360 ) + 360 ) % 360;
                 let label: string | undefined;
 
                 if ( labels === 'degrees' ) label = `${angle}°`;
