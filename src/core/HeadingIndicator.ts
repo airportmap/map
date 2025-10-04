@@ -8,9 +8,6 @@ export class HeadingIndicator {
     private scale: HTMLElement;
     private center: HTMLElement;
 
-    private lastHeading?: number;
-    private offsetX: number = 0;
-
     constructor ( el: HTMLElement, options?: APMapHdgOptions ) {
 
         this.options = deepmerge< Required< APMapHdgOptions > >( {
@@ -93,24 +90,13 @@ export class HeadingIndicator {
     public update ( hdg: number ) : void {
 
         const { pxPerDeg } = this.options;
-        const totalWidth = 360 * pxPerDeg;
+
+        const norm = ( ( hdg % 360 ) + 360 ) % 360;
         const center = this.container.clientWidth / 2;
-        const norm = this.normalize( hdg );
+        const offset = -( norm * pxPerDeg % ( 360 * pxPerDeg ) ) + center;
 
-        if ( this.lastHeading === undefined ) this.lastHeading = norm;
-
-        let delta = norm - this.lastHeading;
-        if ( delta >  180 ) delta -= 360;
-        if ( delta < -180 ) delta += 360;
-
-        this.offsetX -= delta * pxPerDeg;
-        if ( this.offsetX >  totalWidth ) this.offsetX -= totalWidth;
-        if ( this.offsetX < -totalWidth ) this.offsetX += totalWidth;
-
-        this.lastHeading = norm;
-
-        this.scale.style.transform = `translateX(${ this.offsetX + center }px)`;
-        this.center.textContent = `${ Math.round( norm ) }°`;
+        this.scale.style.transform = `translateX(${offset}px)`;
+        this.center.textContent = `${norm}°`;
 
         this.show();
 
