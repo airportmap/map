@@ -41,7 +41,7 @@ export class HeadingIndicator {
         scale.style.width = `${width}px`;
         this.container.appendChild( scale );
 
-        for ( let deg = 0; deg <= 720; deg += minorStep ) {
+        for ( let deg = -360; deg <= 720; deg += minorStep ) {
 
             const tick = document.createElement( 'div' );
             tick.className = 'tick ' + ( deg % majorStep === 0 ? 'major' : 'minor' );
