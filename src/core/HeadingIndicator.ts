@@ -90,11 +90,10 @@ export class HeadingIndicator {
         const { pxPerDeg } = this.options;
 
         const norm = ( ( hdg % 360 ) + 360 ) % 360;
-
         const center = this.container.clientWidth / 2;
         const offset = -( norm * pxPerDeg % ( 360 * pxPerDeg ) ) + center;
-        this.scale.style.transform = `translateX(${offset}px)`;
 
+        this.scale.style.transform = `translateX(${offset}px)`;
         this.center.textContent = `${norm}°`;
 
         this.show();
