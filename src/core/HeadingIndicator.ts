@@ -94,32 +94,32 @@ export class HeadingIndicator {
 
     }
 
-    private handleAnimate ( which: 'hdg' | 'center' ) : boolean {
-
-        const { speed } = this.options;
-        const diff = this.getShortestRotation( this.currentState[ which ], this.targetState[ which ] );
-
-        if ( Math.abs( diff ) > 0.01 ) {
-
-            this.currentState[ which ] = this.normalize( this.currentState[ which ] + diff * speed );
-            return true;
-
-        }
-
-        this.currentState[ which ] = this.targetState[ which ];
-        return false;
-
-    }
-
     private animate () : void {
 
-        const needsHdgUpdate = this.handleAnimate( 'hdg' );
-        const needsCenterUpdate = this.handleAnimate( 'center' );
+        const { speed } = this.options;
+
+        const handleAnimate = ( which: 'hdg' | 'center' ) : boolean => {
+
+            const diff = this.getShortestRotation( this.currentState[ which ], this.targetState[ which ] );
+
+            if ( Math.abs( diff ) > 0.01 ) {
+
+                this.currentState[ which ] = this.normalize( this.currentState[ which ] + diff * speed );
+                return true;
+
+            }
+
+            this.currentState[ which ] = this.targetState[ which ];
+            return false;
+
+        }
 
         this.updateVisuals();
         this.animationId = null;
 
-        if ( this.container.classList.contains( 'hidden' ) === false && ( needsHdgUpdate || needsCenterUpdate ) ) {
+        if ( this.container.classList.contains( 'hidden' ) === false && (
+            handleAnimate( 'hdg' ) || handleAnimate( 'center' )
+        ) ) {
 
             this.animationId = requestAnimationFrame( this.animate );
 
