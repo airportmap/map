@@ -13,6 +13,7 @@
     &_light {
         --map-text: #000;
         --map-ui-fill: #fffd;
+        --map-accent: #176db3;
         --map-daynight-fill: #000;
         --map-shadow: 0 0 4px #fff6;
     }
@@ -20,6 +21,7 @@
     &_dark {
         --map-text: #fff;
         --map-ui-fill: #000d;
+        --map-accent: #4288c0;
         --map-daynight-fill: #000;
         --map-box-shadow: 0 0 20px -10px #0004;
     }
@@ -124,6 +126,11 @@
                 fill: currentColor;
             }
 
+            &.___active {
+                color: #fff;
+                background: var( --map-accent );
+            }
+
             &.___active > :not( .___active ),
             &:not( .___active ) > .___active {
                 display: none;
@@ -202,6 +209,8 @@
                 font-size: 13px;
                 font-weight: 500;
                 letter-spacing: 0.8px;
+                color: #fff;
+                background: var( --map-accent );
                 border-radius: 4px;
             }
 
