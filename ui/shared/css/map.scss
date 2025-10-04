@@ -88,6 +88,7 @@
             flex-flow: column nowrap;
             background: var( --map-ui-fill );
             box-shadow: 0 0 6px -4px rgba( 0 0 0 / 0.2 );
+            overflow: hidden;
 
             &:first-child {
                 border-top-left-radius: 4px;
@@ -112,7 +113,6 @@
             color: var( --map-text );
             background: none;
             border: 0;
-            border-radius: 4px;
             cursor: pointer;
 
             &:disabled {
@@ -242,7 +242,8 @@
                     top: 4px;
                     width: 1px;
                     height: 14px;
-                    background: #0006;
+                    background: var( --map-text );
+                    opacity: 0.6;
                 }
 
             }
