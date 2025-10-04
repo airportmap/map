@@ -16,10 +16,10 @@ export class HeadingIndicator {
 
         this.options = deepmerge< Required< APMapHdgOptions > >( {
             labels: 'mixed',
-            pxPerDeg: 6,
+            pxPerDeg: 10,
             majorStep: 15,
-            minorStep: 5,
-            speed: 0.1
+            minorStep: 3,
+            speed: 0.15
         }, options ?? {} );
 
         this.container = el;
