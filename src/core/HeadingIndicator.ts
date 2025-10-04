@@ -93,6 +93,7 @@ export class HeadingIndicator {
     public update ( hdg: number ) : void {
 
         const { pxPerDeg } = this.options;
+        const totalWidth = 360 * pxPerDeg;
         const center = this.container.clientWidth / 2;
         const norm = this.normalize( hdg );
 
@@ -103,6 +104,9 @@ export class HeadingIndicator {
         if ( delta < -180 ) delta += 360;
 
         this.offsetX -= delta * pxPerDeg;
+        if ( this.offsetX >  totalWidth ) this.offsetX -= totalWidth;
+        if ( this.offsetX < -totalWidth ) this.offsetX += totalWidth;
+
         this.lastHeading = norm;
 
         this.scale.style.transform = `translateX(${ this.offsetX + center }px)`;
