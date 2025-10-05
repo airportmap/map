@@ -26,8 +26,8 @@ export class HeadingControl extends UIWidgetControl {
 
             this.addChild( 'hdg', this.getUIBtn( {
                 handler: this.handleHdgToggle.bind( this ),
-                icon: 'device-orientation',
-                activeIcon: 'device-orientation-off',
+                icon: 'device-orientation-off',
+                activeIcon: 'device-orientation',
                 ariaLabel: 'Device Orientation'
             } ) );
 
