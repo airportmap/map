@@ -33,10 +33,14 @@ export class TrackingControl extends UIWidgetControl {
 
         const tracker = this.UIManager.map.locationTracker;
 
-        if ( tracker.isTracking ) tracker.startTracking( { follow: true, highAccuracy: true } );
-        else tracker.stopTracking();
+        if ( tracker ) {
 
-        this.update();
+            if ( tracker.isTracking ) tracker.startTracking( { follow: true, highAccuracy: true } );
+            else tracker.stopTracking();
+
+            this.update();
+
+        }
 
     }
 
