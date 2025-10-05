@@ -11,7 +11,7 @@ export class TrackingControl extends UIWidgetControl {
 
             this.addChild( 'tracking', this.getUIBtn( {
                 handler: this.handleTracking.bind( this ),
-                icon: 'maker',
+                icon: 'marker',
                 activeIcon: 'marker-off',
                 ariaLabel: 'Track Position'
             } ) );
