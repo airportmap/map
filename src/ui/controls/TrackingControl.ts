@@ -29,8 +29,31 @@ export class TrackingControl extends UIWidgetControl {
 
     protected initEventHandlers () : void {}
 
-    private handleTracking () : void {}
+    private handleTracking () : void {
 
-    public update () : void { if ( this.isVisible() ) this.setChildrenAsContent() }
+        const tracker = this.UIManager.map.locationTracker;
+
+        if ( tracker.isTracking ) tracker.startTracking( { follow: true, highAccuracy: true } );
+        else tracker.stopTracking();
+
+        this.update();
+
+    }
+
+    public update () : void {
+
+        const tracking = this.getChild< HTMLButtonElement >( 'tracking' );
+        const tracker = this.UIManager.map.locationTracker;
+
+        if ( this.isVisible() && tracking && tracker ) {
+
+            if ( tracker.isTracking ) tracking.classList.add( '___active' );
+            else tracking.classList.remove( '___active' );
+
+            if ( this.empty ) this.setChildrenAsContent();
+
+        }
+
+    }
 
 }
