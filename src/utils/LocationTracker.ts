@@ -76,7 +76,7 @@ export class LocationTracker {
         if ( ! this.positionMarker ) {
 
             this.positionMarker = new CircleMarker( position, {
-                radius: 10,
+                radius: 8,
                 className: '__apm_map__mypos_marker',
                 interactive: false
             } ).addTo( leafletMap );
