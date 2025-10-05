@@ -36,6 +36,26 @@
 
     }
 
+    &__mypos {
+
+        &_marker {
+            stroke: var( --map-ui-fill );
+            stroke-width: 3;
+            fill: var( --map-accent );
+            fill-opacity: 1;
+        }
+
+        &_accuracy {
+            stroke: var( --map-accent );
+            stroke-width: 1;
+            stroke-dasharray: 5 5;
+            stroke-opacity: 0.6;
+            fill: var( --map-accent );
+            fill-opacity: 0.15;
+        }
+
+    }
+
     &__ui {
         position: absolute;
         top: 0;
@@ -248,6 +268,8 @@
             }
 
         }
+
+
 
     }
 

@@ -32,14 +32,14 @@ export class LocationTracker {
         this.currentPosition = latLng;
         this.updateMarkers( latLng, accuracy );
 
+        if ( this.followUser ) this.map.setCenter( latitude, longitude );
+
         if ( this.zoomToMarkerOnStart && ! this.hasZoomedToMarker ) {
 
             this.zoomToUserWithAccuracy( latLng, accuracy );
             this.hasZoomedToMarker = true;
 
         }
-
-        if ( this.followUser ) this.map.setCenter( latitude, longitude );
 
         this.map.dispatchEvent( 'user-position-changed', {
             lat: latitude, lng: longitude, accuracy
@@ -58,24 +58,12 @@ export class LocationTracker {
 
         const leafletMap = this.map.map;
 
-        if ( ! this.positionMarker ) {
-
-            this.positionMarker = new CircleMarker( position, {
-                radius: 4,
-                className: '__apm_map__mypos_marker'
-            } ).addTo( leafletMap );
-
-        } else {
-
-            this.positionMarker.setLatLng( position );
-
-        }
-
         if ( ! this.accuracyCircle ) {
 
             this.accuracyCircle = new Circle( position, {
                 radius: accuracy,
-                className: '__apm_map__mypos_accuracy'
+                className: '__apm_map__mypos_accuracy',
+                interactive: false
             } ).addTo( leafletMap );
 
         } else {
@@ -85,23 +73,37 @@ export class LocationTracker {
 
         }
 
+        if ( ! this.positionMarker ) {
+
+            this.positionMarker = new CircleMarker( position, {
+                radius: 10,
+                className: '__apm_map__mypos_marker',
+                interactive: false
+            } ).addTo( leafletMap );
+
+        } else {
+
+            this.positionMarker.setLatLng( position );
+
+        }
+
     }
 
     private removeMarkers () : void {
 
         const leafletMap = this.map.map;
 
-        if ( this.positionMarker ) {
-
-            leafletMap.removeLayer( this.positionMarker );
-            this.positionMarker = undefined;
-
-        }
-
         if ( this.accuracyCircle ) {
 
             leafletMap.removeLayer( this.accuracyCircle );
             this.accuracyCircle = undefined;
+
+        }
+
+        if ( this.positionMarker ) {
+
+            leafletMap.removeLayer( this.positionMarker );
+            this.positionMarker = undefined;
 
         }
 
