@@ -54,9 +54,9 @@ export class TrackingControl extends UIWidgetControl {
             if ( tracker.isTracking ) tracking.classList.add( '___active' );
             else tracking.classList.remove( '___active' );
 
-            if ( this.empty ) this.setChildrenAsContent();
-
         }
+
+        if ( this.empty ) this.setChildrenAsContent();
 
     }
 
