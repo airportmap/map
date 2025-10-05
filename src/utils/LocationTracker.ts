@@ -1,5 +1,5 @@
 import { APMap } from '@map/core/APMap';
-import { LatLng, CircleMarker, Circle } from 'leaflet';
+import { LatLng, LatLngBounds, CircleMarker, Circle } from 'leaflet';
 
 export class LocationTracker {
 
@@ -15,6 +15,9 @@ export class LocationTracker {
     private positionMarker?: CircleMarker;
     private accuracyCircle?: Circle;
 
+    private zoomToMarkerOnStart: boolean = false;
+    private hasZoomedToMarker: boolean = false;
+
     public get isTracking () : boolean { return this.trackingActive }
     public get isFollowing () : boolean { return this.followUser }
     public get currentPos () : LatLng | undefined { return this.currentPosition }
@@ -28,6 +31,13 @@ export class LocationTracker {
 
         this.currentPosition = latLng;
         this.updateMarkers( latLng, accuracy );
+
+        if ( this.zoomToMarkerOnStart && ! this.hasZoomedToMarker ) {
+
+            this.zoomToUserWithAccuracy( latLng, accuracy );
+            this.hasZoomedToMarker = true;
+
+        }
 
         if ( this.followUser ) this.map.setCenter( latitude, longitude );
 
@@ -51,7 +61,7 @@ export class LocationTracker {
         if ( ! this.positionMarker ) {
 
             this.positionMarker = new CircleMarker( position, {
-                radius: 10,
+                radius: 4,
                 className: '__apm_map__mypos_marker'
             } ).addTo( leafletMap );
 
@@ -97,13 +107,29 @@ export class LocationTracker {
 
     }
 
+    private zoomToUserWithAccuracy ( position: LatLng, accuracy: number, minBuffer: number = 200 ) : void {
+
+        const { metersToLat, metersToLng } = this.map.geo;
+        const { lat, lng } = position;
+        const buffer = Math.max( accuracy, minBuffer );
+
+        this.map.map.fitBounds( new LatLngBounds(
+            [ lat - metersToLat( buffer ), lng - metersToLng( buffer, lat ) ],
+            [ lat + metersToLat( buffer ), lng + metersToLng( buffer, lat ) ]
+        ), { animate: true } );
+
+    }
+
     public startTracking ( options: {
         follow?: boolean,
-        highAccuracy?: boolean
+        highAccuracy?: boolean,
+        zoomToMarker?: boolean
     } = {} ) : void {
 
         this.followUser = options.follow ?? false;
         this.highAccuracy = options.highAccuracy ?? true;
+        this.zoomToMarkerOnStart = options.zoomToMarker ?? false;
+        this.hasZoomedToMarker = false;
 
         if ( ! navigator.geolocation ) {
 
@@ -137,6 +163,8 @@ export class LocationTracker {
 
         this.trackingActive = false;
         this.followUser = false;
+        this.zoomToMarkerOnStart = false;
+        this.hasZoomedToMarker = false;
 
         this.removeMarkers();
 

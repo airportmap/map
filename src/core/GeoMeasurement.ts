@@ -4,6 +4,8 @@ import { LatLng } from 'leaflet';
 
 export class GeoMeasurement {
 
+    private static readonly EARTH_CIRCUMFERENCE = 40075016.686;
+
     private static readonly UNIT_SYSTEMS: Record< APMapUnitSystems, APMapUnitSystem > = {
         metric: {
             distance: { base: 'm', convert: { imperial: 3.2808399, avionic: 3.2808399 }, units: { m: 1, km: 0.001 } },
@@ -35,7 +37,7 @@ export class GeoMeasurement {
 
     private getMetersPerPixel ( lat: number, zoom: number ) : number {
 
-        return 40075016.686 * Math.cos( lat * Math.PI / 180 ) / Math.pow( 2, zoom + 8 );
+        return GeoMeasurement.EARTH_CIRCUMFERENCE * Math.cos( lat * Math.PI / 180 ) / Math.pow( 2, zoom + 8 );
 
     }
 
@@ -149,6 +151,14 @@ export class GeoMeasurement {
     public humanToLatLng ( lat: string, lng: string ) : LatLng {
 
         return new LatLng( this.dmsToDeg( lat ), this.dmsToDeg( lng ) );
+
+    }
+
+    public metersToLat ( m: number ) : number { return m / 111320 }
+
+    public metersToLng ( m: number, lat: number ) : number {
+
+        return m / ( GeoMeasurement.EARTH_CIRCUMFERENCE * Math.cos( lat * Math.PI / 180 ) / 360 );
 
     }
 
