@@ -7,6 +7,7 @@ import { HeadingControl } from '@map/ui/controls/HeadingControl';
 import { ScrollControl } from '@map/ui/controls/ScrollControl';
 import { SettingsControl } from '@map/ui/controls/SettingsControl';
 import { StateControl } from '@map/ui/controls/StateControl';
+import { TrackingControl } from '@map/ui/controls/TrackingControl';
 import { ZoomControl } from '@map/ui/controls/ZoomControl';
 
 export class UIManager {
@@ -53,6 +54,7 @@ export class UIManager {
     private initUIControls () : void {
 
         this.UIControls.settingsControl = new SettingsControl( this );
+        this.UIControls.trackingControl = new TrackingControl( this );
         this.UIControls.headingControl = new HeadingControl( this );
         this.UIControls.zoomControl = new ZoomControl( this );
 
