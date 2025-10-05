@@ -35,8 +35,8 @@ export class TrackingControl extends UIWidgetControl {
 
         if ( tracker ) {
 
-            if ( tracker.isTracking ) tracker.startTracking( { follow: true, highAccuracy: true } );
-            else tracker.stopTracking();
+            if ( tracker.isTracking ) tracker.stopTracking();
+            else tracker.startTracking( { follow: true, highAccuracy: true } );
 
             this.update();
 
